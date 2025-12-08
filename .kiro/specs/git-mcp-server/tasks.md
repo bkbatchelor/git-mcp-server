@@ -9,13 +9,13 @@
   - Create application.yml with Git MCP Server configuration
   - _Requirements: 9.1, 9.2, 9.3, 9.5_
 
-- [ ] 2. Implement domain models and exceptions
+- [x] 2. Implement domain models and exceptions
   - Create record classes for RepositoryInfo, RepositoryStatus, CommitInfo, BranchInfo, RemoteInfo, AuthorInfo, Credentials, DiffStats
   - Create GitMcpException class with ErrorCode enum
   - Create ErrorCode enum with all error types (REPOSITORY_NOT_FOUND, INVALID_REPOSITORY_STATE, etc.)
   - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-- [ ] 3. Implement JGit integration layer
+- [-] 3. Implement JGit integration layer
   - Create JGitRepositoryManager class for managing Repository instances with caching
   - Implement repository lifecycle methods (open, close, cache management)
   - Create JGitCommandExecutor class to wrap JGit API calls
