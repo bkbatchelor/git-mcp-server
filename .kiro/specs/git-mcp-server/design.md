@@ -646,10 +646,10 @@ void projectIdExtractionFromBranchNames(@ForAll("branchNamesWithIds") String bra
 ```xml
 <properties>
     <java.version>21</java.version>
-    <spring.boot.version>3.2.0</spring.boot.version>
+    <spring.boot.version>3.5.8</spring.boot.version>
     <spring.ai.version>1.0.0-M1</spring.ai.version>
-    <jgit.version>6.8.0.202311291450-r</jgit.version>
-    <jqwik.version>1.8.2</jqwik.version>
+    <jgit.version>7.1.0.202411261347-r</jgit.version>
+    <jqwik.version>1.9.2</jqwik.version>
 </properties>
 
 <dependencies>

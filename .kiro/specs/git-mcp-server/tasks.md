@@ -1,7 +1,7 @@
 # Implementation Plan
 
-- [ ] 1. Set up Maven project structure and dependencies
-  - Create pom.xml with Java 21, Spring Boot 3.2.0, Spring AI MCP support, JGit 6.8.0, and jqwik 1.8.2
+- [x] 1. Set up Maven project structure and dependencies
+  - Create pom.xml with Java 21, Spring Boot 3.5.8, Spring AI MCP support, JGit 7.1.0, and jqwik 1.9.2
   - Configure Maven compiler plugin for Java 21
   - Configure Spring Boot Maven plugin for running the application
   - Configure Maven Surefire plugin to run both JUnit and jqwik tests

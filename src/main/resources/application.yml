@@ -1,0 +1,19 @@
+git-mcp-server:
+  repository:
+    cache:
+      max-size: 10
+      timeout: 30m
+  history:
+    max-limit: 1000
+  authentication:
+    enabled: true
+  mcp:
+    server-name: "Git MCP Server"
+    server-version: "1.0.0"
+
+logging:
+  level:
+    com.example.gitmcp: DEBUG
+    org.eclipse.jgit: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
