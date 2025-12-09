@@ -4,6 +4,7 @@ import io.sandboxdev.gitmcp.exception.ErrorCode;
 import io.sandboxdev.gitmcp.exception.GitMcpException;
 import io.sandboxdev.gitmcp.jgit.JGitCommandExecutor;
 import io.sandboxdev.gitmcp.jgit.JGitRepositoryManager;
+import io.sandboxdev.gitmcp.jgit.RepositoryLockManager;
 import io.sandboxdev.gitmcp.model.BranchInfo;
 import io.sandboxdev.gitmcp.service.GitBranchService;
 import org.eclipse.jgit.api.Git;
@@ -23,11 +24,14 @@ public class GitBranchServiceImpl implements GitBranchService {
     
     private final JGitRepositoryManager repositoryManager;
     private final JGitCommandExecutor commandExecutor;
+    private final RepositoryLockManager lockManager;
     
     public GitBranchServiceImpl(JGitRepositoryManager repositoryManager,
-                               JGitCommandExecutor commandExecutor) {
+                               JGitCommandExecutor commandExecutor,
+                               RepositoryLockManager lockManager) {
         this.repositoryManager = repositoryManager;
         this.commandExecutor = commandExecutor;
+        this.lockManager = lockManager;
     }
 
     
@@ -35,48 +39,52 @@ public class GitBranchServiceImpl implements GitBranchService {
     public BranchInfo createBranch(Path repositoryPath, String branchName) {
         logger.debug("Creating branch {} in {}", branchName, repositoryPath);
         
-        try {
-            Repository repository = repositoryManager.openRepository(repositoryPath);
-            try (Git git = new Git(repository)) {
-                Ref ref = git.branchCreate()
-                    .setName(branchName)
-                    .call();
-                
-                String commitHash = ref.getObjectId().getName();
-                
-                logger.info("Created branch: {}", branchName);
-                return new BranchInfo(branchName, commitHash, false);
+        return lockManager.executeWithWriteLock(repositoryPath, () -> {
+            try {
+                Repository repository = repositoryManager.openRepository(repositoryPath);
+                try (Git git = new Git(repository)) {
+                    Ref ref = git.branchCreate()
+                        .setName(branchName)
+                        .call();
+                    
+                    String commitHash = ref.getObjectId().getName();
+                    
+                    logger.info("Created branch: {}", branchName);
+                    return new BranchInfo(branchName, commitHash, false);
+                }
+            } catch (Exception e) {
+                throw commandExecutor.translateException(e, "create branch");
             }
-        } catch (Exception e) {
-            throw commandExecutor.translateException(e, "create branch");
-        }
+        });
     }
     
     @Override
     public void switchBranch(Path repositoryPath, String branchName) {
         logger.debug("Switching to branch {} in {}", branchName, repositoryPath);
         
-        try {
-            Repository repository = repositoryManager.openRepository(repositoryPath);
-            try (Git git = new Git(repository)) {
-                
-                // Check for uncommitted changes
-                if (git.status().call().hasUncommittedChanges()) {
-                    throw new GitMcpException(
-                        ErrorCode.UNCOMMITTED_CHANGES,
-                        "Cannot switch branches with uncommitted changes"
-                    );
+        lockManager.executeWithWriteLock(repositoryPath, () -> {
+            try {
+                Repository repository = repositoryManager.openRepository(repositoryPath);
+                try (Git git = new Git(repository)) {
+                    
+                    // Check for uncommitted changes
+                    if (git.status().call().hasUncommittedChanges()) {
+                        throw new GitMcpException(
+                            ErrorCode.UNCOMMITTED_CHANGES,
+                            "Cannot switch branches with uncommitted changes"
+                        );
+                    }
+                    
+                    git.checkout()
+                        .setName(branchName)
+                        .call();
+                    
+                    logger.info("Switched to branch: {}", branchName);
                 }
-                
-                git.checkout()
-                    .setName(branchName)
-                    .call();
-                
-                logger.info("Switched to branch: {}", branchName);
+            } catch (Exception e) {
+                throw commandExecutor.translateException(e, "switch branch");
             }
-        } catch (Exception e) {
-            throw commandExecutor.translateException(e, "switch branch");
-        }
+        });
     }
 
     
@@ -84,60 +92,64 @@ public class GitBranchServiceImpl implements GitBranchService {
     public List<BranchInfo> listBranches(Path repositoryPath) {
         logger.debug("Listing branches in {}", repositoryPath);
         
-        try {
-            Repository repository = repositoryManager.openRepository(repositoryPath);
-            try (Git git = new Git(repository)) {
-                List<Ref> branches = git.branchList().call();
-                String currentBranch = repository.getBranch();
-                
-                List<BranchInfo> branchInfos = new ArrayList<>();
-                
-                for (Ref branch : branches) {
-                    String branchName = branch.getName();
-                    // Remove refs/heads/ prefix
-                    if (branchName.startsWith("refs/heads/")) {
-                        branchName = branchName.substring("refs/heads/".length());
+        return lockManager.executeWithReadLock(repositoryPath, () -> {
+            try {
+                Repository repository = repositoryManager.openRepository(repositoryPath);
+                try (Git git = new Git(repository)) {
+                    List<Ref> branches = git.branchList().call();
+                    String currentBranch = repository.getBranch();
+                    
+                    List<BranchInfo> branchInfos = new ArrayList<>();
+                    
+                    for (Ref branch : branches) {
+                        String branchName = branch.getName();
+                        // Remove refs/heads/ prefix
+                        if (branchName.startsWith("refs/heads/")) {
+                            branchName = branchName.substring("refs/heads/".length());
+                        }
+                        
+                        String commitHash = branch.getObjectId().getName();
+                        boolean isCurrent = branchName.equals(currentBranch);
+                        
+                        branchInfos.add(new BranchInfo(branchName, commitHash, isCurrent));
                     }
                     
-                    String commitHash = branch.getObjectId().getName();
-                    boolean isCurrent = branchName.equals(currentBranch);
-                    
-                    branchInfos.add(new BranchInfo(branchName, commitHash, isCurrent));
+                    logger.debug("Found {} branches", branchInfos.size());
+                    return branchInfos;
                 }
-                
-                logger.debug("Found {} branches", branchInfos.size());
-                return branchInfos;
+            } catch (Exception e) {
+                throw commandExecutor.translateException(e, "list branches");
             }
-        } catch (Exception e) {
-            throw commandExecutor.translateException(e, "list branches");
-        }
+        });
     }
     
     @Override
     public void deleteBranch(Path repositoryPath, String branchName) {
         logger.debug("Deleting branch {} in {}", branchName, repositoryPath);
         
-        try {
-            Repository repository = repositoryManager.openRepository(repositoryPath);
-            try (Git git = new Git(repository)) {
-                String currentBranch = repository.getBranch();
-                
-                // Prevent deleting current branch
-                if (branchName.equals(currentBranch)) {
-                    throw new GitMcpException(
-                        ErrorCode.INVALID_REPOSITORY_STATE,
-                        "Cannot delete current branch: " + branchName
-                    );
+        lockManager.executeWithWriteLock(repositoryPath, () -> {
+            try {
+                Repository repository = repositoryManager.openRepository(repositoryPath);
+                try (Git git = new Git(repository)) {
+                    String currentBranch = repository.getBranch();
+                    
+                    // Prevent deleting current branch
+                    if (branchName.equals(currentBranch)) {
+                        throw new GitMcpException(
+                            ErrorCode.INVALID_REPOSITORY_STATE,
+                            "Cannot delete current branch: " + branchName
+                        );
+                    }
+                    
+                    git.branchDelete()
+                        .setBranchNames(branchName)
+                        .call();
+                    
+                    logger.info("Deleted branch: {}", branchName);
                 }
-                
-                git.branchDelete()
-                    .setBranchNames(branchName)
-                    .call();
-                
-                logger.info("Deleted branch: {}", branchName);
+            } catch (Exception e) {
+                throw commandExecutor.translateException(e, "delete branch");
             }
-        } catch (Exception e) {
-            throw commandExecutor.translateException(e, "delete branch");
-        }
+        });
     }
 }
