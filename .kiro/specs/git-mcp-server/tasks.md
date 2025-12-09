@@ -154,7 +154,7 @@
   - **Property 29: Generated commit message follows template**
   - **Validates: Requirements 10.3, 10.4, 10.5**
 
-- [ ] 9. Implement MCP protocol layer with Spring AI
+- [x] 9. Implement MCP protocol layer with Spring AI
   - Create GitMcpToolProvider class annotated with Spring AI MCP annotations
   - Register init-repository tool with JSON schema
   - Register clone-repository tool with JSON schema
