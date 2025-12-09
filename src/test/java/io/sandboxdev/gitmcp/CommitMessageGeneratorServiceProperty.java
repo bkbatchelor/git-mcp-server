@@ -225,4 +225,174 @@ public class CommitMessageGeneratorServiceProperty {
             // Ignore cleanup errors
         }
     }
+    
+    // Feature: git-mcp-server, Property 29: Generated commit message follows template
+    @Property(tries = 100)
+    void generatedCommitMessageFollowsTemplate(
+        @ForAll("repositoryWithBranch") RepositoryWithBranch repoWithBranch,
+        @ForAll("commitSummary") String summary,
+        @ForAll("commitDescription") String description
+    ) {
+        // Given a repository with a branch and staged changes
+        Path repositoryPath = repoWithBranch.path;
+        String branchName = repoWithBranch.branchName;
+        
+        CommitMessageGeneratorService serviceWithManager = createServiceWithManager();
+        
+        // When generating a commit message
+        String commitMessage = serviceWithManager.generateCommitMessage(repositoryPath, summary, description);
+        
+        // Then the message should follow the template format
+        assertThat(commitMessage).isNotNull();
+        assertThat(commitMessage).isNotEmpty();
+        
+        String[] lines = commitMessage.split("\n", 2);
+        String titleLine = lines[0];
+        
+        // Verify title line format
+        if (branchName.matches("^[^/]+/[A-Za-z]+-\\d+.*")) {
+            // Branch has project ID - format should be [PROJECT-ID]:TYPE Summary
+            assertThat(titleLine).matches("^\\[[A-Z]+-\\d+\\]:[A-Z]+ .+$");
+            
+            // Extract and verify project ID is present
+            assertThat(titleLine).startsWith("[");
+            assertThat(titleLine).contains("]:");
+            
+            // Extract commit type
+            String afterBracket = titleLine.substring(titleLine.indexOf("]:") + 2);
+            String commitType = afterBracket.split(" ")[0];
+            assertThat(commitType).isIn("FEAT", "FIX", "CHORE", "REFACTOR", "DOCS", "STYLE", "TEST");
+        } else {
+            // No project ID - format should be TYPE Summary
+            assertThat(titleLine).matches("^[A-Z]+ .+$");
+            
+            // Extract commit type
+            String commitType = titleLine.split(" ")[0];
+            assertThat(commitType).isIn("FEAT", "FIX", "CHORE", "REFACTOR", "DOCS", "STYLE", "TEST");
+        }
+        
+        // Verify summary is present in title line (trim to handle edge cases)
+        assertThat(titleLine).contains(summary.trim());
+        
+        // If description is provided, verify body format
+        if (description != null && !description.isBlank()) {
+            assertThat(lines.length).isEqualTo(2);
+            String body = lines[1];
+            
+            // Body should be separated by blank line (which means it starts with \n)
+            assertThat(commitMessage).contains("\n\n");
+            assertThat(body).startsWith("\n");
+            assertThat(body.trim()).isEqualTo(description.trim());
+        }
+        
+        // Cleanup
+        cleanupRepository(repositoryPath);
+    }
+    
+    @Provide
+    Arbitrary<RepositoryWithBranch> repositoryWithBranch() {
+        return Arbitraries.oneOf(
+            createRepoWithProjectIdBranch(),
+            createRepoWithoutProjectIdBranch()
+        );
+    }
+    
+    private Arbitrary<RepositoryWithBranch> createRepoWithProjectIdBranch() {
+        return Combinators.combine(
+            branchPrefix(),
+            projectId(),
+            issueNumber()
+        ).as((prefix, projId, issueNum) -> {
+            try {
+                Path tempDir = Files.createTempDirectory("git-test-");
+                Git git = Git.init().setDirectory(tempDir.toFile()).call();
+                
+                // Create initial commit on master/main branch
+                Path initialFile = tempDir.resolve("initial.txt");
+                Files.writeString(initialFile, "initial");
+                git.add().addFilepattern("initial.txt").call();
+                git.commit().setMessage("Initial commit").call();
+                
+                // Now create and checkout the branch
+                String branchName = prefix + "/" + projId + "-" + issueNum;
+                git.checkout().setCreateBranch(true).setName(branchName).call();
+                
+                // Create and stage a file
+                Path file = tempDir.resolve("file.txt");
+                Files.writeString(file, "content");
+                git.add().addFilepattern("file.txt").call();
+                
+                return new RepositoryWithBranch(tempDir, branchName);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to create test repository", e);
+            }
+        });
+    }
+    
+    private Arbitrary<RepositoryWithBranch> createRepoWithoutProjectIdBranch() {
+        return Arbitraries.of("main", "master", "develop", "mybranch").map(branchName -> {
+            try {
+                Path tempDir = Files.createTempDirectory("git-test-");
+                Git git = Git.init().setDirectory(tempDir.toFile()).call();
+                
+                // Create initial commit
+                Path initialFile = tempDir.resolve("initial.txt");
+                Files.writeString(initialFile, "initial");
+                git.add().addFilepattern("initial.txt").call();
+                git.commit().setMessage("Initial commit").call();
+                
+                // Create branch if not master
+                if (!branchName.equals("master")) {
+                    git.checkout().setCreateBranch(true).setName(branchName).call();
+                }
+                
+                // Create and stage a file
+                Path file = tempDir.resolve("file.txt");
+                Files.writeString(file, "content");
+                git.add().addFilepattern("file.txt").call();
+                
+                return new RepositoryWithBranch(tempDir, branchName);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to create test repository", e);
+            }
+        });
+    }
+    
+    @Provide
+    Arbitrary<String> commitSummary() {
+        return Arbitraries.strings()
+            .alpha()
+            .numeric()
+            .withChars(' ')
+            .ofMinLength(5)
+            .ofMaxLength(50)
+            .filter(s -> !s.isBlank() && s.trim().length() >= 3);
+    }
+    
+    @Provide
+    Arbitrary<String> commitDescription() {
+        return Arbitraries.oneOf(
+            // Empty description
+            Arbitraries.just(""),
+            // Null description
+            Arbitraries.just(null),
+            // Valid description
+            Arbitraries.strings()
+                .alpha()
+                .numeric()
+                .withChars(' ', '.', ',', '\n')
+                .ofMinLength(10)
+                .ofMaxLength(200)
+        );
+    }
+    
+    private static class RepositoryWithBranch {
+        final Path path;
+        final String branchName;
+        
+        RepositoryWithBranch(Path path, String branchName) {
+            this.path = path;
+            this.branchName = branchName;
+        }
+    }
 }

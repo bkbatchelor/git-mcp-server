@@ -150,7 +150,7 @@
   - **Property 28: Commit type is valid**
   - **Validates: Requirements 10.2**
 
-- [ ]* 8.3 Write property test for commit message format
+- [x] 8.3 Write property test for commit message format
   - **Property 29: Generated commit message follows template**
   - **Validates: Requirements 10.3, 10.4, 10.5**
 
@@ -179,7 +179,7 @@
   - Implement tool invocation handlers that delegate to service layer
   - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-- [ ]* 9.1 Write property test for tool list completeness
+- [x] 9.1 Write property test for tool list completeness
   - **Property 20: Tool list contains all Git operations**
   - **Validates: Requirements 7.2**
 
