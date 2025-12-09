@@ -142,7 +142,7 @@
   - Support branch name patterns like feature/PROJ-123, bugfix/PROJ-456
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
 
-- [ ]* 8.1 Write property test for project ID extraction
+- [x] 8.1 Write property test for project ID extraction
   - **Property 27: Project ID extraction from branch names**
   - **Validates: Requirements 10.1**
 
