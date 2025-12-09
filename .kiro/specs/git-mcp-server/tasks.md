@@ -60,7 +60,7 @@
   - **Property 7: Current branch is always defined**
   - **Validates: Requirements 2.5**
 
-- [ ] 5. Implement GitCommitService
+- [x] 5. Implement GitCommitService
   - Create GitCommitService interface and implementation
   - Implement stageFiles method to add files to staging area
   - Implement unstageFiles method to remove files from staging
