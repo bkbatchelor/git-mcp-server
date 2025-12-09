@@ -44,6 +44,12 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         
+        <!-- Spring Web (required by Spring AI MCP) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
         <!-- Spring AI MCP Server -->
         <dependency>
             <groupId>org.springframework.ai</groupId>

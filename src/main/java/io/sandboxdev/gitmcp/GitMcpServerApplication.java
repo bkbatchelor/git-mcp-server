@@ -1,10 +1,12 @@
 package io.sandboxdev.gitmcp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 
@@ -26,6 +28,14 @@ public class GitMcpServerApplication {
     public static void main(String[] args) {
         logger.info("Starting Git MCP Server...");
         SpringApplication.run(GitMcpServerApplication.class, args);
+    }
+
+    /**
+     * Provide ObjectMapper bean for JSON serialization.
+     */
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
     /**
