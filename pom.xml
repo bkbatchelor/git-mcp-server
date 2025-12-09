@@ -20,6 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
         <spring.boot.version>3.5.8</spring.boot.version>
+        <spring.ai.version>1.1.1</spring.ai.version>
         <jgit.version>7.1.0.202411261347-r</jgit.version>
         <jqwik.version>1.9.2</jqwik.version>
     </properties>
@@ -43,13 +44,14 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         
-        <!-- 
-        Note: Spring AI MCP support is not yet available in Maven Central.
-        We'll implement MCP protocol support manually using JSON-RPC.
-        When Spring AI MCP becomes available, we can migrate to it.
-        -->
+        <!-- Spring AI MCP Server -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server</artifactId>
+            <version>${spring.ai.version}</version>
+        </dependency>
         
-        <!-- JSON Processing for MCP Protocol -->
+        <!-- JSON Processing -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

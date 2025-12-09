@@ -1,7 +1,7 @@
 {
     "kiroAgent.configureMCP": "Disabled",
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.configuration.updateBuildConfiguration": "automatic",
     "editor.fontSize": 16,
     "debug.console.fontSize": 16
 }
