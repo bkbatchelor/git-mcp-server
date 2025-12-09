@@ -191,7 +191,7 @@
   - **Property 22: Invalid parameters return MCP error format**
   - **Validates: Requirements 7.4**
 
-- [ ] 10. Implement MCP resource provider
+- [x] 10. Implement MCP resource provider
   - Create GitMcpResourceProvider class for exposing repository information
   - Implement resource endpoints for repository status
   - Implement resource endpoints for branch information
