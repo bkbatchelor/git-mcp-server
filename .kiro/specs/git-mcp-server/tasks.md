@@ -146,7 +146,7 @@
   - **Property 27: Project ID extraction from branch names**
   - **Validates: Requirements 10.1**
 
-- [ ]* 8.2 Write property test for commit type validity
+- [x] 8.2 Write property test for commit type validity
   - **Property 28: Commit type is valid**
   - **Validates: Requirements 10.2**
 
