@@ -24,7 +24,7 @@ The architecture follows a layered approach with clear separation between the MC
 │  │  - Request/Response Handling                           │ │
 │  │  - Resource Management                                 │ │
 │  └──────────────────────┬─────────────────────────────────┘ │
-│                         │                                    │
+│                         │                                   │
 │  ┌──────────────────────▼─────────────────────────────────┐ │
 │  │              Service Layer                             │ │
 │  │  - GitRepositoryService                                │ │
@@ -33,7 +33,7 @@ The architecture follows a layered approach with clear separation between the MC
 │  │  - GitRemoteService                                    │ │
 │  │  - CommitMessageGeneratorService                       │ │
 │  └──────────────────────┬─────────────────────────────────┘ │
-│                         │                                    │
+│                         │                                   │
 │  ┌──────────────────────▼─────────────────────────────────┐ │
 │  │           JGit Integration Layer                       │ │
 │  │  - Repository Management                               │ │
@@ -44,8 +44,8 @@ The architecture follows a layered approach with clear separation between the MC
                             │
                             ▼
                    ┌────────────────┐
-                   │  Git Repository │
-                   │  (File System)  │
+                   │  Git Repository│
+                   │  (File System) │
                    └────────────────┘
 ```
 
