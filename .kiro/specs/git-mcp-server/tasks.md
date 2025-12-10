@@ -56,7 +56,7 @@
   - **Property 6: History limit is respected**
   - **Validates: Requirements 2.3**
 
-- [ ]* 4.5 Write property test for current branch validity
+- [x] 4.5 Write property test for current branch validity
   - **Property 7: Current branch is always defined**
   - **Validates: Requirements 2.5**
 
