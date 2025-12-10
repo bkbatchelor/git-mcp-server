@@ -22,7 +22,7 @@
   - Implement exception translation from JGit exceptions to GitMcpException
   - _Requirements: 1.1, 8.1, 8.4, 8.5_
 
-- [ ]* 3.1 Write property test for repository initialization
+- [x] 3.1 Write property test for repository initialization
   - **Property 1: Repository initialization creates valid Git repository**
   - **Validates: Requirements 1.1**
 
