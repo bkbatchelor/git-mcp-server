@@ -13,7 +13,7 @@ git-mcp-server:
 
 logging:
   level:
-    io.sandboxdev.gitmcp: DEBUG
-    org.eclipse.jgit: INFO
+    "[io.sandboxdev.gitmcp]": DEBUG
+    "[org.eclipse.jgit]": INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
