@@ -69,7 +69,7 @@
   - Implement getFileContents method for retrieving file at specific commit
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 6.1, 6.2, 6.3, 6.4, 6.5_
 
-- [ ]* 5.1 Write property test for staging files
+- [x] 5.1 Write property test for staging files
   - **Property 8: Staging files adds them to staged list**
   - **Validates: Requirements 3.1**
 
