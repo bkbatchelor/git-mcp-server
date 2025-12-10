@@ -52,7 +52,7 @@
   - **Property 5: Commit info contains complete metadata**
   - **Validates: Requirements 2.2, 2.4**
 
-- [ ]* 4.4 Write property test for history limit enforcement
+- [x] 4.4 Write property test for history limit enforcement
   - **Property 6: History limit is respected**
   - **Validates: Requirements 2.3**
 
