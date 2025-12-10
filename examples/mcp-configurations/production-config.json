@@ -1,0 +1,32 @@
+{
+  "mcpServers": {
+    "git-prod": {
+      "command": "java",
+      "args": [
+        "-Xmx512m",
+        "-Xms256m",
+        "-jar",
+        "/opt/git-mcp-server/git-mcp-server-1.0.0.jar"
+      ],
+      "env": {
+        "LOG_LEVEL": "WARN",
+        "SPRING_PROFILES_ACTIVE": "prod",
+        "GIT_MCP_SERVER_REPOSITORY_CACHE_MAX_SIZE": "20",
+        "GIT_MCP_SERVER_REPOSITORY_CACHE_TIMEOUT": "60m",
+        "GIT_MCP_SERVER_HISTORY_MAX_LIMIT": "500"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get-status",
+        "get-history",
+        "get-commit-details",
+        "get-current-branch",
+        "list-branches",
+        "list-remotes",
+        "get-diff",
+        "get-file-contents",
+        "generate-commit-message"
+      ]
+    }
+  }
+}

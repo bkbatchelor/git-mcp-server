@@ -12,8 +12,30 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 
 /**
- * Main Spring Boot application class for Git MCP Server.
- * Provides Git operations through the Model Context Protocol.
+ * Main Spring Boot application class for the Git MCP Server.
+ * 
+ * <p>This class serves as the entry point for the Git MCP Server application,
+ * which provides Git repository operations through the Model Context Protocol (MCP).
+ * The server exposes Git functionality as MCP tools and resources that can be
+ * consumed by AI assistants and other MCP-compatible clients.</p>
+ * 
+ * <p>The application is built using Spring Boot and integrates with Spring AI's
+ * MCP framework to provide standardized protocol support. It uses JGit for
+ * Git operations and includes comprehensive error handling and logging.</p>
+ * 
+ * <p>Key features provided by this application:</p>
+ * <ul>
+ *   <li>Repository management (init, clone, status)</li>
+ *   <li>Commit operations (stage, commit, history)</li>
+ *   <li>Branch management (create, switch, delete)</li>
+ *   <li>Remote operations (push, pull, fetch)</li>
+ *   <li>Commit message generation</li>
+ *   <li>File content and diff retrieval</li>
+ * </ul>
+ * 
+ * @author Git MCP Server
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @SpringBootApplication
 @EnableConfigurationProperties
@@ -23,17 +45,35 @@ public class GitMcpServerApplication {
     
     private final Environment environment;
 
+    /**
+     * Constructs the Git MCP Server application with the given Spring environment.
+     * 
+     * @param environment the Spring environment for accessing configuration properties
+     */
     public GitMcpServerApplication(Environment environment) {
         this.environment = environment;
     }
 
+    /**
+     * Main method to start the Git MCP Server application.
+     * 
+     * <p>Initializes the Spring Boot application context and starts the MCP server.
+     * The server will be ready to accept MCP connections once startup is complete.</p>
+     * 
+     * @param args command line arguments passed to the application
+     */
     public static void main(String[] args) {
         logger.info("Starting Git MCP Server...");
         SpringApplication.run(GitMcpServerApplication.class, args);
     }
 
     /**
-     * Provide ObjectMapper bean for JSON serialization.
+     * Provides an ObjectMapper bean for JSON serialization and deserialization.
+     * 
+     * <p>This bean is used throughout the application for converting Java objects
+     * to JSON and vice versa, particularly for MCP protocol communication.</p>
+     * 
+     * @return a configured ObjectMapper instance
      */
     @Bean
     public ObjectMapper objectMapper() {
@@ -41,7 +81,11 @@ public class GitMcpServerApplication {
     }
 
     /**
-     * Log startup information when application is ready.
+     * Event listener that logs startup information when the application is ready.
+     * 
+     * <p>This method is called after the Spring Boot application has fully started
+     * and is ready to accept requests. It logs configuration details and startup
+     * status to help with monitoring and debugging.</p>
      */
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {

@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "git-dev": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "/path/to/git-mcp-server-1.0.0.jar"
+      ],
+      "env": {
+        "LOG_LEVEL": "DEBUG",
+        "SPRING_PROFILES_ACTIVE": "dev"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get-status",
+        "get-history",
+        "get-commit-details",
+        "get-current-branch",
+        "list-branches",
+        "list-remotes",
+        "get-diff",
+        "get-file-contents"
+      ]
+    }
+  }
+}

@@ -15,7 +15,26 @@ import java.util.Map;
 
 /**
  * MCP Resource Provider that exposes Git repository information as MCP resources.
- * Resources provide read-only access to repository state, branches, and commit history.
+ * 
+ * <p>This class provides read-only access to Git repository information through
+ * the MCP resource protocol. Resources are identified by URIs and provide
+ * structured access to repository state, branch information, and commit history.</p>
+ * 
+ * <p>Available resources:</p>
+ * <ul>
+ *   <li>{@code git://repository/{path}/status} - Current repository status</li>
+ *   <li>{@code git://repository/{path}/branches} - All branches in the repository</li>
+ *   <li>{@code git://repository/{path}/history} - Recent commit history</li>
+ *   <li>{@code git://repository/{path}/current-branch} - Currently checked-out branch</li>
+ * </ul>
+ * 
+ * <p>All resources return JSON-formatted data that can be consumed by MCP clients
+ * for read-only access to repository information. This complements the tool
+ * provider by offering passive data access without triggering operations.</p>
+ * 
+ * @author Git MCP Server
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Component
 public class GitMcpResourceProvider {

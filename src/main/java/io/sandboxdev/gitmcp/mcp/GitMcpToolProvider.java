@@ -13,8 +13,27 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * MCP Tool Provider that exposes Git operations as MCP tools using Spring AI MCP.
- * Each method annotated with @McpTool becomes an available MCP tool for AI assistants.
+ * MCP Tool Provider that exposes Git operations as MCP tools using Spring AI MCP framework.
+ * 
+ * <p>This class serves as the primary interface between the MCP protocol and the Git
+ * service layer. Each method annotated with {@code @McpTool} becomes an available
+ * MCP tool that AI assistants can invoke to perform Git operations.</p>
+ * 
+ * <p>The tool provider handles:</p>
+ * <ul>
+ *   <li>Parameter validation and conversion from MCP format</li>
+ *   <li>Delegation to appropriate service layer methods</li>
+ *   <li>Response formatting for MCP protocol compliance</li>
+ *   <li>Error handling and logging for all operations</li>
+ * </ul>
+ * 
+ * <p>All tools follow a consistent pattern of logging invocation details,
+ * executing the operation through service layers, logging results, and
+ * returning structured responses that conform to MCP specifications.</p>
+ * 
+ * @author Git MCP Server
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Component
 public class GitMcpToolProvider {
