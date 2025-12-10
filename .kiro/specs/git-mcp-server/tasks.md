@@ -187,7 +187,7 @@
   - **Property 21: Valid tool invocations return MCP-formatted responses**
   - **Validates: Requirements 7.3**
 
-- [ ]* 9.3 Write property test for invalid parameter error handling
+- [x] 9.3 Write property test for invalid parameter error handling
   - **Property 22: Invalid parameters return MCP error format**
   - **Validates: Requirements 7.4**
 
