@@ -48,7 +48,7 @@
   - **Property 4: Status response contains all required fields**
   - **Validates: Requirements 2.1**
 
-- [ ]* 4.3 Write property test for commit metadata completeness
+- [x] 4.3 Write property test for commit metadata completeness
   - **Property 5: Commit info contains complete metadata**
   - **Validates: Requirements 2.2, 2.4**
 
