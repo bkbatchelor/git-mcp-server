@@ -199,7 +199,7 @@
   - Format resources according to MCP specification
   - _Requirements: 7.5_
 
-- [ ]* 10.1 Write property test for resource exposure
+- [x] 10.1 Write property test for resource exposure
   - **Property 23: Resources expose repository information**
   - **Validates: Requirements 7.5**
 
