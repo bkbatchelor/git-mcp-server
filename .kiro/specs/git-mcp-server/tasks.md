@@ -26,7 +26,7 @@
   - **Property 1: Repository initialization creates valid Git repository**
   - **Validates: Requirements 1.1**
 
-- [ ]* 3.2 Write property test for duplicate initialization rejection
+- [x] 3.2 Write property test for duplicate initialization rejection
   - **Property 2: Duplicate initialization is rejected**
   - **Validates: Requirements 1.4**
 

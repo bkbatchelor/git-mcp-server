@@ -1,5 +1,6 @@
 package io.sandboxdev.gitmcp;
 
+import io.sandboxdev.gitmcp.exception.GitMcpException;
 import io.sandboxdev.gitmcp.jgit.JGitCommandExecutor;
 import io.sandboxdev.gitmcp.jgit.JGitRepositoryManager;
 import io.sandboxdev.gitmcp.model.RepositoryInfo;
@@ -74,6 +75,58 @@ public class RepositoryInitializationProperty {
                 fail("Failed to open initialized repository: " + e.getMessage());
             }
             
+        } finally {
+            // Cleanup
+            cleanupRepository(repositoryPath);
+        }
+    }
+    
+    // Feature: git-mcp-server, Property 2: Duplicate initialization is rejected
+    @Property(tries = 100)
+    void duplicateInitializationIsRejected(@ForAll("validRepositoryPath") Path repositoryPath) {
+        try {
+            // Given a repository is already initialized at the path
+            RepositoryInfo firstInit = repositoryService.initRepository(repositoryPath);
+            assertThat(firstInit).isNotNull();
+            
+            // Store the original state of the repository
+            Path gitDir = repositoryPath.resolve(".git");
+            assertThat(gitDir).exists();
+            long originalConfigSize = Files.size(gitDir.resolve("config"));
+            
+            // When attempting to initialize again at the same path
+            // Then it should throw a GitMcpException and leave the existing repository unchanged
+            assertThatThrownBy(() -> repositoryService.initRepository(repositoryPath))
+                .isInstanceOf(GitMcpException.class)
+                .hasMessageContaining("already exists");
+            
+            // And the existing repository should remain unchanged
+            assertThat(gitDir).exists();
+            assertThat(gitDir).isDirectory();
+            assertThat(gitDir.resolve("config")).exists();
+            assertThat(gitDir.resolve("HEAD")).exists();
+            assertThat(gitDir.resolve("objects")).exists();
+            assertThat(gitDir.resolve("refs")).exists();
+            
+            // Verify the config file size hasn't changed (indicating no modification)
+            long currentConfigSize = Files.size(gitDir.resolve("config"));
+            assertThat(currentConfigSize).isEqualTo(originalConfigSize);
+            
+            // Verify we can still open the repository normally
+            File gitDirFile = gitDir.toFile();
+            try {
+                Repository repository = new FileRepositoryBuilder()
+                    .setGitDir(gitDirFile)
+                    .build();
+                
+                assertThat(repository).isNotNull();
+                repository.close();
+            } catch (IOException e) {
+                fail("Original repository was corrupted after duplicate initialization attempt: " + e.getMessage());
+            }
+            
+        } catch (IOException e) {
+            fail("Failed to check file sizes: " + e.getMessage());
         } finally {
             // Cleanup
             cleanupRepository(repositoryPath);
