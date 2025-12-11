@@ -32,7 +32,6 @@ hs_err_pid*
 *.iml
 *.ipr
 .vscode/
-.kiro/
 .settings/
 .project
 .classpath

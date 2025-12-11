@@ -23,6 +23,22 @@ The Git MCP Server enables AI assistants to interact with Git repositories by pr
 - Maven 3.6 or higher
 - Git (for repository operations)
 
+## Cross-Platform Compatibility
+
+The Git MCP Server is designed to work seamlessly across different operating systems:
+
+### Supported Platforms
+- **Windows** (Windows 10/11, Windows Server 2019+)
+- **macOS** (macOS 10.15+)
+- **Linux** (Ubuntu 18.04+, CentOS 7+, RHEL 7+, and other distributions)
+
+### Cross-Platform Features
+- **Automatic Line Ending Handling**: Git attributes configured for proper CRLF/LF handling
+- **UTF-8 Encoding**: Consistent UTF-8 encoding across all platforms
+- **Platform-Specific Scripts**: Both shell scripts (.sh) and batch files (.bat) provided
+- **Maven Profile Activation**: Automatic platform detection for deployment
+- **File Path Compatibility**: Proper handling of Windows and Unix file paths
+
 ## Quick Start
 
 ### Building the Project
@@ -57,6 +73,7 @@ mvn clean package
 
 #### Deployment Examples
 
+**Unix/Linux/macOS:**
 ```bash
 # Deploy to a local applications directory
 export DEPLOY_DIR="/opt/git-mcp-server"
@@ -75,14 +92,43 @@ export DEPLOY_DIR="/mnt/shared/mcp-servers"
 mvn clean package
 ```
 
+**Windows:**
+```cmd
+REM Deploy to a local applications directory
+set DEPLOY_DIR=C:\opt\git-mcp-server
+mvn clean package
+
+REM Deploy to your user directory
+set DEPLOY_DIR=%USERPROFILE%\applications
+mvn clean package
+
+REM Deploy to a project-specific location
+set DEPLOY_DIR=.\deploy
+mvn clean package
+
+REM Deploy to a shared network location
+set DEPLOY_DIR=\\server\shared\mcp-servers
+mvn clean package
+```
+
 #### Build Without Deployment
 
+**Unix/Linux/macOS:**
 ```bash
 # Simply don't set the DEPLOY_DIR variable
 unset DEPLOY_DIR
 mvn clean package
 
 # JAR will only be created in target/ directory
+```
+
+**Windows:**
+```cmd
+REM Clear the DEPLOY_DIR variable
+set DEPLOY_DIR=
+mvn clean package
+
+REM JAR will only be created in target\ directory
 ```
 
 The deployment process will:
@@ -451,8 +497,9 @@ For issues and questions:
 
 ### Testing Deployment
 
-The project includes a test script to verify the deployment functionality:
+The project includes cross-platform test scripts to verify the deployment functionality:
 
+**Unix/Linux/macOS:**
 ```bash
 # Make the test script executable
 chmod +x test-deploy.sh
@@ -461,11 +508,36 @@ chmod +x test-deploy.sh
 ./test-deploy.sh
 ```
 
-This script will:
+**Windows:**
+```cmd
+REM Run the deployment test
+test-deploy.bat
+```
+
+These scripts will:
 1. Test building without deployment
-2. Test building with deployment to `/tmp/test-deploy`
+2. Test building with deployment to a temporary directory
 3. Verify that the JAR was copied correctly
 4. Show the results
+
+### Log Management
+
+Cross-platform log management scripts are available:
+
+**Unix/Linux/macOS:**
+```bash
+chmod +x log-management.sh
+./log-management.sh tail    # Follow logs in real-time
+./log-management.sh errors  # View only errors
+./log-management.sh size    # Check log file sizes
+```
+
+**Windows:**
+```cmd
+log-management.bat tail     REM Follow logs in real-time
+log-management.bat errors   REM View only errors
+log-management.bat size     REM Check log file sizes
+```
 
 ### Manual Testing
 

@@ -18,6 +18,8 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         
         <spring.boot.version>3.5.8</spring.boot.version>
         <spring.ai.version>1.1.1</spring.ai.version>
@@ -132,6 +134,24 @@
                     <source>21</source>
                     <target>21</target>
                     <release>21</release>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>-Xlint:unchecked</arg>
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>class</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
 
@@ -140,6 +160,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
+                    <encoding>UTF-8</encoding>
                     <includes>
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>
@@ -148,37 +169,95 @@
                 </configuration>
             </plugin>
 
-            <!-- Copy JAR to deployment directory if DEPLOY_DIR is set -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-jar-to-deploy-dir</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>bash</executable>
-                            <arguments>
-                                <argument>-c</argument>
-                                <argument>
-                                    if [ -n "$DEPLOY_DIR" ]; then
-                                        echo "DEPLOY_DIR is set to: $DEPLOY_DIR";
-                                        mkdir -p "$DEPLOY_DIR";
-                                        cp "${project.build.directory}/${project.build.finalName}.jar" "$DEPLOY_DIR/";
-                                        echo "JAR copied to $DEPLOY_DIR/${project.build.finalName}.jar";
-                                    else
-                                        echo "DEPLOY_DIR not set, skipping JAR copy";
-                                    fi
-                                </argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
+    <!-- Cross-platform deployment profiles -->
+    <profiles>
+        <!-- Unix/Linux/macOS deployment profile -->
+        <profile>
+            <id>deploy-unix</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+                <property>
+                    <name>env.DEPLOY_DIR</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>copy-jar-unix</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <arguments>
+                                        <argument>-c</argument>
+                                        <argument>
+                                            echo "DEPLOY_DIR is set to: $DEPLOY_DIR";
+                                            mkdir -p "$DEPLOY_DIR";
+                                            cp "${project.build.directory}/${project.build.finalName}.jar" "$DEPLOY_DIR/";
+                                            echo "JAR copied to $DEPLOY_DIR/${project.build.finalName}.jar";
+                                        </argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Windows deployment profile -->
+        <profile>
+            <id>deploy-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+                <property>
+                    <name>env.DEPLOY_DIR</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>copy-jar-windows</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>cmd</executable>
+                                    <arguments>
+                                        <argument>/c</argument>
+                                        <argument>
+                                            echo DEPLOY_DIR is set to: %DEPLOY_DIR% &amp;&amp;
+                                            if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%" &amp;&amp;
+                                            copy "${project.build.directory}\${project.build.finalName}.jar" "%DEPLOY_DIR%\" &amp;&amp;
+                                            echo JAR copied to %DEPLOY_DIR%\${project.build.finalName}.jar
+                                        </argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
