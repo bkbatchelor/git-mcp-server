@@ -2,7 +2,11 @@
   "mcpServers": {
     "git": {
       "command": "java",
-      "args": ["-jar", "/path/to/git-mcp-server-1.0.0.jar"],
+      "args": [
+        "-Djava.awt.headless=true",
+        "-jar", 
+        "/path/to/git-mcp-server-1.0.0.jar"
+      ],
       "env": {
         "LOG_LEVEL": "INFO"
       },

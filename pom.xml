@@ -147,6 +147,38 @@
                     </includes>
                 </configuration>
             </plugin>
+
+            <!-- Copy JAR to deployment directory if DEPLOY_DIR is set -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-jar-to-deploy-dir</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>-c</argument>
+                                <argument>
+                                    if [ -n "$DEPLOY_DIR" ]; then
+                                        echo "DEPLOY_DIR is set to: $DEPLOY_DIR";
+                                        mkdir -p "$DEPLOY_DIR";
+                                        cp "${project.build.directory}/${project.build.finalName}.jar" "$DEPLOY_DIR/";
+                                        echo "JAR copied to $DEPLOY_DIR/${project.build.finalName}.jar";
+                                    else
+                                        echo "DEPLOY_DIR not set, skipping JAR copy";
+                                    fi
+                                </argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
