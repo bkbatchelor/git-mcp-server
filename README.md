@@ -39,6 +39,58 @@ mvn clean install
 mvn test
 ```
 
+### Automated Deployment
+
+The project includes automated JAR deployment functionality that copies the built JAR to a specified directory using environment variables.
+
+#### Basic Deployment
+
+```bash
+# Set your deployment directory
+export DEPLOY_DIR="/path/to/your/deployment/directory"
+
+# Build and automatically deploy
+mvn clean package
+
+# The JAR will be automatically copied to $DEPLOY_DIR/git-mcp-server-1.0.0.jar
+```
+
+#### Deployment Examples
+
+```bash
+# Deploy to a local applications directory
+export DEPLOY_DIR="/opt/git-mcp-server"
+mvn clean package
+
+# Deploy to your home directory
+export DEPLOY_DIR="$HOME/applications"
+mvn clean package
+
+# Deploy to a project-specific location
+export DEPLOY_DIR="./deploy"
+mvn clean package
+
+# Deploy to a shared network location
+export DEPLOY_DIR="/mnt/shared/mcp-servers"
+mvn clean package
+```
+
+#### Build Without Deployment
+
+```bash
+# Simply don't set the DEPLOY_DIR variable
+unset DEPLOY_DIR
+mvn clean package
+
+# JAR will only be created in target/ directory
+```
+
+The deployment process will:
+- Automatically create the destination directory if it doesn't exist
+- Copy the JAR file to the specified location
+- Provide console output showing the deployment status
+- Continue the build process even if deployment fails (non-blocking)
+
 ### Running the Server
 
 ```bash
@@ -46,7 +98,10 @@ mvn test
 mvn spring-boot:run
 
 # Or run the packaged JAR
-java -jar target/git-mcp-server-1.0.0.jar
+java -Djava.awt.headless=true -jar target/git-mcp-server-1.0.0.jar
+
+# For production environments, you may also want to add memory settings
+java -Djava.awt.headless=true -Xmx512m -Xms256m -jar target/git-mcp-server-1.0.0.jar
 ```
 
 The server will start and listen for MCP connections. By default, it runs on the standard MCP protocol interface.
@@ -58,6 +113,16 @@ The server will start and listen for MCP connections. By default, it runs on the
 The server can be configured through `src/main/resources/application.yml`:
 
 ```yaml
+# Spring Boot Configuration
+spring:
+  main:
+    web-application-type: none  # Disable web server to avoid port conflicts
+    banner-mode: off           # Disable Spring Boot banner
+  output:
+    ansi:
+      enabled: never           # Disable ANSI colors for cleaner logs
+
+# Git MCP Server Configuration
 git-mcp-server:
   repository:
     cache:
@@ -71,11 +136,32 @@ git-mcp-server:
     server-name: "Git MCP Server"
     server-version: "1.0.0"
 
+# Logging Configuration
 logging:
   level:
-    "[io.sandboxdev.gitmcp]": DEBUG
-    "[org.eclipse.jgit]": INFO
+    root: WARN                              # Reduce root logging level
+    "[io.sandboxdev.gitmcp]": INFO          # Application logs
+    "[org.eclipse.jgit]": WARN              # JGit logs
+    "[org.springframework]": WARN           # Spring logs
+    "[org.springframework.boot]": ERROR     # Spring Boot startup logs
+  file:
+    name: logs/git-mcp-server.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 5
+      total-size-cap: 50MB
+  console:
+    enabled: false                          # Disable console logging
 ```
+
+#### Key Configuration Features:
+
+- **Headless Operation**: Web server disabled to prevent port conflicts
+- **Clean Startup**: Banner and verbose startup logs disabled
+- **File-Only Logging**: All logs redirected to `logs/git-mcp-server.log`
+- **Log Rotation**: Automatic log rotation with size and time-based policies
+- **Optimized for MCP**: Configuration designed for MCP protocol communication
 
 ### MCP Client Configuration
 
@@ -86,7 +172,33 @@ To use the Git MCP Server with an MCP-compatible AI assistant, add the following
   "mcpServers": {
     "git": {
       "command": "java",
-      "args": ["-jar", "/path/to/git-mcp-server-1.0.0.jar"],
+      "args": [
+        "-Djava.awt.headless=true",
+        "-jar", 
+        "/path/to/git-mcp-server-1.0.0.jar"
+      ],
+      "env": {
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
+```
+
+#### Using with Deployed JAR
+
+If you've used the automated deployment feature, you can reference the deployed JAR directly:
+
+```json
+{
+  "mcpServers": {
+    "git": {
+      "command": "java",
+      "args": [
+        "-Djava.awt.headless=true",
+        "-jar", 
+        "/opt/git-mcp-server/git-mcp-server-1.0.0.jar"
+      ],
       "env": {
         "LOG_LEVEL": "INFO"
       }
@@ -271,12 +383,49 @@ The server provides comprehensive error handling with specific error codes:
 
 ## Logging
 
-The server uses SLF4J with Logback for logging. Log levels can be configured in `application.yml`:
+The server uses SLF4J with Logback for comprehensive logging management:
 
-- `DEBUG` - Detailed operation information
-- `INFO` - General operation status
-- `WARN` - Warning conditions
-- `ERROR` - Error conditions with stack traces
+### Log Configuration
+
+- **File-Only Logging**: All logs are written to `logs/git-mcp-server.log`
+- **Console Logging Disabled**: Prevents JSON parsing errors in MCP communication
+- **Automatic Rotation**: Logs rotate based on size (10MB) and time (daily)
+- **Retention Policy**: Keeps 5 historical files, max 50MB total
+
+### Log Levels
+
+- `ERROR` - Critical errors and Spring Boot startup issues
+- `WARN` - Warning conditions and JGit operations
+- `INFO` - Application operations and Git MCP Server activities
+- `DEBUG` - Detailed debugging information (disabled by default)
+
+### Log File Management
+
+```bash
+# View current logs
+tail -f logs/git-mcp-server.log
+
+# View logs with specific level
+grep "ERROR" logs/git-mcp-server.log
+
+# Monitor log file size
+ls -lh logs/
+
+# Clean old logs (if needed)
+find logs/ -name "*.log.gz" -mtime +30 -delete
+```
+
+### Environment-Specific Logging
+
+You can override log levels using environment variables:
+
+```bash
+# Enable debug logging for development
+export LOGGING_LEVEL_IO_SANDBOXDEV_GITMCP=DEBUG
+
+# Change log file location
+export LOGGING_FILE_NAME=/var/log/git-mcp-server.log
+```
 
 ## Contributing
 
@@ -298,6 +447,30 @@ For issues and questions:
 2. Create a new issue with detailed information
 3. Include logs and configuration details when reporting bugs
 
+## Development Tools
+
+### Testing Deployment
+
+The project includes a test script to verify the deployment functionality:
+
+```bash
+# Make the test script executable
+chmod +x test-deploy.sh
+
+# Run the deployment test
+./test-deploy.sh
+```
+
+This script will:
+1. Test building without deployment
+2. Test building with deployment to `/tmp/test-deploy`
+3. Verify that the JAR was copied correctly
+4. Show the results
+
+### Manual Testing
+
+For manual testing of the deployment feature, see `manual-test.md` for detailed instructions.
+
 ## Changelog
 
 ### Version 1.0.0
@@ -306,3 +479,4 @@ For issues and questions:
 - Complete Git operations suite
 - Property-based testing implementation
 - Comprehensive error handling and logging
+- Automated JAR deployment with environment variable configuration

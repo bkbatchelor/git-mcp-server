@@ -3,6 +3,7 @@
     "git": {
       "command": "java",
       "args": [
+        "-Djava.awt.headless=true",
         "-jar",
         "target/git-mcp-server-1.0.0.jar"
       ],

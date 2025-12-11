@@ -3,6 +3,7 @@
     "git-prod": {
       "command": "java",
       "args": [
+        "-Djava.awt.headless=true",
         "-Xmx512m",
         "-Xms256m",
         "-jar",
