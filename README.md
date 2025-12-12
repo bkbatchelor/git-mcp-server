@@ -61,14 +61,17 @@ The project includes automated JAR deployment functionality that copies the buil
 
 #### Basic Deployment
 
+The project uses a unified cross-platform deployment approach with the maven-antrun-plugin, which automatically handles file operations correctly on all operating systems.
+
 ```bash
-# Set your deployment directory
-export DEPLOY_DIR="/path/to/your/deployment/directory"
+# Set your deployment directory (works on all platforms)
+export DEPLOY_DIR="/path/to/your/deployment/directory"  # Unix/Linux/macOS
+set DEPLOY_DIR=C:\path\to\your\deployment\directory     # Windows
 
 # Build and automatically deploy
 mvn clean package
 
-# The JAR will be automatically copied to $DEPLOY_DIR/git-mcp-server-1.0.0.jar
+# The JAR will be automatically copied to the specified directory
 ```
 
 #### Deployment Examples
@@ -110,6 +113,15 @@ REM Deploy to a shared network location
 set DEPLOY_DIR=\\server\shared\mcp-servers
 mvn clean package
 ```
+
+#### Cross-Platform Improvements
+
+The deployment system now uses maven-antrun-plugin instead of exec-maven-plugin for better cross-platform compatibility:
+
+- **Unified Configuration**: Single profile works on all platforms
+- **Proper Maven Property Resolution**: Environment variables and Maven properties are correctly resolved
+- **Cross-Platform File Operations**: Ant tasks handle file paths automatically on Windows and Unix systems
+- **Better Error Handling**: More reliable file operations with consistent behavior across platforms
 
 #### Build Without Deployment
 
@@ -515,6 +527,49 @@ export LOGGING_LEVEL_IO_SANDBOXDEV_GITMCP=DEBUG
 # Change log file location
 export LOGGING_FILE_NAME=/var/log/git-mcp-server.log
 ```
+The server uses SLF4J with Logback for comprehensive logging management:
+
+### Log Configuration
+
+- **File-Only Logging**: All logs are written to `logs/git-mcp-server.log`
+- **Console Logging Disabled**: Prevents JSON parsing errors in MCP communication
+- **Automatic Rotation**: Logs rotate based on size (10MB) and time (daily)
+- **Retention Policy**: Keeps 5 historical files, max 50MB total
+
+### Log Levels
+
+- `ERROR` - Critical errors and Spring Boot startup issues
+- `WARN` - Warning conditions and JGit operations
+- `INFO` - Application operations and Git MCP Server activities
+- `DEBUG` - Detailed debugging information (disabled by default)
+
+### Log File Management
+
+```bash
+# View current logs
+tail -f logs/git-mcp-server.log
+
+# View logs with specific level
+grep "ERROR" logs/git-mcp-server.log
+
+# Monitor log file size
+ls -lh logs/
+
+# Clean old logs (if needed)
+find logs/ -name "*.log.gz" -mtime +30 -delete
+```
+
+### Environment-Specific Logging
+
+You can override log levels using environment variables:
+
+```bash
+# Enable debug logging for development
+export LOGGING_LEVEL_IO_SANDBOXDEV_GITMCP=DEBUG
+
+# Change log file location
+export LOGGING_FILE_NAME=/var/log/git-mcp-server.log
+```
 
 ## Contributing
 
@@ -541,7 +596,9 @@ For issues and questions:
 ### Testing Deployment
 
 The project includes cross-platform test scripts to verify the deployment functionality:
+The project includes cross-platform test scripts to verify the deployment functionality:
 
+**Unix/Linux/macOS:**
 **Unix/Linux/macOS:**
 ```bash
 # Make the test script executable
@@ -558,10 +615,37 @@ test-deploy.bat
 ```
 
 These scripts will:
+**Windows:**
+```cmd
+REM Run the deployment test
+test-deploy.bat
+```
+
+These scripts will:
 1. Test building without deployment
+2. Test building with deployment to a temporary directory
 2. Test building with deployment to a temporary directory
 3. Verify that the JAR was copied correctly
 4. Show the results
+
+### Log Management
+
+Cross-platform log management scripts are available:
+
+**Unix/Linux/macOS:**
+```bash
+chmod +x log-management.sh
+./log-management.sh tail    # Follow logs in real-time
+./log-management.sh errors  # View only errors
+./log-management.sh size    # Check log file sizes
+```
+
+**Windows:**
+```cmd
+log-management.bat tail     REM Follow logs in real-time
+log-management.bat errors   REM View only errors
+log-management.bat size     REM Check log file sizes
+```
 
 ### Log Management
 
@@ -594,5 +678,6 @@ For manual testing of the deployment feature, see `manual-test.md` for detailed 
 - Complete Git operations suite
 - Property-based testing implementation
 - Comprehensive error handling and logging
+- Automated JAR deployment with environment variable configuration
 - Automated JAR deployment with environment variable configuration
 - Automated JAR deployment with environment variable configuration
