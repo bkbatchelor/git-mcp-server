@@ -61,14 +61,17 @@ The project includes automated JAR deployment functionality that copies the buil
 
 #### Basic Deployment
 
+The project uses a unified cross-platform deployment approach with the maven-antrun-plugin, which automatically handles file operations correctly on all operating systems.
+
 ```bash
-# Set your deployment directory
-export DEPLOY_DIR="/path/to/your/deployment/directory"
+# Set your deployment directory (works on all platforms)
+export DEPLOY_DIR="/path/to/your/deployment/directory"  # Unix/Linux/macOS
+set DEPLOY_DIR=C:\path\to\your\deployment\directory     # Windows
 
 # Build and automatically deploy
 mvn clean package
 
-# The JAR will be automatically copied to $DEPLOY_DIR/git-mcp-server-1.0.0.jar
+# The JAR will be automatically copied to the specified directory
 ```
 
 #### Deployment Examples
@@ -110,6 +113,15 @@ REM Deploy to a shared network location
 set DEPLOY_DIR=\\server\shared\mcp-servers
 mvn clean package
 ```
+
+#### Cross-Platform Improvements
+
+The deployment system now uses maven-antrun-plugin instead of exec-maven-plugin for better cross-platform compatibility:
+
+- **Unified Configuration**: Single profile works on all platforms
+- **Proper Maven Property Resolution**: Environment variables and Maven properties are correctly resolved
+- **Cross-Platform File Operations**: Ant tasks handle file paths automatically on Windows and Unix systems
+- **Better Error Handling**: More reliable file operations with consistent behavior across platforms
 
 #### Build Without Deployment
 

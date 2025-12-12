@@ -172,15 +172,11 @@
         </plugins>
     </build>
 
-    <!-- Cross-platform deployment profiles -->
+    <!-- Cross-platform deployment profile -->
     <profiles>
-        <!-- Unix/Linux/macOS deployment profile -->
         <profile>
-            <id>deploy-unix</id>
+            <id>deploy</id>
             <activation>
-                <os>
-                    <family>unix</family>
-                </os>
                 <property>
                     <name>env.DEPLOY_DIR</name>
                 </property>
@@ -188,70 +184,24 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
-                                <id>copy-jar-unix</id>
+                                <id>deploy-jar</id>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>exec</goal>
+                                    <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>bash</executable>
-                                    <arguments>
-                                        <argument>-c</argument>
-                                        <argument>
-                                            echo "DEPLOY_DIR is set to: $DEPLOY_DIR";
-                                            mkdir -p "$DEPLOY_DIR";
-                                            cp "${project.build.directory}/${project.build.finalName}.jar" "$DEPLOY_DIR/";
-                                            echo "JAR copied to $DEPLOY_DIR/${project.build.finalName}.jar";
-                                        </argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- Windows deployment profile -->
-        <profile>
-            <id>deploy-windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-                <property>
-                    <name>env.DEPLOY_DIR</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.1.1</version>
-                        <executions>
-                            <execution>
-                                <id>copy-jar-windows</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>cmd</executable>
-                                    <arguments>
-                                        <argument>/c</argument>
-                                        <argument>
-                                            echo DEPLOY_DIR is set to: %DEPLOY_DIR% &amp;&amp;
-                                            if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%" &amp;&amp;
-                                            copy "${project.build.directory}\${project.build.finalName}.jar" "%DEPLOY_DIR%\" &amp;&amp;
-                                            echo JAR copied to %DEPLOY_DIR%\${project.build.finalName}.jar
-                                        </argument>
-                                    </arguments>
+                                    <target>
+                                        <echo message="DEPLOY_DIR is set to: ${env.DEPLOY_DIR}" />
+                                        <mkdir dir="${env.DEPLOY_DIR}" />
+                                        <copy file="${project.build.directory}/${project.build.finalName}.jar" 
+                                              todir="${env.DEPLOY_DIR}" />
+                                        <echo message="JAR copied to ${env.DEPLOY_DIR}/${project.build.finalName}.jar" />
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
