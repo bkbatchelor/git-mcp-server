@@ -21,6 +21,42 @@ git-mcp-server:
     server-name: "Git MCP Server"
     server-version: "1.0.0"
 
+# MCP Debug System Configuration
+mcp-debug:
+  enabled: false  # Set to true to enable debug system
+  global-level: INFO
+  
+  protocol-tracing:
+    enabled: true
+    retention: 24h
+    buffer-size: 10000
+    real-time-monitoring: false
+    
+  performance-monitoring:
+    enabled: true
+    collection-interval: 1s
+    thresholds:
+      tool-response-time: "5s"
+      resource-response-size: "10MB"
+      
+  health-checks:
+    enabled: true
+    interval: 5m
+    timeout: 30s
+    
+  storage:
+    type: file # file, memory
+    base-path: debug-data
+    retention: 7d
+    compression: true
+    
+  notifications:
+    enabled: true
+        
+  export:
+    sanitize-sensitive-data: true
+    max-export-size: "100MB"
+
 # Logging Configuration
 logging:
   level:
