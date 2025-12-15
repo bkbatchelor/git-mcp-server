@@ -8,36 +8,37 @@ import java.util.List;
 
 /**
  * Interface for processing MCP protocol traces.
- * Handles trace processing, storage, and real-time monitoring.
+ * 
+ * Handles storage, retrieval, and real-time monitoring of protocol traces.
  */
 public interface TraceProcessor {
     
     /**
-     * Process a protocol trace for storage and analysis.
+     * Process a captured protocol trace.
      * 
      * @param trace the protocol trace to process
      */
     void processProtocolTrace(ProtocolTrace trace);
     
     /**
-     * Retrieve traces matching the specified filter criteria.
+     * Retrieve traces matching the given filter.
      * 
-     * @param filter the filter criteria for trace selection
-     * @return list of matching protocol traces
+     * @param filter the filter criteria
+     * @return list of matching traces
      */
     List<ProtocolTrace> getTraces(TraceFilter filter);
     
     /**
-     * Enable or disable real-time monitoring of protocol traces.
+     * Enable or disable real-time monitoring.
      * 
-     * @param enabled true to enable real-time monitoring, false to disable
+     * @param enabled true to enable real-time monitoring
      */
     void enableRealTimeMonitoring(boolean enabled);
     
     /**
-     * Set the retention policy for protocol traces.
+     * Set the trace retention policy.
      * 
-     * @param retention the duration to retain traces
+     * @param retention how long to keep traces
      */
     void setTraceRetentionPolicy(Duration retention);
 }
