@@ -14,12 +14,12 @@ The architecture follows a plugin-based approach where debugging capabilities ca
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    AI Assistant (Client)                     │
+│                    AI Assistant (Client)                    │
 └───────────────────────────┬─────────────────────────────────┘
                             │ MCP Protocol (JSON-RPC)
                             │
 ┌───────────────────────────▼─────────────────────────────────┐
-│                    MCP Server with Debugging                 │
+│                    MCP Server with Debugging                │
 │  ┌────────────────────────────────────────────────────────┐ │
 │  │              MCP Protocol Layer                        │ │
 │  │           (Existing MCP Server)                        │ │
