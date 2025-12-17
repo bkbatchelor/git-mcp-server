@@ -231,33 +231,33 @@ public class McpProtocolInterceptor {
     
     private boolean matchesFilter(ProtocolTrace trace, TraceFilter filter) {
         // Check message type filter
-        if (filter.messageType().isPresent() && 
-            !filter.messageType().get().equals(trace.messageType())) {
+        if (filter.messageType() != null && 
+            !filter.messageType().equals(trace.messageType())) {
             return false;
         }
         
         // Check client ID filter
-        if (filter.clientId().isPresent() && 
-            !filter.clientId().get().equals(trace.clientId())) {
+        if (filter.clientId() != null && 
+            !filter.clientId().equals(trace.clientId())) {
             return false;
         }
         
-        // Check start time filter
-        if (filter.startTime().isPresent() && 
-            trace.timestamp().isBefore(filter.startTime().get())) {
-            return false;
-        }
-        
-        // Check end time filter
-        if (filter.endTime().isPresent() && 
-            trace.timestamp().isAfter(filter.endTime().get())) {
-            return false;
+        // Check time range filter
+        if (filter.timeRange() != null) {
+            if (filter.timeRange().start() != null && 
+                trace.timestamp().isBefore(filter.timeRange().start())) {
+                return false;
+            }
+            if (filter.timeRange().end() != null && 
+                trace.timestamp().isAfter(filter.timeRange().end())) {
+                return false;
+            }
         }
         
         // Check error filter
-        if (filter.hasError().isPresent()) {
+        if (filter.errorsOnly()) {
             boolean traceHasError = trace.errorMessage().isPresent();
-            if (filter.hasError().get() != traceHasError) {
+            if (!traceHasError) {
                 return false;
             }
         }
