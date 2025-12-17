@@ -41,7 +41,7 @@ public record TraceFilter(
     /**
      * Create a filter for errors only.
      */
-    public static TraceFilter errorsOnly() {
+    public static TraceFilter forErrorsOnly() {
         return new TraceFilter(null, null, null, true);
     }
     
