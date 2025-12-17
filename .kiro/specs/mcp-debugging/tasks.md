@@ -85,54 +85,54 @@
     - **Property 36: Notification retry reliability**
     - **Validates: Requirements 10.5**
 
-- [ ] 4. Implement Health Check System
-  - [ ] 4.1 Create HealthCheckExecutor implementation
+- [x] 4. Implement Health Check System
+  - [x] 4.1 Create HealthCheckExecutor implementation
     - Implement tool accessibility validation
     - Add resource endpoint validation
     - Create configuration validation at startup
     - Add scheduled health check execution
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 4.2 Write property test for tool accessibility validation
+  - [x] 4.2 Write property test for tool accessibility validation
     - **Property 6: Tool accessibility validation**
     - **Validates: Requirements 3.1**
 
-  - [ ] 4.3 Write property test for resource endpoint validation
+  - [x] 4.3 Write property test for resource endpoint validation
     - **Property 7: Resource endpoint validation**
     - **Validates: Requirements 3.2**
 
-  - [ ] 4.4 Write property test for configuration validation
+  - [x] 4.4 Write property test for configuration validation
     - **Property 8: Configuration validation completeness**
     - **Validates: Requirements 3.3**
 
-  - [ ] 4.5 Write property test for health report completeness
+  - [x] 4.5 Write property test for health report completeness
     - **Property 9: Health report completeness**
     - **Validates: Requirements 3.4**
 
-  - [ ] 4.6 Write property test for scheduled health checks
+  - [x] 4.6 Write property test for scheduled health checks
     - **Property 10: Scheduled health check execution**
     - **Validates: Requirements 3.5**
 
-- [ ] 5. Implement Data Storage Layer
-  - [ ] 5.1 Create InMemoryTraceBuffer implementation
+- [x] 5. Implement Data Storage Layer
+  - [x] 5.1 Create InMemoryTraceBuffer implementation
     - Implement ring buffer for real-time protocol traces
     - Add configurable size and retention policy
     - Ensure thread-safe concurrent access
     - _Requirements: 1.1, 5.1_
 
-  - [ ] 5.2 Create FileBasedStorage implementation
+  - [x] 5.2 Create FileBasedStorage implementation
     - Implement persistent storage for historical data
     - Add compressed archives with searchable indexes
     - Implement configurable retention and cleanup policies
     - _Requirements: 5.2, 7.5_
 
-  - [ ] 5.3 Create MetricsDatabase implementation
+  - [x] 5.3 Create MetricsDatabase implementation
     - Implement time-series storage for performance metrics
     - Add efficient aggregation and querying capabilities
     - Support metric rollups and downsampling
     - _Requirements: 2.4, 5.4_
 
-  - [ ] 5.4 Write property test for historical data availability
+  - [x] 5.4 Write property test for historical data availability
     - **Property 15: Historical data availability**
     - **Validates: Requirements 5.2**
 
