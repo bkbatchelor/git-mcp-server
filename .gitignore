@@ -28,6 +28,7 @@ hs_err_pid*
 *.iws
 *.iml
 *.ipr
+.vscode/
 .settings/
 .project
 .classpath
