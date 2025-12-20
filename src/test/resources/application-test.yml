@@ -1,0 +1,11 @@
+mcp-debug:
+  enabled: true
+  protocol-tracing:
+    enabled: true
+    retention: 1h
+    buffer-size: 1000
+
+logging:
+  level:
+    io.sandboxdev.gitmcp.debug: DEBUG
+    root: WARN
