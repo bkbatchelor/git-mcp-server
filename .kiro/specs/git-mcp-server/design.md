@@ -2,63 +2,93 @@
 
 ## Overview
 
-The Git MCP Server is a Java 21 application that bridges AI assistants with Git repositories through the Model Context Protocol (MCP). The server exposes Git operations as MCP tools, enabling AI-driven version control workflows while maintaining security and data integrity.
+The Git MCP Server is a Java 21 application that bridges AI assistants with Git repositories through the Model Context Protocol (MCP). The server exposes Git operations as MCP tools, enabling AI-driven version control workflows while maintaining strict security and data integrity.
 
-The architecture follows a layered approach with clear separation between MCP protocol handling, Git operations, and data serialization. The server uses JGit for Git operations, Spring AI for MCP protocol implementation, and follows modern Java practices with Gradle Kotlin DSL for build management.
+The architecture follows a layered approach with clear separation between MCP protocol handling, Git operations, and data serialization. The server uses JGit for Git operations, adheres to MCP JSON-RPC 2.0 specification, and follows modern Java 21 practices including Virtual Threads, Records, and Pattern Matching. The build system uses Gradle Kotlin DSL with comprehensive quality gates including mutation testing via PiTest.
 
 ## Architecture
 
 ### High-Level Architecture
 
+```mermaid
+graph TB
+    A[AI Assistant Client] -->|MCP JSON-RPC 2.0| B[Git MCP Server]
+    B -->|Stdio/SSE Transport| C[MCP Protocol Layer]
+    C --> D[Service Layer]
+    D --> E[Repository Layer]
+    E -->|JGit API| F[Git Repository]
+    
+    subgraph "Git MCP Server"
+        C[MCP Protocol Layer]
+        D[Service Layer] 
+        E[Repository Layer]
+        G[Data Layer]
+        H[Security Layer]
+    end
+    
+    subgraph "Transport Options"
+        I[Stdio - Local IDE]
+        J[SSE - Remote Agents]
+    end
+    
+    C -.-> I
+    C -.-> J
+    D --> G
+    C --> H
 ```
-┌─────────────────┐    MCP Protocol    ┌─────────────────┐
-│   AI Assistant  │ ◄─────────────────► │  Git MCP Server │
-│    (Client)     │    JSON-RPC 2.0    │                 │
-└─────────────────┘                    └─────────────────┘
-                                                │
-                                                │ JGit API
-                                                ▼
-                                       ┌─────────────────┐
-                                       │ Git Repository  │
-                                       │  (File System)  │
-                                       └─────────────────┘
-```
+
+### Transport Layer Strategy
+
+**Local IDE Integration**: Uses Stdio transport with Java 21 Virtual Threads to handle blocking I/O on System.in/System.out without stalling the application loop.
+
+**Remote Agent Integration**: Uses Server-Sent Events (SSE) for HTTP-based transport, leveraging Spring Boot's reactive capabilities.
+
+**Protocol Compliance**: Strict adherence to MCP JSON-RPC 2.0 specification with stateless operation - context passed via protocol primitives, not server memory.
 
 ### Layer Architecture
 
-1. **MCP Protocol Layer**: Handles JSON-RPC 2.0 communication, session management, and protocol compliance
-2. **Service Layer**: Orchestrates Git operations and manages business logic
-3. **Repository Layer**: Abstracts Git operations using JGit
-4. **Data Layer**: Handles serialization/deserialization and data validation
+1. **MCP Protocol Layer**: Handles JSON-RPC 2.0 communication, session management, and protocol compliance with strict output stream hygiene
+2. **Security Layer**: Input validation, path traversal protection, and credential management
+3. **Service Layer**: Orchestrates Git operations and manages business logic with Virtual Thread support
+4. **Repository Layer**: Abstracts Git operations using JGit with comprehensive error handling
+5. **Data Layer**: Handles serialization/deserialization using Java Records for immutable data structures
 
 ## Components and Interfaces
 
 ### Core Components
 
 #### MCPServerController
-- **Purpose**: Entry point for MCP protocol messages
+
+- **Purpose**: Entry point for MCP protocol messages with strict JSON-RPC 2.0 compliance
 - **Responsibilities**: 
-  - Handle JSON-RPC 2.0 requests/responses
-  - Manage client sessions and authentication
+  - Handle JSON-RPC 2.0 requests/responses with proper error code mapping
+  - Manage stateless client sessions
   - Route requests to appropriate services
+  - Maintain output stream hygiene (System.out for protocol, System.err for logs)
 - **Key Methods**:
   - `handleToolCall(ToolCallRequest): ToolCallResponse`
   - `initializeSession(InitRequest): InitResponse`
   - `listTools(): ToolListResponse`
+- **Security**: Input validation against Java Record schemas, path traversal protection
 
 #### GitOperationService
-- **Purpose**: Orchestrates Git operations and business logic
+
+- **Purpose**: Orchestrates Git operations with Virtual Thread support for I/O operations
 - **Responsibilities**:
-  - Coordinate complex Git workflows
-  - Handle error scenarios and validation
-  - Manage transaction boundaries
+  - Coordinate complex Git workflows using Virtual Threads
+  - Handle error scenarios with structured JSON-RPC error responses
+  - Manage transaction boundaries and resource cleanup
+  - Implement confirmation loops for high-stakes operations
 - **Key Methods**:
   - `executeGitOperation(GitOperationRequest): GitOperationResult`
   - `validateRepository(String path): ValidationResult`
+  - `confirmHighStakesOperation(OperationRequest): ConfirmationResult`
 
 #### GitRepository (Interface)
-- **Purpose**: Abstract Git operations for testability
+
+- **Purpose**: Abstract Git operations for testability with comprehensive error handling
 - **Implementations**: JGitRepository
+- **Security**: Directory allowlist enforcement, path validation
 - **Key Methods**:
   - `init(String path): Repository`
   - `clone(String url, String path): Repository`
@@ -67,14 +97,16 @@ The architecture follows a layered approach with clear separation between MCP pr
   - `merge(String branchName): MergeResult`
 
 #### DataSerializer
-- **Purpose**: Handle JSON serialization/deserialization for MCP protocol
+
+- **Purpose**: Handle JSON serialization/deserialization using Java Records for type safety
 - **Responsibilities**:
-  - Convert Git objects to/from JSON
-  - Validate data integrity
-  - Handle round-trip consistency
+  - Convert Git objects to/from JSON using immutable Records
+  - Validate data integrity with strict typing
+  - Handle round-trip consistency with proper error mapping
 - **Key Methods**:
   - `serialize(GitObject): JsonNode`
   - `deserialize(JsonNode, Class<T>): T`
+  - `validateSchema(JsonNode, RecordClass): ValidationResult`
 
 ### Interface Definitions
 
@@ -91,81 +123,172 @@ public interface GitRepository {
     MergeResult merge(Repository repo, String branchName) throws GitException;
     void push(Repository repo, CredentialsProvider credentials) throws GitException;
     void pull(Repository repo, CredentialsProvider credentials) throws GitException;
+    
+    // Security validation
+    ValidationResult validatePath(String path);
+    boolean isPathAllowed(String path);
 }
 
 public interface MCPProtocolHandler {
     void handleRequest(JsonRpcRequest request, JsonRpcResponse response);
     void initializeSession(String clientId, Map<String, Object> capabilities);
     List<ToolDefinition> getAvailableTools();
+    
+    // Logging integration
+    void forwardLogToMCP(LogLevel level, String message);
+    void setDynamicLogLevel(LogLevel level);
+}
+
+public interface SecurityValidator {
+    ValidationResult validateToolInput(String toolName, Object input);
+    boolean requiresConfirmation(String toolName, Object input);
+    CredentialsProvider sanitizeCredentials(CredentialsProvider credentials);
 }
 ```
 
 ## Data Models
 
-### Core Data Models
+### Core Data Models (Java Records)
+
+All data models use Java Records for immutability and precise serialization:
 
 #### GitOperationRequest
+
 ```java
-public class GitOperationRequest {
-    private String operation;           // "init", "clone", "commit", etc.
-    private String repositoryPath;      // Local repository path
-    private Map<String, Object> parameters; // Operation-specific parameters
-    private CredentialsProvider credentials; // Authentication info
+public record GitOperationRequest(
+    String operation,           // "init", "clone", "commit", etc.
+    String repositoryPath,      // Local repository path
+    Map<String, Object> parameters, // Operation-specific parameters
+    Optional<CredentialsProvider> credentials // Authentication info
+) {
+    // Validation methods
+    public ValidationResult validate() { /* ... */ }
 }
 ```
 
 #### GitOperationResult
+
 ```java
-public class GitOperationResult {
-    private boolean success;
-    private String message;
-    private Map<String, Object> data;   // Operation-specific result data
-    private List<String> errors;       // Error details if any
-}
+public record GitOperationResult(
+    boolean success,
+    String message,
+    Map<String, Object> data,   // Operation-specific result data
+    List<String> errors,        // Error details if any
+    Optional<String> confirmationRequired // For high-stakes operations
+) {}
 ```
 
 #### RepositoryStatus
+
 ```java
-public class RepositoryStatus {
-    private List<String> stagedFiles;
-    private List<String> unstagedFiles;
-    private List<String> untrackedFiles;
-    private String currentBranch;
-    private boolean hasUncommittedChanges;
-}
+public record RepositoryStatus(
+    List<String> stagedFiles,
+    List<String> unstagedFiles,
+    List<String> untrackedFiles,
+    String currentBranch,
+    boolean hasUncommittedChanges,
+    Optional<ConflictInfo> conflicts
+) {}
 ```
 
 #### CommitInfo
+
 ```java
-public class CommitInfo {
-    private String hash;
-    private String message;
-    private String author;
-    private String email;
-    private Instant timestamp;
-    private List<String> parentHashes;
-}
+public record CommitInfo(
+    String hash,
+    String message,
+    String author,
+    String email,
+    Instant timestamp,
+    List<String> parentHashes
+) {}
 ```
 
-### MCP Protocol Models
+### MCP Protocol Models (Java Records)
 
 #### ToolDefinition
+
 ```java
-public class ToolDefinition {
-    private String name;
-    private String description;
-    private JsonSchema inputSchema;     // JSON Schema for parameters
-}
+public record ToolDefinition(
+    String name,
+    String description,
+    JsonSchema inputSchema,     // JSON Schema for parameters
+    boolean requiresConfirmation,
+    List<String> allowedPaths   // Security constraint
+) {}
 ```
 
 #### ToolCallRequest
+
 ```java
-public class ToolCallRequest {
-    private String toolName;
-    private Map<String, Object> arguments;
-    private String requestId;
-}
+public record ToolCallRequest(
+    String toolName,
+    Map<String, Object> arguments,
+    String requestId,
+    Optional<String> confirmationToken
+) {}
 ```
+
+### Security Models
+
+#### ValidationResult
+
+```java
+public record ValidationResult(
+    boolean isValid,
+    List<String> errors,
+    SecurityLevel requiredLevel
+) {}
+```
+
+#### SecurityContext
+
+```java
+public record SecurityContext(
+    String clientId,
+    List<String> allowedPaths,
+    Set<String> permissions,
+    SecurityLevel level
+) {}
+```
+
+## Security Architecture
+
+### Input Validation and Sanitization
+
+**Strict Typing**: All incoming JSON-RPC arguments validated against Java Record schemas before execution.
+
+**Path Traversal Protection**: Directory allowlist enforcement with rejection of paths containing `..` or absolute paths outside sandbox.
+
+**Credential Management**: Secure handling of authentication credentials with sanitization and no exposure in logs.
+
+### Confirmation Loops
+
+**High-Stakes Operations**: Tools that modify code, delete files, or execute system commands implement confirmation capability requiring explicit user consent.
+
+**Operation Classification**: Automatic detection of operations requiring confirmation based on impact assessment.
+
+### Error Handling Security
+
+**Information Disclosure**: JSON-RPC errors use standard error codes without leaking Java stack traces in error messages.
+
+**Graceful Degradation**: Failed operations return human-readable error strings allowing AI model self-correction rather than session crashes.
+
+## Logging and Diagnostics
+
+### Output Stream Hygiene
+
+**Protocol Compliance**: System.out strictly reserved for JSON-RPC protocol messages to prevent corruption.
+
+**Log Redirection**: All application logs (Spring Boot startup, SLF4J output) configured to write to System.err.
+
+### MCP Protocol Logging
+
+**Bridge Implementation**: Custom SLF4J Appender forwards log events to MCP Host using `notifications/message` capability.
+
+**Level Mapping**: Direct mapping of SLF4J levels (INFO, WARN, ERROR) to MCP logging levels.
+
+**Dynamic Management**: Runtime log level adjustment via system tool without server restart.
 
 ## Correctness Properties
 
@@ -302,13 +425,14 @@ The system implements a hierarchical error classification:
 ### Error Response Format
 
 ```java
-public class ErrorResponse {
-    private String errorCode;        // Standardized error code
-    private String message;          // Human-readable description
-    private Map<String, Object> details; // Context-specific error details
-    private String timestamp;        // ISO 8601 timestamp
-    private String requestId;        // Original request identifier
-}
+public record ErrorResponse(
+    String errorCode,        // Standardized JSON-RPC error code
+    String message,          // Human-readable description
+    Map<String, Object> details, // Context-specific error details
+    String timestamp,        // ISO 8601 timestamp
+    String requestId,        // Original request identifier
+    Optional<String> correlationId // For error tracking
+) {}
 ```
 
 ### Error Handling Strategies
@@ -320,30 +444,23 @@ public class ErrorResponse {
 
 ## Testing Strategy
 
-### Dual Testing Approach
+### Comprehensive Testing Approach
 
-The Git MCP Server requires both unit testing and property-based testing for comprehensive coverage:
+The Git MCP Server implements a multi-layered testing strategy following TDD principles:
 
-- **Unit tests** verify specific examples, edge cases, and integration points
-- **Property tests** verify universal properties across all valid inputs
-- Together they provide complete coverage: unit tests catch concrete bugs, property tests verify general correctness
+**Red-Green-Refactor**: All code generation follows the TDD cycle - fail first, pass simple, refactor safely.
 
-### Property-Based Testing
+**Testing Stack**:
+- **Framework**: JUnit 5 (Jupiter) for all test execution
+- **Assertions**: AssertJ for fluent, readable assertions
+- **Mocking**: Mockito with strict stubbing enabled
+- **Property Testing**: jqwik for universal property validation with JUnit 5 integration
 
-**Framework**: The system will use **QuickCheck for Java** (net.java.quickcheck) for property-based testing.
+### Unit Testing Strategy
 
-**Configuration**: Each property-based test must run a minimum of 100 iterations to ensure adequate random input coverage.
+**Mechanics vs Intelligence**: Unit tests verify mechanics (prompt template rendering, data transformations) not intelligence (creative quality).
 
-**Test Tagging**: Each property-based test must include a comment with this exact format:
-`**Feature: git-mcp-server, Property {number}: {property_text}**`
-
-**Implementation Requirements**:
-- Each correctness property must be implemented by a single property-based test
-- Tests must generate appropriate random inputs for Git operations
-- Tests must validate the universal properties defined in this document
-- Property tests should focus on core logic without excessive mocking
-
-### Unit Testing
+**Determinism**: Tests remain deterministic and fast through proper mocking and controlled inputs.
 
 **Coverage Areas**:
 - Specific examples demonstrating correct behavior
@@ -351,11 +468,41 @@ The Git MCP Server requires both unit testing and property-based testing for com
 - Integration points between MCP protocol and Git operations
 - Error conditions and exception handling
 
-**Testing Framework**: JUnit 5 with Mockito for mocking external dependencies
+### Property-Based Testing
+
+**Framework**: jqwik for comprehensive property validation, providing seamless JUnit 5 integration.
+
+**Configuration**: Each property-based test runs minimum 100 iterations for adequate random input coverage.
+
+**Test Tagging**: Each property-based test includes comment with exact format:
+`**Feature: git-mcp-server, Property {number}: {property_text}**`
+
+**Implementation Requirements**:
+- Each correctness property implemented by single property-based test using `@Property` annotation
+- Tests generate appropriate random inputs using jqwik's `Arbitrary` generators
+- Tests validate universal properties without excessive mocking
+- Focus on core logic with smart generators constraining input space intelligently
+
+### Mutation Testing
+
+**Tool**: PiTest configured via Gradle plugin `info.solidsoft.pitest`
+
+**Philosophy**: Code coverage insufficient - tests must detect code changes ("mutants")
+
+**Quality Gates**:
+- Mutation Coverage: Minimum 80%
+- Test Strength: Minimum 85%
+- Scope: Logic-heavy layers (Services, Domain logic), excluding DTOs and Configuration
+
+### Integration Testing
+
+**Slicing Strategy**: Prefer `@WebMvcTest` or `@DataJpaTest` over full `@SpringBootTest` where possible.
+
+**Test Containers**: Mandatory use of Testcontainers for external dependencies requiring real integration testing.
 
 ### Test Data Management
 
 - **Repository Fixtures**: Temporary test repositories with known states
-- **Mock Remote Repositories**: Local Git repositories simulating remote operations
-- **Credential Mocking**: Test credentials that don't require real authentication
+- **Mock Remote Repositories**: Local Git repositories simulating remote operations  
+- **Credential Mocking**: Test credentials without real authentication
 - **Network Simulation**: Mock network conditions for remote operation testing
