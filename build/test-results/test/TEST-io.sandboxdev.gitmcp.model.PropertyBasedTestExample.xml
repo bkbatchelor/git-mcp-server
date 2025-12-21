@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.sandboxdev.gitmcp.model.PropertyBasedTestExample" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-12-21T02:14:49.219Z" hostname="ozone" time="0.319">
+  <properties/>
+  <testcase name="stringLengthIsAdditive" classname="io.sandboxdev.gitmcp.model.PropertyBasedTestExample" time="0.218"/>
+  <testcase name="stringConcatenationIsAssociative" classname="io.sandboxdev.gitmcp.model.PropertyBasedTestExample" time="0.1"/>
+  <system-out><![CDATA[timestamp = 2025-12-20T21:14:49.437008500, PropertyBasedTestExample:stringLengthIsAdditive = 
+                              |-----------------------jqwik-----------------------
+tries = 1000                  | # of calls to property
+checks = 1000                 | # of not rejected calls
+generation = RANDOMIZED       | parameters are randomly generated
+after-failure = SAMPLE_FIRST  | try previously failed sample, then previous seed
+when-fixed-seed = ALLOW       | fixing the random seed is allowed
+edge-cases#mode = MIXIN       | edge cases are mixed in
+edge-cases#total = 0          | # of all combined edge cases
+edge-cases#tried = 0          | # of edge cases tried in current run
+seed = 1815800190878155684    | random seed to reproduce generated values
+
+
+timestamp = 2025-12-20T21:14:49.538245855, PropertyBasedTestExample:stringConcatenationIsAssociative = 
+                              |-----------------------jqwik-----------------------
+tries = 1000                  | # of calls to property
+checks = 1000                 | # of not rejected calls
+generation = RANDOMIZED       | parameters are randomly generated
+after-failure = SAMPLE_FIRST  | try previously failed sample, then previous seed
+when-fixed-seed = ALLOW       | fixing the random seed is allowed
+edge-cases#mode = MIXIN       | edge cases are mixed in
+edge-cases#total = 0          | # of all combined edge cases
+edge-cases#tried = 0          | # of edge cases tried in current run
+seed = 1706081790115409088    | random seed to reproduce generated values
+
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

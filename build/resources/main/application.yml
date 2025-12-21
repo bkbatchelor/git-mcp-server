@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: git-mcp-server
+  
+  # Profile-specific configuration
+  profiles:
+    active: default
+
+# Server configuration
+server:
+  port: 8080
+  shutdown: graceful
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    io.sandboxdev.gitmcp: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Git MCP Server specific configuration
+git-mcp:
+  security:
+    allowed-paths:
+      - "/tmp"
+      - "${user.home}/projects"
+    confirmation-required-operations:
+      - "delete"
+      - "reset"
+      - "force-push"
+  
+  mcp:
+    protocol-version: "2024-11-05"
+    server-info:
+      name: "git-mcp-server"
+      version: "@project.version@"
+    
+    # Transport configuration
+    transport:
+      stdio:
+        enabled: true
+      sse:
+        enabled: false
+        endpoint: "/mcp/sse"
