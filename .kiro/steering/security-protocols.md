@@ -1,12 +1,15 @@
+---
+name: security-protocols
+description: Defines security standards including SAST scanner requirement, input/output guardrails, and Spring Security authentication. Use when implementing security features or configuring project infrastructure.
+---
+
 #### Security Scanners
 
 * **SAST:** SonarQube / Checkmarx.
-* **SCA:** Snyk / **OWASP Dependency Check** (configured as a Plugin in `build.gradle.kts`).
-* **DAST:** OWASP ZAP.
 
-#### AI Security Gates (OWASP Top 10 for LLMs)
+#### AI Security Gates 
 
-* **Threat Model:** Adhere to the **OWASP Top 10 for Large Language Model Applications**.
+* **Threat Model:** Adhere to the **OWASP Top 10 For Agentic Applications**.
 * **Input Guardrails:** All user input destined for an LLM must be sanitized to prevent **Prompt Injection** (Jailbreaking).
 * **Output Guardrails:** Treat LLM output as **untrusted**. Sanitize all AI-generated text before rendering to HTML to prevent XSS.
 * **Secret Management:** LLM Provider keys (e.g., OpenAI, Anthropic) must be injected strictly as runtime environment variables. They must **never** be hardcoded or committed to version control.

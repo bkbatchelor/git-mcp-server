@@ -1,3 +1,8 @@
+---
+name: testing-strategy
+description: Mandates the TDD cycle, testing stack (JUnit 5, AssertJ, Mockito), and quality thresholds (mutation testing) for the Kiro project. Use this steering file when generating code, designing test cases, or configuring CI/CD pipelines to ensure compliance with architectural standards.
+---
+
 #### The TDD Mandate
 
 * **Red-Green-Refactor:** Code generation must follow the cycle: fail first, pass simple, refactor safely.

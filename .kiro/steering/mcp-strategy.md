@@ -1,3 +1,8 @@
+---
+name: mcp-strategy
+description: Defines the architectural standards, transport protocols, and security guidelines for Kiro MCP servers. Use this when implementing or modifying protocol compliance, logging, resources, or tool definitions.
+---
+
 #### Protocol Architecture
 
 * **Standard Compliance:** All MCP servers must strictly adhere to the **Model Context Protocol (MCP) JSON-RPC 2.0** specification.

@@ -1,3 +1,8 @@
+---
+name: coding-standards
+description: Enforces technical directives for the Kiro project, covering Java 21, Spring AI, Spring Boot, and Gradle. Use when generating, refactoring, or reviewing code to ensure architectural compliance.
+---
+
 #### Java 21 Core Directives
 
 * **Immutable Data:** Prefer **Java Records** (`record`) over traditional POJOs for DTOs and value objects.
@@ -20,4 +25,3 @@
 
 * **Format:** Use **Kotlin DSL** (`build.gradle.kts`) exclusively.
 * **Version Management:** All dependency versions must be declared in a Version Catalog (`gradle/libs.versions.toml`).
-* **Plugins:** Builds must fail if quality gates are not met (PiTest, OWASP Dependency Check).
