@@ -1,0 +1,306 @@
+# Implementation Plan - TDD Approach
+
+**TDD Methodology**: Each implementation follows strict Red-Green-Refactor cycles:
+1. **Red**: Write failing tests first (property-based and unit tests)
+2. **Green**: Implement minimal code to make tests pass
+3. **Refactor**: Improve code while keeping tests green
+
+- [ ] 1. Set up project structure and build configuration
+  - Create Gradle project with Kotlin DSL following coding standards
+  - Configure Java 21 toolchain with Virtual Threads support
+  - Add dependencies: JGit, Spring Boot, JUnit 5, jqwik, AssertJ, Mockito, PiTest
+  - Configure version catalog in `gradle/libs.versions.toml`
+  - Set up source directories and package structure following layered architecture
+  - Configure PiTest with 80% mutation coverage and 85% test strength thresholds
+  - Configure OWASP Dependency Check plugin
+  - _Requirements: 7.1, 7.2, 7.3_
+
+- [ ] 2. TDD Cycle: Core data models using Java Records
+  - [ ] 2.1 RED: Write failing property test for serialization round-trip
+    - **Property 18: Git data serialization round-trip**
+    - **Validates: Requirements 5.1, 5.3, 5.5**
+    - Write failing jqwik test for Git object serialization/deserialization
+  - [ ] 2.2 RED: Write failing unit tests for data model validation
+    - Write failing tests for GitOperationRequest validation
+    - Write failing tests for GitOperationResult structure
+    - Write failing tests for RepositoryStatus and CommitInfo
+  - [ ] 2.3 GREEN: Implement Git operation request/response models as Records
+    - Implement GitOperationRequest with validation methods
+    - Implement GitOperationResult with confirmation support
+    - Implement RepositoryStatus with conflict information
+    - Implement CommitInfo as immutable Record
+    - Add SecurityContext and ValidationResult Records
+    - _Requirements: 2.3, 2.5, 3.3, 3.4_
+  - [ ] 2.4 GREEN: Implement MCP protocol models as Records
+    - Implement ToolDefinition with security constraints
+    - Implement ToolCallRequest with confirmation token support
+    - Implement ErrorResponse with correlation ID
+    - _Requirements: 1.1, 6.1_
+  - [ ] 2.5 REFACTOR: Optimize data models and ensure all tests pass
+    - Refactor Record implementations for better immutability
+    - Ensure property test passes with 100+ iterations
+
+- [ ] 3. TDD Cycle: Security layer and input validation
+  - [ ] 3.1 RED: Write failing property test for input validation security
+    - **Property 24: Input validation security**
+    - **Validates: Requirements 1.3, 6.1**
+    - Write failing jqwik test for path traversal protection
+  - [ ] 3.2 RED: Write failing unit tests for security validation
+    - Write failing tests for directory allowlist enforcement
+    - Write failing tests for credential sanitization
+    - Write failing tests for confirmation loop system
+  - [ ] 3.3 GREEN: Implement SecurityValidator interface and implementation
+    - Implement path traversal protection with directory allowlist
+    - Add input validation against Java Record schemas
+    - Implement credential sanitization
+    - _Requirements: 1.3, 6.1_
+  - [ ] 3.4 GREEN: Implement confirmation loop system
+    - Add operation classification for high-stakes operations
+    - Implement confirmation token generation and validation
+    - _Requirements: 6.1_
+  - [ ] 3.5 REFACTOR: Optimize security layer and ensure all tests pass
+
+- [ ] 4. TDD Cycle: GitRepository interface and basic operations
+  - [ ] 4.1 RED: Write failing property tests for basic Git operations
+    - **Property 3: Repository initialization** - **Validates: Requirements 2.1**
+    - **Property 4: Repository cloning** - **Validates: Requirements 2.2**
+    - **Property 5: Repository status reporting** - **Validates: Requirements 2.3**
+    - **Property 6: File staging** - **Validates: Requirements 2.4**
+    - **Property 7: Commit creation** - **Validates: Requirements 2.5**
+    - Write failing jqwik tests for all basic Git operations
+  - [ ] 4.2 RED: Write failing unit tests for GitRepository interface
+    - Write failing tests for init() edge cases
+    - Write failing tests for clone() with various URL formats
+    - Write failing tests for status() with different repository states
+    - Write failing tests for add() with invalid file patterns
+    - Write failing tests for commit() with empty messages
+  - [ ] 4.3 GREEN: Define GitRepository interface with security methods
+    - Define methods for init, clone, status, add, commit
+    - Add security validation methods
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
+  - [ ] 4.4 GREEN: Implement JGitRepository with Virtual Thread support
+    - Implement init() to create new repositories
+    - Implement clone() with URL and credentials support using Virtual Threads
+    - Implement getStatus() to return repository status
+    - Implement add() to stage files with path validation
+    - Implement commit() to create commits
+    - Add comprehensive error handling with JSON-RPC error mapping
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
+  - [ ] 4.5 REFACTOR: Optimize JGitRepository implementation
+    - Refactor for better Virtual Thread utilization
+    - Ensure all property tests pass with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 5. TDD Cycle: Branch management operations
+  - [ ] 5.1 RED: Write failing property tests for branch operations
+    - **Property 8: Branch creation** - **Validates: Requirements 3.1**
+    - **Property 9: Branch checkout** - **Validates: Requirements 3.2**
+    - **Property 10: Branch listing** - **Validates: Requirements 3.3**
+    - **Property 11: Commit history retrieval** - **Validates: Requirements 3.4**
+    - **Property 12: Branch merging** - **Validates: Requirements 3.5**
+    - Write failing jqwik tests for all branch operations
+  - [ ] 5.2 RED: Write failing unit tests for branch management
+    - Write failing tests for createBranch() with invalid names
+    - Write failing tests for checkout() with non-existent branches
+    - Write failing tests for listBranches() with empty repositories
+    - Write failing tests for merge() with conflicts
+  - [ ] 5.3 GREEN: Implement branch operations in JGitRepository
+    - Implement createBranch() to create new branches
+    - Implement checkout() to switch branches
+    - Implement listBranches() to return all branches
+    - Implement merge() to merge branches with conflict detection
+    - _Requirements: 3.1, 3.2, 3.3, 3.5_
+  - [ ] 5.4 GREEN: Implement commit history retrieval
+    - Implement log() method with configurable depth and formatting
+    - _Requirements: 3.4_
+  - [ ] 5.5 REFACTOR: Optimize branch management implementation
+    - Ensure all property tests pass with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 6. TDD Cycle: Remote repository operations
+  - [ ] 6.1 RED: Write failing property tests for remote operations
+    - **Property 13: Push operations** - **Validates: Requirements 4.1**
+    - **Property 14: Pull operations** - **Validates: Requirements 4.2**
+    - **Property 15: Fetch operations** - **Validates: Requirements 4.3**
+    - **Property 16: Credential handling** - **Validates: Requirements 4.4**
+    - **Property 17: Conflict reporting** - **Validates: Requirements 4.5**
+    - Write failing jqwik tests for all remote operations
+  - [ ] 6.2 RED: Write failing unit tests for remote operations
+    - Write failing tests for push() with authentication failures
+    - Write failing tests for pull() with merge conflicts
+    - Write failing tests for fetch() with network issues
+    - Write failing tests for credential handling edge cases
+  - [ ] 6.3 GREEN: Implement remote operations with Virtual Threads
+    - Implement push() with credentials handling using Virtual Threads
+    - Implement pull() with fetch and merge
+    - Implement fetch() without merge
+    - Add secure credential provider support with sanitization
+    - _Requirements: 4.1, 4.2, 4.3, 4.4_
+  - [ ] 6.4 GREEN: Implement conflict detection and reporting
+    - Add conflict detection in merge operations
+    - Create detailed conflict information structures
+    - _Requirements: 4.5_
+  - [ ] 6.5 REFACTOR: Optimize remote operations implementation
+    - Ensure all property tests pass with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 7. Checkpoint - TDD Validation with Mutation Testing
+  - Run PiTest mutation testing to verify test quality
+  - Ensure 80% mutation coverage and 85% test strength
+  - Verify all Red-Green-Refactor cycles completed successfully
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 8. TDD Cycle: Data serialization layer with Records
+  - [ ] 8.1 RED: Write failing property test for data validation
+    - **Property 19: Git data validation** - **Validates: Requirements 5.2, 5.4**
+    - Write failing jqwik test for Git data validation with Record schemas
+  - [ ] 8.2 RED: Write failing unit tests for serialization
+    - Write failing tests for serialize() with various Git objects
+    - Write failing tests for deserialize() with malformed JSON
+    - Write failing tests for validation with invalid data structures
+  - [ ] 8.3 GREEN: Implement DataSerializer component using Records
+    - Implement serialize() to convert Git objects to JSON using Records
+    - Implement deserialize() to parse JSON to Git Records
+    - Add validation logic for Git data structures with Record schemas
+    - _Requirements: 5.1, 5.2_
+  - [ ] 8.4 GREEN: Implement Git data validation with Record schemas
+    - Add validation for commit hashes, branch names, file paths
+    - Return specific error messages for validation failures
+    - Use Record pattern matching for validation logic
+    - _Requirements: 5.2, 5.4_
+  - [ ] 8.5 REFACTOR: Optimize serialization layer
+    - Ensure property test passes with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 9. TDD Cycle: Error handling infrastructure with JSON-RPC compliance
+  - [ ] 9.1 RED: Write failing property tests for error handling
+    - **Property 20: Structured error responses** - **Validates: Requirements 6.1, 6.3**
+    - **Property 21: Error logging and classification** - **Validates: Requirements 6.2, 6.4**
+    - **Property 22: Graceful failure handling** - **Validates: Requirements 6.5**
+    - Write failing jqwik tests for all error handling scenarios
+  - [ ] 9.2 RED: Write failing unit tests for error infrastructure
+    - Write failing tests for error classification hierarchy
+    - Write failing tests for JSON-RPC error code mapping
+    - Write failing tests for logging with output stream hygiene
+    - Write failing tests for graceful failure scenarios
+  - [ ] 9.3 GREEN: Implement error classification hierarchy
+    - Define error types: Protocol, Authentication, Git, System
+    - Create ErrorResponse Record with standardized JSON-RPC format
+    - Implement error code mapping without stack trace leakage
+    - _Requirements: 6.1_
+  - [ ] 9.4 GREEN: Implement error handling in GitRepository
+    - Wrap JGit exceptions with contextual information
+    - Add specific JSON-RPC error codes for different failure types
+    - Distinguish between permission, missing repo, and corruption errors
+    - Implement graceful degradation with human-readable error strings
+    - _Requirements: 6.1, 6.4_
+  - [ ] 9.5 GREEN: Implement logging infrastructure with output stream hygiene
+    - Configure SLF4J with Logback to write to System.err
+    - Implement custom SLF4J Appender for MCP notifications/message
+    - Add dynamic log level management via system tool
+    - _Requirements: 6.2_
+  - [ ] 9.6 GREEN: Implement graceful failure handling
+    - Add resource cleanup in error scenarios
+    - Ensure system stability during unexpected states
+    - _Requirements: 6.5_
+  - [ ] 9.7 REFACTOR: Optimize error handling infrastructure
+    - Ensure all property tests pass with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 10. TDD Cycle: GitOperationService with Virtual Thread support
+  - [ ] 10.1 RED: Write failing unit tests for GitOperationService
+    - Write failing tests for executeGitOperation() orchestration
+    - Write failing tests for validateRepository() with security checks
+    - Write failing tests for transaction boundary management
+    - Write failing tests for integration with dependencies
+  - [ ] 10.2 GREEN: Implement GitOperationService class
+    - Implement executeGitOperation() using Virtual Threads for I/O
+    - Implement validateRepository() with security checks
+    - Add transaction boundary management
+    - Wire in GitRepository, DataSerializer, and SecurityValidator dependencies
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4, 3.5, 4.1, 4.2, 4.3_
+  - [ ] 10.3 REFACTOR: Optimize GitOperationService implementation
+    - Use AssertJ for fluent assertions in tests
+    - Ensure all unit tests pass
+
+- [ ] 11. TDD Cycle: MCP protocol layer with strict compliance
+  - [ ] 11.1 RED: Write failing property tests for MCP protocol
+    - **Property 1: MCP session lifecycle management** - **Validates: Requirements 1.1, 1.2, 1.4, 1.5**
+    - **Property 2: Authentication failure handling** - **Validates: Requirements 1.3**
+    - Write failing jqwik tests for session management and authentication
+  - [ ] 11.2 RED: Write failing unit tests for MCP protocol layer
+    - Write failing tests for handleToolCall() JSON-RPC 2.0 compliance
+    - Write failing tests for initializeSession() stateless design
+    - Write failing tests for listTools() with security metadata
+    - Write failing tests for transport layer support
+  - [ ] 11.3 GREEN: Implement MCPServerController with JSON-RPC 2.0 compliance
+    - Implement handleToolCall() for JSON-RPC 2.0 requests
+    - Implement initializeSession() for stateless client connections
+    - Implement listTools() to return available Git operations with security metadata
+    - Ensure System.out reserved for protocol messages only
+    - _Requirements: 1.1, 1.2_
+  - [ ] 11.4 GREEN: Implement session management with stateless design
+    - Add stateless session handling using protocol primitives
+    - Implement authentication logic with security validation
+    - Add resource cleanup on disconnect
+    - _Requirements: 1.2, 1.3, 1.4, 1.5_
+  - [ ] 11.5 GREEN: Implement transport layer support
+    - Add Stdio transport with Virtual Thread support for blocking I/O
+    - Add SSE transport preparation for remote agents
+    - _Requirements: 1.1, 1.4_
+  - [ ] 11.6 GREEN: Wire MCPServerController to GitOperationService
+    - Route tool calls to appropriate Git operations
+    - Handle request/response transformation using Records
+    - Implement confirmation loop integration
+    - _Requirements: 1.1, 1.4_
+  - [ ] 11.7 REFACTOR: Optimize MCP protocol layer
+    - Ensure all property tests pass with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 12. TDD Cycle: Configuration management with type-safe properties
+  - [ ] 12.1 RED: Write failing property test for configuration support
+    - **Property 23: External configuration support** - **Validates: Requirements 7.4**
+    - Write failing jqwik test for configuration loading and validation
+  - [ ] 12.2 RED: Write failing unit tests for configuration management
+    - Write failing tests for YAML configuration loading
+    - Write failing tests for environment variable overrides
+    - Write failing tests for @ConfigurationProperties validation
+  - [ ] 12.3 GREEN: Implement configuration loading mechanism
+    - Support external configuration files (YAML preferred)
+    - Support environment variable overrides
+    - Add configuration validation using Records
+    - Use @ConfigurationProperties for type-safe configuration
+    - _Requirements: 7.4_
+  - [ ] 12.4 GREEN: Wire configuration into application startup
+    - Load configuration during initialization
+    - Apply settings to components
+    - _Requirements: 7.3, 7.4_
+  - [ ] 12.5 REFACTOR: Optimize configuration management
+    - Ensure property test passes with 100+ iterations
+    - Ensure all unit tests pass
+
+- [ ] 13. TDD Cycle: Application entry point with Spring Boot integration
+  - [ ] 13.1 RED: Write failing integration tests for application startup
+    - Write failing tests for successful initialization with proper logging setup
+    - Write failing tests for configuration loading
+    - Write failing tests for component wiring
+    - Use @SpringBootTest slicing where appropriate
+  - [ ] 13.2 GREEN: Implement main application class
+    - Set up Spring Boot application with Java 21 and Virtual Threads
+    - Configure component scanning and constructor injection
+    - Add application startup logic with proper logging configuration
+    - _Requirements: 7.3_
+  - [ ] 13.3 GREEN: Configure MCP server integration
+    - Set up MCP server beans with proper transport configuration
+    - Configure tool registration with security metadata
+    - Wire all components together using constructor injection
+    - _Requirements: 7.2_
+  - [ ] 13.4 REFACTOR: Optimize application startup
+    - Ensure all integration tests pass
+
+- [ ] 14. Final TDD Validation - Comprehensive testing and quality gates
+  - Run full test suite including unit tests and property-based tests
+  - Execute PiTest mutation testing and verify quality gates (80% mutation coverage, 85% test strength)
+  - Run OWASP Dependency Check for security vulnerabilities
+  - Verify all TDD cycles completed successfully (Red-Green-Refactor)
+  - Ensure all tests pass, ask the user if questions arise.
