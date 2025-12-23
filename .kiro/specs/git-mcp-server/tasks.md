@@ -217,18 +217,37 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Configure production-safe logging (no PII) to make tests pass
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5_
 
-- [ ] 12. Implement configuration management
+- [ ] 12. Implement configuration management and headless deployment
   - [ ] 12.1 Create configuration properties
     - Define GitMcpProperties with @ConfigurationProperties
-    - Add TransportConfig, SecurityConfig, RepositoryConfig records
+    - Add TransportConfig, SecurityConfig, RepositoryConfig, HeadlessConfig records
     - Implement configuration validation with fail-fast behavior
-    - _Requirements: 15.1, 15.2, 15.4, 15.5_
+    - _Requirements: 15.1, 15.2, 15.4, 15.5, 16.8_
 
   - [ ] 12.2 Add environment variable support
     - Configure API key injection from environment variables
     - Support profile-specific configurations
     - Add configuration validation at startup
     - _Requirements: 15.3, 15.4, 15.5_
+
+  - [ ] 12.3 Write property test for headless deployment (RED)
+    - **Property 17: Headless Deployment**
+    - **Validates: Requirements 16.1, 16.3, 16.4, 16.5, 16.7**
+    - Write failing tests for headless operation capabilities
+
+  - [ ] 12.4 Implement headless deployment features (GREEN)
+    - Add graceful shutdown handling via SIGTERM/SIGINT signals
+    - Configure daemon mode operation for background processes
+    - Implement structured JSON logging for log aggregation systems
+    - Add health check endpoints for container orchestration
+    - Ensure zero GUI dependencies in runtime classpath to make tests pass
+    - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5, 16.7_
+
+  - [ ] 12.5 Add batch processing support (GREEN)
+    - Implement batch processing mode for sequential Git operations
+    - Add configuration for batch operation timeouts
+    - Support Docker deployment with mounted configuration files
+    - _Requirements: 16.6, 16.8_
 
 - [ ] 13. Ensure stateless operation (TDD approach)
   - [ ] 13.1 Write property test for stateless operation (RED)
