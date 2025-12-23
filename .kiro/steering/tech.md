@@ -11,20 +11,16 @@
 
 ## Frameworks
 
-* **App Framework:** **Spring Boot 3.5.x**.
-* **AI Integration:** **Spring AI**.
+* **App Framework:** **Spring Boot 3.5.9**.
+* **AI Integration:** **Spring AI 1.1.2**.
   * **Structured Output:** Use `ChatClient.call().entity(MyRecord.class)` for deserialization.
 * **Security:** **Spring Security 6.x** (Lambda DSL) with OAuth 2.1 / JWT.
-* **Observability:** **Micrometer Tracing** & **Micrometer Observation**.
-  * **Logging:** **SLF4J** exclusively.
+
 
 ## Build & Quality (Gradle Kotlin DSL)
 
 * **Build Script:** `build.gradle.kts`.
 * **Version Control:** `gradle/libs.versions.toml` (Version Catalog).
-* **Static Analysis (SAST):** SonarQube / Checkmarx.
-* **Dependency Scanning (SCA):** **OWASP Dependency Check** (plugin must fail build on violation).
-* **Mutation Testing:** **PiTest** (Minimum 80% mutation coverage, 85% test strength).
 
 ## Testing Strategy
 
