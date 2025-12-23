@@ -198,3 +198,18 @@ This document specifies the requirements for a production-grade Model Context Pr
 3. WHEN API keys are required, THE MCP_Server SHALL read them exclusively from environment variables
 4. THE MCP_Server SHALL validate configuration at startup and fail fast if required properties are missing
 5. THE MCP_Server SHALL support profile-specific configuration (dev, prod)
+
+### Requirement 16: Headless Deployment Support
+
+**User Story:** As a DevOps engineer, I want to deploy the MCP server in headless environments without UI dependencies, so that I can run it in containers, CI/CD pipelines, and server environments.
+
+#### Acceptance Criteria
+
+1. THE MCP_Server SHALL run without requiring any graphical user interface dependencies
+2. WHEN deployed in a container, THE MCP_Server SHALL operate with minimal resource footprint and no display requirements
+3. THE MCP_Server SHALL support daemon mode operation for long-running background processes
+4. WHEN running in headless mode, THE MCP_Server SHALL provide health check endpoints for monitoring
+5. THE MCP_Server SHALL support graceful shutdown via SIGTERM signals in headless environments
+6. WHEN configured for batch processing, THE MCP_Server SHALL process multiple Git operations sequentially without user interaction
+7. THE MCP_Server SHALL log all operations to structured output suitable for log aggregation systems
+8. WHERE Docker deployment is used, THE MCP_Server SHALL support configuration via environment variables and mounted configuration files
