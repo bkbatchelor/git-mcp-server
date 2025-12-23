@@ -1,0 +1,80 @@
+[versions]
+# Core Runtime
+java = "21"
+spring-boot = "3.5.9"
+spring-ai = "1.0.0-M4"
+spring-security = "6.4.1"
+
+# Git Operations
+jgit = "7.1.0.202411261347-r"
+
+# Observability
+micrometer = "1.14.2"
+micrometer-tracing = "1.4.2"
+
+# Testing Framework
+junit = "5.12.2"
+assertj = "3.26.3"
+mockito = "5.14.2"
+jqwik = "1.9.1"
+testcontainers = "1.20.4"
+spring-ai-test = "1.0.0-M4"
+
+# Build & Quality
+pitest = "1.17.1"
+pitest-gradle = "1.15.0"
+owasp-dependency-check = "11.1.0"
+
+# Logging
+logback = "1.5.22"
+
+[libraries]
+# Logging
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
+
+# Spring Boot
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
+
+# Spring AI
+spring-ai-openai-spring-boot-starter = { module = "org.springframework.ai:spring-ai-openai-spring-boot-starter", version.ref = "spring-ai" }
+spring-ai-anthropic-spring-boot-starter = { module = "org.springframework.ai:spring-ai-anthropic-spring-boot-starter", version.ref = "spring-ai" }
+
+# Git Operations
+jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
+
+# Observability
+micrometer-core = { module = "io.micrometer:micrometer-core", version.ref = "micrometer" }
+micrometer-tracing = { module = "io.micrometer:micrometer-tracing", version.ref = "micrometer-tracing" }
+micrometer-observation = { module = "io.micrometer:micrometer-observation", version.ref = "micrometer" }
+
+# Testing
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+spring-ai-test = { module = "org.springframework.ai:spring-ai-test", version.ref = "spring-ai-test" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-git = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
+pitest = { id = "info.solidsoft.pitest", version.ref = "pitest-gradle" }
+owasp-dependency-check = { id = "org.owasp.dependencycheck", version.ref = "owasp-dependency-check" }
+
+[bundles]
+spring-boot-core = ["spring-boot-starter", "spring-boot-starter-web", "spring-boot-starter-security", "spring-boot-starter-actuator", "spring-boot-starter-validation"]
+spring-ai = ["spring-ai-openai-spring-boot-starter", "spring-ai-anthropic-spring-boot-starter"]
+observability = ["micrometer-core", "micrometer-tracing", "micrometer-observation"]
+testing-core = ["junit-jupiter", "junit-jupiter-engine", "assertj-core", "mockito-core", "mockito-junit-jupiter"]
+testing-property = ["jqwik"]
+testing-integration = ["testcontainers-junit-jupiter", "testcontainers-git", "spring-ai-test"]

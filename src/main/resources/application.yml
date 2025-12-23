@@ -1,0 +1,133 @@
+spring:
+  application:
+    name: git-mcp-server
+  
+  # Enable Virtual Threads
+  threads:
+    virtual:
+      enabled: true
+  
+  # Security Configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # JWT configuration will be added when implementing security
+          issuer-uri: ${JWT_ISSUER_URI:}
+  
+  # AI Configuration
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        options:
+          model: gpt-4o
+          temperature: 0.1
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat:
+        options:
+          model: claude-3-5-sonnet-20241022
+          temperature: 0.1
+    chat:
+      client:
+        observations:
+          # Disable prompt/completion logging in production to protect PII
+          log-prompt: false
+          log-completion: false
+
+# Git MCP Server Configuration
+git:
+  mcp:
+    transport:
+      stdio-enabled: true
+      sse-enabled: false
+      sse-port: 8080
+      request-timeout: PT30S
+    security:
+      allowed-repositories:
+        - ${user.home}/Projects
+        - ${user.home}/workspace
+        - /tmp/git-repos
+      enable-input-sanitization: true
+      max-concurrent-operations: 10
+    repository:
+      default-branch: main
+      max-file-size: 10MB
+    observability:
+      tracing-enabled: true
+      metrics-enabled: true
+      log-level: INFO
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    io.sandboxdev.gitmcp: INFO
+    org.springframework.ai: INFO
+    org.eclipse.jgit: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  ai:
+    chat:
+      client:
+        observations:
+          log-prompt: true
+          log-completion: true
+
+git:
+  mcp:
+    observability:
+      log-level: DEBUG
+
+logging:
+  level:
+    io.sandboxdev.gitmcp: DEBUG
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+  ai:
+    chat:
+      client:
+        observations:
+          log-prompt: false
+          log-completion: false
+
+git:
+  mcp:
+    security:
+      enable-input-sanitization: true
+    observability:
+      log-level: WARN
+
+logging:
+  level:
+    root: WARN
+    io.sandboxdev.gitmcp: INFO
