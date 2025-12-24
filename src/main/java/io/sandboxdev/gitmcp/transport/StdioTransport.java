@@ -195,4 +195,19 @@ public class StdioTransport {
     public boolean isRunning() {
         return running;
     }
+
+    /**
+     * Returns true if the executor is using Virtual Threads.
+     */
+    public boolean isUsingVirtualThreads() {
+        String className = virtualThreadExecutor.getClass().getSimpleName();
+        return className.equals("ThreadPerTaskExecutor");
+    }
+
+    /**
+     * Returns the executor service for introspection.
+     */
+    public ExecutorService getExecutor() {
+        return virtualThreadExecutor;
+    }
 }
