@@ -8,6 +8,9 @@ spring-security = "6.4.1"
 # Git Operations
 jgit = "7.1.0.202411261347-r"
 
+# JSON Processing
+jackson = "2.18.2"
+
 # Observability
 micrometer = "1.14.2"
 micrometer-tracing = "1.4.2"
@@ -47,6 +50,9 @@ spring-ai-anthropic-spring-boot-starter = { module = "org.springframework.ai:spr
 
 # Git Operations
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
+
+# JSON Processing
+jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "jackson" }
 
 # Observability
 micrometer-core = { module = "io.micrometer:micrometer-core", version.ref = "micrometer" }

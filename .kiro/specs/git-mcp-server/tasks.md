@@ -18,24 +18,24 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
   - Set up Logback configuration to redirect logs to System.err
   - _Requirements: 15.1, 15.2, 15.5_
 
-- [ ] 2. Implement core MCP protocol foundation (TDD approach)
-  - [ ] 2.1 Write property test for MCP protocol serialization (RED)
+- [x] 2. Implement core MCP protocol foundation (TDD approach)
+  - [x] 2.1 Write property test for MCP protocol serialization (RED)
     - **Property 12: Schema Serialization**
     - **Validates: Requirements 11.2, 11.3, 11.4, 11.5**
     - Write failing tests for JSON serialization/deserialization
 
-  - [ ] 2.2 Create MCP protocol data models using Java Records (GREEN)
+  - [x] 2.2 Create MCP protocol data models using Java Records (GREEN)
     - Define McpMessage, McpRequest, McpResponse, McpNotification records
     - Create ToolDefinition, ToolResult, ResourceDefinition, ResourceContent records
     - Implement JSON serialization/deserialization to make tests pass
     - _Requirements: 1.1, 1.2, 11.1, 11.2_
 
-  - [ ] 2.3 Write property test for JSON-RPC protocol compliance (RED)
+  - [x] 2.3 Write property test for JSON-RPC protocol compliance (RED)
     - **Property 1: JSON-RPC Protocol Compliance**
     - **Validates: Requirements 1.1, 1.2, 1.3, 1.5**
     - Write failing tests for JSON-RPC message validation
 
-  - [ ] 2.4 Implement JSON-RPC dispatcher (GREEN)
+  - [x] 2.4 Implement JSON-RPC dispatcher (GREEN)
     - Create McpJsonRpcDispatcher component for message routing
     - Implement request validation against MCP specification
     - Add error handling with proper JSON-RPC error codes to make tests pass

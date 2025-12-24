@@ -22,6 +22,11 @@ A Spring Bean is a Java object that is instantiated, configured, and managed by 
 Confidence: 9.3 
 </confidence-score>
 
+<sources>
+1. Spring Framework Reference: Official documentation for IoC container and bean management.
+2. Baeldung and GeeksforGeeks: Leading technical tutorials for Java and Spring development.
+3. Software Engineering Patterns: Architectural concepts like IoC and Dependency Injection.
+</sources>
 
-
+OutOfScope=false
 ```
