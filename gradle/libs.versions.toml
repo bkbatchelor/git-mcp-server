@@ -31,6 +31,9 @@ owasp-dependency-check = "11.1.0"
 # Logging
 logback = "1.5.22"
 
+# Validation
+jakarta-validation = "3.1.0"
+
 [libraries]
 # Logging
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
@@ -58,6 +61,9 @@ jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datat
 micrometer-core = { module = "io.micrometer:micrometer-core", version.ref = "micrometer" }
 micrometer-tracing = { module = "io.micrometer:micrometer-tracing", version.ref = "micrometer-tracing" }
 micrometer-observation = { module = "io.micrometer:micrometer-observation", version.ref = "micrometer" }
+
+# Validation
+jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakarta-validation" }
 
 # Testing
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }

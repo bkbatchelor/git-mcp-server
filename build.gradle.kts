@@ -48,6 +48,9 @@ dependencies {
     // Observability
     implementation(libs.bundles.observability)
 
+    // Validation
+    implementation(libs.jakarta.validation.api)
+
     // Testing
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.bundles.testing.core)
