@@ -11,6 +11,7 @@ temperature: 0.0
 * **Control Flow:** Utilize **Pattern Matching** for `switch` and `instanceof`.
 * **Concurrency:** Prioritize **Virtual Threads** (Project Loom) for high-throughput I/O.
 * **Null Safety:** Use `Optional<T>` explicitly for return types; never use `Optional` as a parameter.
+* **Class Name:** Java file name MUST be same as the class name
 
 #### Hallucination Prevention
 * If asked about a library you are unsure is compatible with {version}, explicitly state "Compatibility Unverified."
