@@ -67,14 +67,14 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
 - [x] 4. Checkpoint - Ensure transport layer tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Implement Git repository management (TDD approach)
-  - [ ] 5.1 Write unit tests for Git data models (RED)
+- [x] 5. Implement Git repository management (TDD approach)
+  - [x] 5.1 Write unit tests for Git data models (RED)
     - Write failing tests for GitStatus, GitCommitInfo, GitBranchInfo records
     - Write failing tests for Tool schema records for all Git operations
     - Write failing tests for Git-specific parameter validation
     - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1_
 
-  - [ ] 5.2 Create Git data models (GREEN)
+  - [x] 5.2 Create Git data models (GREEN)
     - Define GitStatus, GitCommitInfo, GitBranchInfo records to make tests pass
     - Create Tool schema records for all Git operations to make tests pass
     - Implement validation for Git-specific parameters to make tests pass
