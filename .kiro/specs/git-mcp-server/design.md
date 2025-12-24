@@ -70,12 +70,72 @@ flowchart TB
 
 ### Transport Architecture
 
-The server supports two transport mechanisms:
+The server supports two transport mechanisms with explicit headless deployment support:
 
 1. **Stdio Transport**: For local IDE integration using standard input/output streams
 2. **SSE Transport**: For remote HTTP-based communication using Server-Sent Events
 
 Both transports converge on a common JSON-RPC dispatcher that handles MCP protocol messages uniformly.
+
+#### Headless Deployment Architecture
+
+The server is designed for headless operation in various deployment scenarios:
+
+```mermaid
+flowchart TB
+    subgraph "Deployment Environments"
+        A[Container/Docker]
+        B[CI/CD Pipeline]
+        C[Server Daemon]
+        D[Batch Processing]
+    end
+    
+    subgraph "Headless MCP Server"
+        E[Spring Boot Application]
+        F[No GUI Dependencies]
+        G[Signal Handlers]
+        H[Health Endpoints]
+    end
+    
+    subgraph "Configuration Sources"
+        I[Environment Variables]
+        J[Mounted Config Files]
+        K[Command Line Args]
+    end
+    
+    subgraph "Output Channels"
+        L[Structured Logs]
+        M[Metrics Endpoints]
+        N[Health Checks]
+        O[JSON-RPC Responses]
+    end
+    
+    A --> E
+    B --> E
+    C --> E
+    D --> E
+    
+    I --> E
+    J --> E
+    K --> E
+    
+    E --> L
+    E --> M
+    E --> N
+    E --> O
+    
+    G --> E
+    F --> E
+    H --> E
+```
+
+**Key Headless Features**:
+- Zero GUI dependencies in the runtime classpath
+- SIGTERM/SIGINT signal handling for graceful shutdown
+- Structured JSON logging for log aggregation systems
+- Health check endpoints for container orchestration
+- Environment variable-based configuration
+- Minimal resource footprint suitable for containerization
 
 ### Threading Model
 
@@ -346,7 +406,8 @@ public record GitMcpProperties(
     TransportConfig transport,
     SecurityConfig security,
     RepositoryConfig repository,
-    ObservabilityConfig observability
+    ObservabilityConfig observability,
+    HeadlessConfig headless
 ) {}
 
 public record TransportConfig(
@@ -360,6 +421,14 @@ public record SecurityConfig(
     List<String> allowedRepositories,
     boolean enableInputSanitization,
     int maxConcurrentOperations
+) {}
+
+public record HeadlessConfig(
+    boolean daemonMode,
+    boolean batchProcessing,
+    Duration gracefulShutdownTimeout,
+    boolean structuredLogging,
+    String healthCheckPath
 ) {}
 ```
 
@@ -432,6 +501,10 @@ The following properties define the correctness requirements for the Git MCP Ser
 ### Property 16: Configuration Management
 *For any* server startup, the system should support configuration from application.yml and environment variables, read API keys exclusively from environment variables, validate configuration and fail fast for missing required properties, and support profile-specific configurations.
 **Validates: Requirements 15.2, 15.3, 15.4, 15.5**
+
+### Property 17: Headless Deployment
+*For any* headless deployment environment, the server should operate without GUI dependencies, handle SIGTERM signals gracefully, provide health check endpoints, support container orchestration, and process operations without user interaction while maintaining structured logging output.
+**Validates: Requirements 16.1, 16.3, 16.4, 16.5, 16.7**
 
 ## Error Handling
 

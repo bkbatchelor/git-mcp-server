@@ -42,6 +42,9 @@ dependencies {
     // Git Operations
     implementation(libs.jgit)
 
+    // JSON Processing
+    implementation(libs.jackson.datatype.jdk8)
+
     // Observability
     implementation(libs.bundles.observability)
 

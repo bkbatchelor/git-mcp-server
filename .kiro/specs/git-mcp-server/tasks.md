@@ -18,36 +18,36 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
   - Set up Logback configuration to redirect logs to System.err
   - _Requirements: 15.1, 15.2, 15.5_
 
-- [ ] 2. Implement core MCP protocol foundation (TDD approach)
-  - [ ] 2.1 Write property test for MCP protocol serialization (RED)
+- [x] 2. Implement core MCP protocol foundation (TDD approach)
+  - [x] 2.1 Write property test for MCP protocol serialization (RED)
     - **Property 12: Schema Serialization**
     - **Validates: Requirements 11.2, 11.3, 11.4, 11.5**
     - Write failing tests for JSON serialization/deserialization
 
-  - [ ] 2.2 Create MCP protocol data models using Java Records (GREEN)
+  - [x] 2.2 Create MCP protocol data models using Java Records (GREEN)
     - Define McpMessage, McpRequest, McpResponse, McpNotification records
     - Create ToolDefinition, ToolResult, ResourceDefinition, ResourceContent records
     - Implement JSON serialization/deserialization to make tests pass
     - _Requirements: 1.1, 1.2, 11.1, 11.2_
 
-  - [ ] 2.3 Write property test for JSON-RPC protocol compliance (RED)
+  - [x] 2.3 Write property test for JSON-RPC protocol compliance (RED)
     - **Property 1: JSON-RPC Protocol Compliance**
     - **Validates: Requirements 1.1, 1.2, 1.3, 1.5**
     - Write failing tests for JSON-RPC message validation
 
-  - [ ] 2.4 Implement JSON-RPC dispatcher (GREEN)
+  - [x] 2.4 Implement JSON-RPC dispatcher (GREEN)
     - Create McpJsonRpcDispatcher component for message routing
     - Implement request validation against MCP specification
     - Add error handling with proper JSON-RPC error codes to make tests pass
     - _Requirements: 1.1, 1.3, 1.5, 10.4_
 
-- [ ] 3. Implement transport layer (TDD approach)
-  - [ ] 3.1 Write property test for Stdio transport logging isolation (RED)
+- [-] 3. Implement transport layer (TDD approach)
+  - [x] 3.1 Write property test for Stdio transport logging isolation (RED)
     - **Property 2: Stdio Transport Logging Isolation**
     - **Validates: Requirements 2.3**
     - Write failing tests for log redirection to System.err
 
-  - [ ] 3.2 Create Stdio transport implementation (GREEN)
+  - [x] 3.2 Create Stdio transport implementation (GREEN)
     - Implement Stdio message reading from System.in using Virtual Threads
     - Configure JSON-RPC message writing to System.out
     - Ensure all application logs redirect to System.err to make tests pass
@@ -217,18 +217,37 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Configure production-safe logging (no PII) to make tests pass
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5_
 
-- [ ] 12. Implement configuration management
+- [ ] 12. Implement configuration management and headless deployment
   - [ ] 12.1 Create configuration properties
     - Define GitMcpProperties with @ConfigurationProperties
-    - Add TransportConfig, SecurityConfig, RepositoryConfig records
+    - Add TransportConfig, SecurityConfig, RepositoryConfig, HeadlessConfig records
     - Implement configuration validation with fail-fast behavior
-    - _Requirements: 15.1, 15.2, 15.4, 15.5_
+    - _Requirements: 15.1, 15.2, 15.4, 15.5, 16.8_
 
   - [ ] 12.2 Add environment variable support
     - Configure API key injection from environment variables
     - Support profile-specific configurations
     - Add configuration validation at startup
     - _Requirements: 15.3, 15.4, 15.5_
+
+  - [ ] 12.3 Write property test for headless deployment (RED)
+    - **Property 17: Headless Deployment**
+    - **Validates: Requirements 16.1, 16.3, 16.4, 16.5, 16.7**
+    - Write failing tests for headless operation capabilities
+
+  - [ ] 12.4 Implement headless deployment features (GREEN)
+    - Add graceful shutdown handling via SIGTERM/SIGINT signals
+    - Configure daemon mode operation for background processes
+    - Implement structured JSON logging for log aggregation systems
+    - Add health check endpoints for container orchestration
+    - Ensure zero GUI dependencies in runtime classpath to make tests pass
+    - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5, 16.7_
+
+  - [ ] 12.5 Add batch processing support (GREEN)
+    - Implement batch processing mode for sequential Git operations
+    - Add configuration for batch operation timeouts
+    - Support Docker deployment with mounted configuration files
+    - _Requirements: 16.6, 16.8_
 
 - [ ] 13. Ensure stateless operation (TDD approach)
   - [ ] 13.1 Write property test for stateless operation (RED)
