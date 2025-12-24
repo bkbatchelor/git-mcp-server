@@ -64,7 +64,7 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Configure async servlet handling for SSE streams to make tests pass
     - _Requirements: 2.2, 2.5_
 
-- [ ] 4. Checkpoint - Ensure transport layer tests pass
+- [x] 4. Checkpoint - Ensure transport layer tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 5. Implement Git repository management (TDD approach)
