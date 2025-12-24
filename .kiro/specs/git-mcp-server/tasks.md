@@ -53,12 +53,12 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Ensure all application logs redirect to System.err to make tests pass
     - _Requirements: 2.1, 2.3, 2.4_
 
-  - [ ] 3.3 Write property test for Virtual Thread I/O handling (RED)
+  - [x] 3.3 Write property test for Virtual Thread I/O handling (RED)
     - **Property 3: Virtual Thread I/O Handling**
     - **Validates: Requirements 2.4**
     - Write failing tests for Virtual Thread I/O operations
 
-  - [ ] 3.4 Create SSE transport implementation (GREEN)
+  - [x] 3.4 Create SSE transport implementation (GREEN)
     - Implement HTTP endpoint for Server-Sent Events
     - Add CORS support for cross-origin requests
     - Configure async servlet handling for SSE streams to make tests pass
