@@ -25,3 +25,4 @@ description: Enforces technical directives for the Kiro project, covering Java 2
 
 * **Format:** Use **Kotlin DSL** (`build.gradle.kts`) exclusively.
 * **Version Management:** All dependency versions must be declared in a Version Catalog (`gradle/libs.versions.toml`).
+
