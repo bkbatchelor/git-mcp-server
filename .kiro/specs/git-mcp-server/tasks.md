@@ -41,13 +41,13 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Add error handling with proper JSON-RPC error codes to make tests pass
     - _Requirements: 1.1, 1.3, 1.5, 10.4_
 
-- [ ] 3. Implement transport layer (TDD approach)
-  - [ ] 3.1 Write property test for Stdio transport logging isolation (RED)
+- [-] 3. Implement transport layer (TDD approach)
+  - [x] 3.1 Write property test for Stdio transport logging isolation (RED)
     - **Property 2: Stdio Transport Logging Isolation**
     - **Validates: Requirements 2.3**
     - Write failing tests for log redirection to System.err
 
-  - [ ] 3.2 Create Stdio transport implementation (GREEN)
+  - [x] 3.2 Create Stdio transport implementation (GREEN)
     - Implement Stdio message reading from System.in using Virtual Threads
     - Configure JSON-RPC message writing to System.out
     - Ensure all application logs redirect to System.err to make tests pass
