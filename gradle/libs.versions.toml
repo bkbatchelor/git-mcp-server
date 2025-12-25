@@ -2,7 +2,6 @@
 # Core Runtime
 java = "21"
 spring-boot = "3.5.9"
-spring-ai = "1.0.0-M4"
 spring-security = "6.4.1"
 
 # Git Operations
@@ -21,7 +20,6 @@ assertj = "3.26.3"
 mockito = "5.14.2"
 jqwik = "1.9.1"
 testcontainers = "1.20.4"
-spring-ai-test = "1.0.0-M4"
 
 # Build & Quality
 pitest = "1.17.1"
@@ -47,10 +45,6 @@ spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
 
-# Spring AI
-spring-ai-openai-spring-boot-starter = { module = "org.springframework.ai:spring-ai-openai-spring-boot-starter", version.ref = "spring-ai" }
-spring-ai-anthropic-spring-boot-starter = { module = "org.springframework.ai:spring-ai-anthropic-spring-boot-starter", version.ref = "spring-ai" }
-
 # Git Operations
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 
@@ -73,7 +67,6 @@ mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-spring-ai-test = { module = "org.springframework.ai:spring-ai-test", version.ref = "spring-ai-test" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
 testcontainers-git = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 
@@ -85,8 +78,7 @@ owasp-dependency-check = { id = "org.owasp.dependencycheck", version.ref = "owas
 
 [bundles]
 spring-boot-core = ["spring-boot-starter", "spring-boot-starter-web", "spring-boot-starter-security", "spring-boot-starter-actuator", "spring-boot-starter-validation"]
-spring-ai = ["spring-ai-openai-spring-boot-starter", "spring-ai-anthropic-spring-boot-starter"]
 observability = ["micrometer-core", "micrometer-tracing", "micrometer-observation"]
 testing-core = ["junit-jupiter", "junit-jupiter-engine", "assertj-core", "mockito-core", "mockito-junit-jupiter"]
 testing-property = ["jqwik"]
-testing-integration = ["testcontainers-junit-jupiter", "testcontainers-git", "spring-ai-test"]
+testing-integration = ["testcontainers-junit-jupiter", "testcontainers-git"]

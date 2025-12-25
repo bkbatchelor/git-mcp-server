@@ -1,0 +1,106 @@
+{
+  "groups": [
+    {
+      "name": "git.mcp",
+      "type": "io.sandboxdev.gitmcp.config.GitMcpProperties",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties"
+    },
+    {
+      "name": "git.mcp.observability",
+      "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$ObservabilityConfig",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
+      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.ObservabilityConfig observability() "
+    },
+    {
+      "name": "git.mcp.repository",
+      "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
+      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.RepositoryConfig repository() "
+    },
+    {
+      "name": "git.mcp.security",
+      "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
+      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.SecurityConfig security() "
+    },
+    {
+      "name": "git.mcp.transport",
+      "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$TransportConfig",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
+      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.TransportConfig transport() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "git.mcp.observability.log-level",
+      "type": "java.lang.String",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$ObservabilityConfig"
+    },
+    {
+      "name": "git.mcp.observability.metrics-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$ObservabilityConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "git.mcp.observability.tracing-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$ObservabilityConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "git.mcp.repository.default-branch",
+      "type": "java.lang.String",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig"
+    },
+    {
+      "name": "git.mcp.repository.max-file-size",
+      "type": "java.lang.String",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig"
+    },
+    {
+      "name": "git.mcp.security.allowed-repositories",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig"
+    },
+    {
+      "name": "git.mcp.security.enable-input-sanitization",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "git.mcp.security.max-concurrent-operations",
+      "type": "java.lang.Integer",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "git.mcp.transport.request-timeout",
+      "type": "java.time.Duration",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$TransportConfig"
+    },
+    {
+      "name": "git.mcp.transport.sse-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$TransportConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "git.mcp.transport.sse-port",
+      "type": "java.lang.Integer",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$TransportConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "git.mcp.transport.stdio-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$TransportConfig",
+      "defaultValue": false
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

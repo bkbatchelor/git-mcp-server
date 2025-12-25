@@ -36,9 +36,6 @@ dependencies {
     implementation(libs.bundles.spring.boot.core)
     annotationProcessor(libs.spring.boot.configuration.processor)
 
-    // Spring AI
-    implementation(libs.bundles.spring.ai)
-
     // Git Operations
     implementation(libs.jgit)
 
