@@ -1,3 +1,10 @@
+spring:
+  ai:
+    openai:
+      api-key: test-key
+    anthropic:
+      api-key: test-key
+
 git:
   mcp:
     transport:

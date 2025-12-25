@@ -11,7 +11,6 @@ description: Defines security standards including SAST scanner requirement, inpu
 
 * **Input Guardrails:** All user input destined for an LLM must be sanitized to prevent **Prompt Injection** (Jailbreaking).
 * **Output Guardrails:** Treat LLM output as **untrusted**. Sanitize all AI-generated text before rendering to HTML to prevent XSS.
-* **Secret Management:** LLM Provider keys (e.g., OpenAI, Anthropic) must be injected strictly as runtime environment variables. They must **never** be hardcoded or committed to version control.
 
 #### Authentication & Authorization
 

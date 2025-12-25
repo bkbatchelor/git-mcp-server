@@ -8,7 +8,6 @@ A production-grade Model Context Protocol (MCP) Server that enables Large Langua
 - **Dual Transport Support**: Stdio for local IDE integration and SSE for remote communication
 - **Java 21 & Virtual Threads**: High-throughput I/O operations with minimal resource overhead
 - **JGit Integration**: Pure Java Git operations without external dependencies
-- **Spring AI Integration**: Structured LLM interactions with OpenAI and Anthropic support
 - **Comprehensive Security**: Input validation, path traversal prevention, and access control
 - **Observability**: Distributed tracing, metrics, and structured logging
 - **Property-Based Testing**: Comprehensive test coverage with mutation testing
@@ -43,11 +42,6 @@ A production-grade Model Context Protocol (MCP) Server that enables Large Langua
 ## Configuration
 
 The application can be configured via `application.yml` or environment variables:
-
-### Required Environment Variables
-
-- `OPENAI_API_KEY`: OpenAI API key for AI integration
-- `ANTHROPIC_API_KEY`: Anthropic API key for AI integration
 
 ### Key Configuration Properties
 
