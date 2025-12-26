@@ -86,6 +86,14 @@ public class JGitRepositoryManager {
     }
     
     /**
+     * Get Git status for repository by path.
+     */
+    public GitStatus getStatus(Path repositoryPath) throws IOException, GitAPIException {
+        Repository repo = getRepository(repositoryPath);
+        return getStatus(repo);
+    }
+    
+    /**
      * Create a commit with the given message.
      */
     public ObjectId commit(Repository repo, String message) throws GitAPIException {
