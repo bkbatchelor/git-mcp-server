@@ -87,13 +87,13 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Refactor to improve code quality while keeping tests green
     - _Requirements: 3.5, 4.5, 5.1, 7.1_
 
-- [ ] 6. Implement Git Tools (TDD approach)
-  - [ ] 6.1 Write property test for Git status operations (RED)
+- [x] 6. Implement Git Tools (TDD approach)
+  - [x] 6.1 Write property test for Git status operations (RED)
     - **Property 4: Git Status Operations**
     - **Validates: Requirements 3.1, 3.2, 3.4**
     - Write failing tests for Git status functionality
 
-  - [ ] 6.2 Implement GitStatusTool (GREEN)
+  - [x] 6.2 Implement GitStatusTool (GREEN)
     - Create git_status tool with JGit integration
     - Handle repository validation and error cases
     - Return structured status with modified, staged, untracked files to make tests pass
