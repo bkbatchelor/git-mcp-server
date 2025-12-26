@@ -99,12 +99,12 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Return structured status with modified, staged, untracked files to make tests pass
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 6.3 Write property test for Git commit operations (RED)
+  - [x] 6.3 Write property test for Git commit operations (RED)
     - **Property 5: Git Commit Operations**
     - **Validates: Requirements 4.1, 4.3, 4.4**
     - Write failing tests for Git commit functionality
 
-  - [ ] 6.4 Implement GitCommitTool (GREEN)
+  - [x] 6.4 Implement GitCommitTool (GREEN)
     - Create git_commit tool with message validation
     - Validate staged changes and repository state
     - Return commit hash and summary on success to make tests pass
