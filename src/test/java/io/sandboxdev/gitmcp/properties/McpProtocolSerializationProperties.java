@@ -135,7 +135,7 @@ class McpProtocolSerializationProperties {
             ResourceContent deserialized = objectMapper.readValue(json, ResourceContent.class);
 
             assertThat(deserialized).isEqualTo(resourceContent);
-            assertThat(deserialized.content()).isNotNull();
+            assertThat(deserialized.text()).isNotNull();
             assertThat(deserialized.mimeType()).isNotBlank();
         } catch (JsonProcessingException e) {
             throw new RuntimeException("JSON serialization failed", e);
@@ -146,73 +146,69 @@ class McpProtocolSerializationProperties {
     @Provide
     Arbitrary<McpRequest> mcpRequests() {
         return Combinators.combine(
-            Arbitraries.strings().alpha().ofMinLength(1),
-            jsonNodes(),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as((method, params, id) -> new McpRequest("2.0", method, params, id));
+                Arbitraries.strings().alpha().ofMinLength(1),
+                jsonNodes(),
+                Arbitraries.strings().alpha().ofMinLength(1))
+                .as((method, params, id) -> new McpRequest("2.0", method, params, id));
     }
 
     @Provide
     Arbitrary<McpResponse> mcpResponses() {
         return Combinators.combine(
-            jsonNodes().optional(),
-            mcpErrors().optional(),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as((result, error, id) -> new McpResponse("2.0", result.orElse(null), error.orElse(null), id));
+                jsonNodes().optional(),
+                mcpErrors().optional(),
+                Arbitraries.strings().alpha().ofMinLength(1))
+                .as((result, error, id) -> new McpResponse("2.0", result.orElse(null), error.orElse(null), id));
     }
 
     @Provide
     Arbitrary<McpNotification> mcpNotifications() {
         return Combinators.combine(
-            Arbitraries.strings().alpha().ofMinLength(1),
-            jsonNodes()
-        ).as((method, params) -> new McpNotification("2.0", method, params));
+                Arbitraries.strings().alpha().ofMinLength(1),
+                jsonNodes()).as((method, params) -> new McpNotification("2.0", method, params));
     }
 
     @Provide
     Arbitrary<ToolDefinition> toolDefinitions() {
         return Combinators.combine(
-            Arbitraries.strings().alpha().ofMinLength(1),
-            Arbitraries.strings().alpha().ofMinLength(1),
-            jsonSchemas()
-        ).as(ToolDefinition::new);
+                Arbitraries.strings().alpha().ofMinLength(1),
+                Arbitraries.strings().alpha().ofMinLength(1),
+                jsonSchemas()).as(ToolDefinition::new);
     }
 
     @Provide
     Arbitrary<ToolResult> toolResults() {
         return Combinators.combine(
-            jsonNodes(),
-            Arbitraries.of(Boolean.TRUE, Boolean.FALSE),
-            Arbitraries.strings().alpha().optional()
-        ).as((content, isError, errorMessage) -> new ToolResult(content, isError.booleanValue(), errorMessage));
+                jsonNodes(),
+                Arbitraries.of(Boolean.TRUE, Boolean.FALSE),
+                Arbitraries.strings().alpha().optional())
+                .as((content, isError, errorMessage) -> new ToolResult(content, isError.booleanValue(), errorMessage));
     }
 
     @Provide
     Arbitrary<ResourceDefinition> resourceDefinitions() {
         return Combinators.combine(
-            uris(),
-            Arbitraries.strings().alpha().ofMinLength(1),
-            Arbitraries.strings().alpha().ofMinLength(1),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as(ResourceDefinition::new);
+                uris(),
+                Arbitraries.strings().alpha().ofMinLength(1),
+                Arbitraries.strings().alpha().ofMinLength(1),
+                Arbitraries.strings().alpha().ofMinLength(1)).as(ResourceDefinition::new);
     }
 
     @Provide
     Arbitrary<ResourceContent> resourceContents() {
         return Combinators.combine(
-            Arbitraries.strings().alpha(),
-            Arbitraries.strings().alpha().ofMinLength(1),
-            stringMaps().optional()
-        ).as(ResourceContent::new);
+                Arbitraries.strings().alpha(),
+                Arbitraries.strings().alpha().ofMinLength(1),
+                stringMaps().optional())
+                .as((mime, text, metadata) -> new ResourceContent("file:///test", mime, text, metadata));
     }
 
     @Provide
     Arbitrary<McpError> mcpErrors() {
         return Combinators.combine(
-            Arbitraries.integers(),
-            Arbitraries.strings().alpha().ofMinLength(1),
-            jsonNodes().optional()
-        ).as((code, message, data) -> new McpError(code, message, data.orElse(null)));
+                Arbitraries.integers(),
+                Arbitraries.strings().alpha().ofMinLength(1),
+                jsonNodes().optional()).as((code, message, data) -> new McpError(code, message, data.orElse(null)));
     }
 
     @Provide
@@ -240,14 +236,13 @@ class McpProtocolSerializationProperties {
     @Provide
     Arbitrary<java.net.URI> uris() {
         return Arbitraries.strings().alpha().ofMinLength(1)
-            .map(s -> java.net.URI.create("git-resource://" + s));
+                .map(s -> java.net.URI.create("git-resource://" + s));
     }
 
     @Provide
     Arbitrary<Map<String, String>> stringMaps() {
         return Arbitraries.maps(
-            Arbitraries.strings().alpha().ofMinLength(1),
-            Arbitraries.strings().alpha()
-        );
+                Arbitraries.strings().alpha().ofMinLength(1),
+                Arbitraries.strings().alpha());
     }
 }

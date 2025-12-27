@@ -144,25 +144,25 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Return commits in reverse chronological order to make tests pass
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 8. Implement Tool and Resource registries (TDD approach)
-  - [ ] 8.1 Write property test for resource access (RED)
+- [x] 8. Implement Tool and Resource registries (TDD approach)
+  - [x] 8.1 Write property test for resource access (RED)
     - **Property 9: Resource Access**
     - **Validates: Requirements 8.2, 8.3, 8.4, 8.5**
     - Write failing tests for resource URI resolution and content access
 
-  - [ ] 8.2 Create GitToolRegistry (GREEN)
+  - [x] 8.2 Create GitToolRegistry (GREEN)
     - Implement tool registration and discovery
     - Add tool metadata and schema exposure
     - Handle tool execution with proper error handling to make tests pass
     - _Requirements: 1.1, 10.1, 10.2, 11.1_
 
-  - [ ] 8.3 Create GitResourceRegistry (GREEN)
+  - [x] 8.3 Create GitResourceRegistry (GREEN)
     - Implement resource URI resolution
     - Create repository-info and file content resources
     - Handle resource not found scenarios to make tests pass
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 9. Checkpoint - Ensure Git operations tests pass
+- [x] 9. Checkpoint - Ensure Git operations tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 10. Implement security and validation layer (TDD approach)
