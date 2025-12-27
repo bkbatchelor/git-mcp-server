@@ -122,47 +122,47 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
 - [ ] 7. Implement remaining Git Tools (TDD approach)
-  - [ ] 7.1 Write property test for Git branch operations (RED)
+  - [x] 7.1 Write property test for Git branch operations (RED)
     - **Property 7: Git Branch Operations**
     - **Validates: Requirements 6.1, 6.2, 6.3**
     - Write failing tests for Git branch functionality
 
-  - [ ] 7.2 Implement GitBranchTool (GREEN)
+  - [x] 7.2 Implement GitBranchTool (GREEN)
     - Create git_branch_list, git_branch_create, git_checkout tools
     - Handle branch validation and conflict detection
     - Manage uncommitted changes during checkout to make tests pass
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ] 7.3 Write property test for Git log operations (RED)
+  - [x] 7.3 Write property test for Git log operations (RED)
     - **Property 8: Git Log Operations**
     - **Validates: Requirements 7.1, 7.2, 7.3, 7.4**
     - Write failing tests for Git log functionality
 
-  - [ ] 7.4 Implement GitLogTool (GREEN)
+  - [x] 7.4 Implement GitLogTool (GREEN)
     - Create git_log tool with filtering support
     - Support limit, file path, and date filtering
     - Return commits in reverse chronological order to make tests pass
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 8. Implement Tool and Resource registries (TDD approach)
-  - [ ] 8.1 Write property test for resource access (RED)
+- [x] 8. Implement Tool and Resource registries (TDD approach)
+  - [x] 8.1 Write property test for resource access (RED)
     - **Property 9: Resource Access**
     - **Validates: Requirements 8.2, 8.3, 8.4, 8.5**
     - Write failing tests for resource URI resolution and content access
 
-  - [ ] 8.2 Create GitToolRegistry (GREEN)
+  - [x] 8.2 Create GitToolRegistry (GREEN)
     - Implement tool registration and discovery
     - Add tool metadata and schema exposure
     - Handle tool execution with proper error handling to make tests pass
     - _Requirements: 1.1, 10.1, 10.2, 11.1_
 
-  - [ ] 8.3 Create GitResourceRegistry (GREEN)
+  - [x] 8.3 Create GitResourceRegistry (GREEN)
     - Implement resource URI resolution
     - Create repository-info and file content resources
     - Handle resource not found scenarios to make tests pass
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-- [ ] 9. Checkpoint - Ensure Git operations tests pass
+- [x] 9. Checkpoint - Ensure Git operations tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 10. Implement security and validation layer (TDD approach)

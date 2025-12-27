@@ -13,31 +13,32 @@ import java.util.Optional;
  * along with its MIME type and optional metadata.
  */
 public record ResourceContent(
-    @JsonProperty("content") String content,
-    @JsonProperty("mimeType") String mimeType,
-    @JsonProperty("metadata") Optional<Map<String, String>> metadata
-) {
-    
+        @JsonProperty("uri") String uri,
+        @JsonProperty("mimeType") String mimeType,
+        @JsonProperty("text") String text,
+        @JsonProperty("metadata") Optional<Map<String, String>> metadata) {
+
     /**
      * Creates resource content without metadata.
      */
-    public ResourceContent(String content, String mimeType) {
-        this(content, mimeType, Optional.empty());
+    public ResourceContent(String uri, String mimeType, String text) {
+        this(uri, mimeType, text, Optional.empty());
     }
-    
+
     /**
      * Creates resource content with metadata.
      */
-    public ResourceContent(String content, String mimeType, Map<String, String> metadata) {
-        this(content, mimeType, Optional.of(metadata));
+    public ResourceContent(String uri, String mimeType, String text, Map<String, String> metadata) {
+        this(uri, mimeType, text, Optional.of(metadata));
     }
-    
+
     /**
      * Validates that this resource content is valid.
      */
     @JsonIgnore
     public boolean isValid() {
-        return content != null &&
-               mimeType != null && !mimeType.isBlank();
+        return uri != null && !uri.isBlank() &&
+                mimeType != null && !mimeType.isBlank() &&
+                text != null;
     }
 }
