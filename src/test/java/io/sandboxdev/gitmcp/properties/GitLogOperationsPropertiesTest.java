@@ -7,6 +7,7 @@ import io.sandboxdev.gitmcp.model.GitCommitInfo;
 import io.sandboxdev.gitmcp.model.GitLogToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitLogTool;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 
@@ -23,11 +24,12 @@ class GitLogOperationsPropertiesTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
-    @RepeatedTest(10)
-    void gitLogOperationsWorkflow() throws Exception {
-        // Setup repo with history
-        Path repositoryPath = createInitializedRepositoryWithHistory();
-        GitLogTool logTool = new GitLogTool();
+        @RepeatedTest(10)
+        @DisplayName("Property 8: Git Log Operations - Returns commit history with limit and file filtering (Req 7.1, 7.2, 7.3)")
+        void gitLogOperationsWorkflow() throws Exception {
+                // Setup repo with history
+                Path repositoryPath = createInitializedRepositoryWithHistory();
+                GitLogTool logTool = new GitLogTool();
 
         // 1. Full Log
         ToolResult result = logTool.execute(new GitLogToolSchema(

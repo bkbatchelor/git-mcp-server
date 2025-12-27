@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sandboxdev.gitmcp.model.*;
 import io.sandboxdev.gitmcp.protocol.McpJsonRpcDispatcher;
 import net.jqwik.api.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,14 +28,15 @@ class JsonRpcProtocolComplianceProperties {
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
+    @DisplayName("Property 1: JSON-RPC Compliance - Valid requests are processed correctly (Req 1.1, 1.2)")
     void validJsonRpcRequestsAreProcessedCorrectly(@ForAll("validMcpRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         assertThat(request.isValid()).isTrue();
-        
+
         // The dispatcher should validate the request according to MCP specification
         // and return a properly formatted response
         McpResponse response = dispatcher.dispatch(request, null);
-        
+
         assertThat(response).isNotNull();
         assertThat(response.jsonrpc()).isEqualTo("2.0");
         assertThat(response.id()).isEqualTo(request.id());
@@ -44,12 +46,13 @@ class JsonRpcProtocolComplianceProperties {
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
+    @DisplayName("Property 1: JSON-RPC Compliance - Invalid version returns error (Req 1.3)")
     void invalidJsonRpcVersionReturnsError(@ForAll("invalidVersionRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         assertThat(request.jsonrpc()).isNotEqualTo("2.0");
-        
+
         McpResponse response = dispatcher.dispatch(request, null);
-        
+
         assertThat(response).isNotNull();
         assertThat(response.jsonrpc()).isEqualTo("2.0");
         assertThat(response.id()).isEqualTo(request.id());
@@ -60,12 +63,13 @@ class JsonRpcProtocolComplianceProperties {
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
+    @DisplayName("Property 1: JSON-RPC Compliance - Empty method name returns error (Req 1.3)")
     void emptyMethodNameReturnsError(@ForAll("emptyMethodRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         assertThat(request.method()).isBlank();
-        
+
         McpResponse response = dispatcher.dispatch(request, null);
-        
+
         assertThat(response).isNotNull();
         assertThat(response.isError()).isTrue();
         assertThat(response.error().code()).isEqualTo(McpError.INVALID_REQUEST);
@@ -74,12 +78,13 @@ class JsonRpcProtocolComplianceProperties {
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
+    @DisplayName("Property 1: JSON-RPC Compliance - Unknown method returns METHOD_NOT_FOUND (Req 1.4)")
     void unknownMethodReturnsMethodNotFoundError(@ForAll("unknownMethodRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         // Assume the method name is not a known MCP method
-        
+
         McpResponse response = dispatcher.dispatch(request, null);
-        
+
         assertThat(response).isNotNull();
         assertThat(response.isError()).isTrue();
         assertThat(response.error().code()).isEqualTo(McpError.METHOD_NOT_FOUND);
@@ -89,6 +94,7 @@ class JsonRpcProtocolComplianceProperties {
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
+    @DisplayName("Property 1: JSON-RPC Compliance - Malformed JSON returns PARSE_ERROR (Req 1.3)")
     void malformedJsonReturnsParseError(@ForAll("malformedJsonStrings") String malformedJson) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         try {
@@ -98,7 +104,7 @@ class JsonRpcProtocolComplianceProperties {
         } catch (JsonProcessingException e) {
             // Expected - this is malformed JSON
             McpResponse response = dispatcher.handleMalformedJson(malformedJson);
-            
+
             assertThat(response).isNotNull();
             assertThat(response.jsonrpc()).isEqualTo("2.0");
             assertThat(response.isError()).isTrue();
@@ -109,10 +115,11 @@ class JsonRpcProtocolComplianceProperties {
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
+    @DisplayName("Property 1: JSON-RPC Compliance - Responses maintain request ID correlation (Req 1.2)")
     void responsesMaintainRequestIdCorrelation(@ForAll("validMcpRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         McpResponse response = dispatcher.dispatch(request, null);
-        
+
         assertThat(response).isNotNull();
         assertThat(response.id()).isEqualTo(request.id());
     }
@@ -121,53 +128,51 @@ class JsonRpcProtocolComplianceProperties {
     @Provide
     Arbitrary<McpRequest> validMcpRequests() {
         return Combinators.combine(
-            Arbitraries.strings().alpha().ofMinLength(1),
-            jsonNodes(),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as((method, params, id) -> new McpRequest("2.0", method, params, id));
+                Arbitraries.strings().alpha().ofMinLength(1),
+                jsonNodes(),
+                Arbitraries.strings().alpha().ofMinLength(1))
+                .as((method, params, id) -> new McpRequest("2.0", method, params, id));
     }
 
     @Provide
     Arbitrary<McpRequest> invalidVersionRequests() {
         return Combinators.combine(
-            Arbitraries.strings().alpha().filter(v -> !"2.0".equals(v)),
-            Arbitraries.strings().alpha().ofMinLength(1),
-            jsonNodes(),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as(McpRequest::new);
+                Arbitraries.strings().alpha().filter(v -> !"2.0".equals(v)),
+                Arbitraries.strings().alpha().ofMinLength(1),
+                jsonNodes(),
+                Arbitraries.strings().alpha().ofMinLength(1)).as(McpRequest::new);
     }
 
     @Provide
     Arbitrary<McpRequest> emptyMethodRequests() {
         return Combinators.combine(
-            Arbitraries.of("", "   ", "\t", "\n"),
-            jsonNodes(),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as((method, params, id) -> new McpRequest("2.0", method, params, id));
+                Arbitraries.of("", "   ", "\t", "\n"),
+                jsonNodes(),
+                Arbitraries.strings().alpha().ofMinLength(1))
+                .as((method, params, id) -> new McpRequest("2.0", method, params, id));
     }
 
     @Provide
     Arbitrary<McpRequest> unknownMethodRequests() {
         return Combinators.combine(
-            Arbitraries.strings().alpha().ofMinLength(1)
-                .filter(method -> !isKnownMcpMethod(method)),
-            jsonNodes(),
-            Arbitraries.strings().alpha().ofMinLength(1)
-        ).as((method, params, id) -> new McpRequest("2.0", method, params, id));
+                Arbitraries.strings().alpha().ofMinLength(1)
+                        .filter(method -> !isKnownMcpMethod(method)),
+                jsonNodes(),
+                Arbitraries.strings().alpha().ofMinLength(1))
+                .as((method, params, id) -> new McpRequest("2.0", method, params, id));
     }
 
     @Provide
     Arbitrary<String> malformedJsonStrings() {
         return Arbitraries.of(
-            "{invalid json",
-            "{'single': 'quotes'}",
-            "{\"unclosed\": \"string",
-            "{\"trailing\": \"comma\",}",
-            "not json at all",
-            "",
-            "null",
-            "{\"duplicate\": 1, \"duplicate\": 2}"
-        );
+                "{invalid json",
+                "{'single': 'quotes'}",
+                "{\"unclosed\": \"string",
+                "{\"trailing\": \"comma\",}",
+                "not json at all",
+                "",
+                "null",
+                "{\"duplicate\": 1, \"duplicate\": 2}");
     }
 
     @Provide
@@ -184,9 +189,9 @@ class JsonRpcProtocolComplianceProperties {
     private boolean isKnownMcpMethod(String method) {
         // Define known MCP methods - this will be expanded as we implement tools
         return method.equals("initialize") ||
-               method.equals("tools/list") ||
-               method.equals("tools/call") ||
-               method.equals("resources/list") ||
-               method.equals("resources/read");
+                method.equals("tools/list") ||
+                method.equals("tools/call") ||
+                method.equals("resources/list") ||
+                method.equals("resources/read");
     }
 }

@@ -4,6 +4,7 @@ import io.sandboxdev.gitmcp.model.GitDiffToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitDiffTool;
 import net.jqwik.api.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GitDiffOperationsProperties {
 
     @org.junit.jupiter.api.Test
+    @DisplayName("Property 6: Git Diff Operations - Returns unified diff for unstaged changes (Req 5.1, 5.2)")
     void gitDiffReturnsUnifiedDiffForUnstagedChanges_Unit() {
         // Create repo state manually
         try {
@@ -92,6 +94,7 @@ class GitDiffOperationsProperties {
     @Property
     @Tag("property-6")
     @Tag("git-diff-operations")
+    @DisplayName("Property 6: Git Diff Operations - Returns unified diff for unstaged changes (Req 5.1, 5.2)")
     void gitDiffReturnsUnifiedDiffForUnstagedChanges(
             @ForAll("repositoryWithUnstagedChanges") RepositoryWithChanges repoState) {
         // Arrange

@@ -10,6 +10,7 @@ import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitBranchCreateTool;
 import io.sandboxdev.gitmcp.tools.GitBranchListTool;
 import io.sandboxdev.gitmcp.tools.GitCheckoutTool;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 
@@ -27,6 +28,7 @@ class GitBranchOperationsPropertiesTest {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
         @RepeatedTest(10)
+        @DisplayName("Property 7: Git Branch Operations - List, create, and checkout branches workflow (Req 6.1, 6.2, 6.3, 6.4)")
         void gitBranchOperationsWorkflow() throws Exception {
                 // Generate random data
                 Path repositoryPath = createInitializedRepository();
