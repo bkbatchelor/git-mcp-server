@@ -62,6 +62,8 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    include("**/*Test.class")
+    include("**/*Properties.class")
 
     // Configure test execution
     maxHeapSize = "1g"
