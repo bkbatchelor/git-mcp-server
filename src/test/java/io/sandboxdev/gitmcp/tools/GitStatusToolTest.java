@@ -5,6 +5,7 @@ import io.sandboxdev.gitmcp.model.GitStatus;
 import io.sandboxdev.gitmcp.model.GitStatusToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.service.JGitRepositoryManager;
+import io.sandboxdev.gitmcp.security.GitInputValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,13 +26,16 @@ class GitStatusToolTest {
     @Mock
     private JGitRepositoryManager repositoryManager;
 
+    @Mock
+    private GitInputValidator validator;
+
     private GitStatusTool gitStatusTool;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        gitStatusTool = new GitStatusTool(repositoryManager, objectMapper);
+        gitStatusTool = new GitStatusTool(repositoryManager, objectMapper, validator);
     }
 
     @Test
@@ -40,11 +44,10 @@ class GitStatusToolTest {
         Path repoPath = Paths.get("/valid/repo");
         GitStatusToolSchema schema = new GitStatusToolSchema(repoPath.toString());
         GitStatus expectedStatus = new GitStatus(
-            List.of("modified.txt"),
-            List.of("staged.txt"),
-            List.of("untracked.txt"),
-            false
-        );
+                List.of("modified.txt"),
+                List.of("staged.txt"),
+                List.of("untracked.txt"),
+                false);
 
         when(repositoryManager.isValidRepository(repoPath)).thenReturn(true);
         when(repositoryManager.getStatus(repoPath)).thenReturn(expectedStatus);
@@ -55,7 +58,7 @@ class GitStatusToolTest {
         // Assert
         assertThat(result.isError()).isFalse();
         assertThat(result.content()).isNotNull();
-        
+
         GitStatus actualStatus = objectMapper.convertValue(result.content(), GitStatus.class);
         assertThat(actualStatus.modifiedFiles()).containsExactly("modified.txt");
         assertThat(actualStatus.stagedFiles()).containsExactly("staged.txt");
@@ -86,11 +89,10 @@ class GitStatusToolTest {
         Path repoPath = Paths.get("/clean/repo");
         GitStatusToolSchema schema = new GitStatusToolSchema(repoPath.toString());
         GitStatus expectedStatus = new GitStatus(
-            List.of(),
-            List.of(),
-            List.of(),
-            true
-        );
+                List.of(),
+                List.of(),
+                List.of(),
+                true);
 
         when(repositoryManager.isValidRepository(repoPath)).thenReturn(true);
         when(repositoryManager.getStatus(repoPath)).thenReturn(expectedStatus);
@@ -100,7 +102,7 @@ class GitStatusToolTest {
 
         // Assert
         assertThat(result.isError()).isFalse();
-        
+
         GitStatus actualStatus = objectMapper.convertValue(result.content(), GitStatus.class);
         assertThat(actualStatus.modifiedFiles()).isEmpty();
         assertThat(actualStatus.stagedFiles()).isEmpty();
