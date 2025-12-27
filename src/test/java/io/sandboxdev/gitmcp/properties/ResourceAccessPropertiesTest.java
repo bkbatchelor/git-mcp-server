@@ -3,6 +3,7 @@ package io.sandboxdev.gitmcp.properties;
 import io.sandboxdev.gitmcp.model.ResourceContent;
 import io.sandboxdev.gitmcp.registry.GitResourceRegistry;
 import io.sandboxdev.gitmcp.service.JGitRepositoryManager;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.RepeatedTest;
@@ -22,6 +23,7 @@ class ResourceAccessPropertiesTest {
     private final GitResourceRegistry resourceRegistry = new GitResourceRegistry(repositoryManager);
 
     @RepeatedTest(10)
+    @DisplayName("Property 9: Resource Access - Resolves git:// URIs and reads file content (Req 8.2, 8.3, 8.4)")
     void resourceAccessWorkflow() throws Exception {
         Path tempDir = Files.createTempDirectory("git-resource-test");
         try {
