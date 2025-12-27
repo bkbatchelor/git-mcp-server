@@ -14,10 +14,10 @@ class GitToolSchemasTest {
     void shouldCreateGitStatusToolSchema() {
         // Given
         String repositoryPath = "/path/to/repo";
-        
+
         // When
         GitStatusToolSchema schema = new GitStatusToolSchema(repositoryPath);
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
     }
@@ -27,10 +27,10 @@ class GitToolSchemasTest {
         // Given
         String repositoryPath = "/path/to/repo";
         String message = "Add new feature";
-        
+
         // When
         GitCommitToolSchema schema = new GitCommitToolSchema(repositoryPath, message);
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.message()).isEqualTo(message);
@@ -40,10 +40,11 @@ class GitToolSchemasTest {
     void shouldCreateGitDiffToolSchemaWithoutRefs() {
         // Given
         String repositoryPath = "/path/to/repo";
-        
+
         // When
-        GitDiffToolSchema schema = new GitDiffToolSchema(repositoryPath, Optional.empty(), Optional.empty());
-        
+        GitDiffToolSchema schema = new GitDiffToolSchema(repositoryPath, Optional.empty(), Optional.empty(),
+                Optional.empty());
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.fromRef()).isEmpty();
@@ -56,10 +57,11 @@ class GitToolSchemasTest {
         String repositoryPath = "/path/to/repo";
         String fromRef = "HEAD~1";
         String toRef = "HEAD";
-        
+
         // When
-        GitDiffToolSchema schema = new GitDiffToolSchema(repositoryPath, Optional.of(fromRef), Optional.of(toRef));
-        
+        GitDiffToolSchema schema = new GitDiffToolSchema(repositoryPath, Optional.of(fromRef), Optional.of(toRef),
+                Optional.empty());
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.fromRef()).contains(fromRef);
@@ -70,10 +72,10 @@ class GitToolSchemasTest {
     void shouldCreateGitBranchListToolSchema() {
         // Given
         String repositoryPath = "/path/to/repo";
-        
+
         // When
         GitBranchListToolSchema schema = new GitBranchListToolSchema(repositoryPath);
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
     }
@@ -83,10 +85,10 @@ class GitToolSchemasTest {
         // Given
         String repositoryPath = "/path/to/repo";
         String branchName = "feature/new-api";
-        
+
         // When
         GitBranchCreateToolSchema schema = new GitBranchCreateToolSchema(repositoryPath, branchName);
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.branchName()).isEqualTo(branchName);
@@ -97,10 +99,10 @@ class GitToolSchemasTest {
         // Given
         String repositoryPath = "/path/to/repo";
         String branchName = "main";
-        
+
         // When
         GitCheckoutToolSchema schema = new GitCheckoutToolSchema(repositoryPath, branchName);
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.branchName()).isEqualTo(branchName);
@@ -110,10 +112,10 @@ class GitToolSchemasTest {
     void shouldCreateGitLogToolSchemaWithDefaults() {
         // Given
         String repositoryPath = "/path/to/repo";
-        
+
         // When
         GitLogToolSchema schema = new GitLogToolSchema(repositoryPath, Optional.empty(), Optional.empty());
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.limit()).isEmpty();
@@ -126,10 +128,10 @@ class GitToolSchemasTest {
         String repositoryPath = "/path/to/repo";
         int limit = 10;
         String filePath = "src/main/App.java";
-        
+
         // When
         GitLogToolSchema schema = new GitLogToolSchema(repositoryPath, Optional.of(limit), Optional.of(filePath));
-        
+
         // Then
         assertThat(schema.repositoryPath()).isEqualTo(repositoryPath);
         assertThat(schema.limit()).contains(limit);
@@ -141,12 +143,13 @@ class GitToolSchemasTest {
         // Given/When/Then - All schemas should be records (immutable)
         GitStatusToolSchema statusSchema = new GitStatusToolSchema("/repo");
         GitCommitToolSchema commitSchema = new GitCommitToolSchema("/repo", "message");
-        GitDiffToolSchema diffSchema = new GitDiffToolSchema("/repo", Optional.empty(), Optional.empty());
+        GitDiffToolSchema diffSchema = new GitDiffToolSchema("/repo", Optional.empty(), Optional.empty(),
+                Optional.empty());
         GitBranchListToolSchema branchListSchema = new GitBranchListToolSchema("/repo");
         GitBranchCreateToolSchema branchCreateSchema = new GitBranchCreateToolSchema("/repo", "branch");
         GitCheckoutToolSchema checkoutSchema = new GitCheckoutToolSchema("/repo", "branch");
         GitLogToolSchema logSchema = new GitLogToolSchema("/repo", Optional.empty(), Optional.empty());
-        
+
         // All should be non-null and immutable
         assertThat(statusSchema).isNotNull();
         assertThat(commitSchema).isNotNull();
