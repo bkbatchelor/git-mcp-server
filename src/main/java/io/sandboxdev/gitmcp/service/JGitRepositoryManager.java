@@ -6,6 +6,8 @@ import io.sandboxdev.gitmcp.model.GitStatus;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -77,11 +79,10 @@ public class JGitRepositoryManager {
             Status status = git.status().call();
 
             return new GitStatus(
-                new ArrayList<>(status.getModified()),
-                new ArrayList<>(status.getAdded()),
-                new ArrayList<>(status.getUntracked()),
-                status.isClean()
-            );
+                    new ArrayList<>(status.getModified()),
+                    new ArrayList<>(status.getAdded()),
+                    new ArrayList<>(status.getUntracked()),
+                    status.isClean());
         }
     }
 
@@ -113,13 +114,12 @@ public class JGitRepositoryManager {
             RevCommit commit = revWalk.parseCommit(commitId);
 
             return new GitCommitInfo(
-                commit.getId().getName(),
-                commit.getId().abbreviate(7).name(),
-                commit.getAuthorIdent().getName(),
-                commit.getAuthorIdent().getEmailAddress(),
-                Instant.ofEpochSecond(commit.getCommitTime()),
-                commit.getFullMessage()
-            );
+                    commit.getId().getName(),
+                    commit.getId().abbreviate(7).name(),
+                    commit.getAuthorIdent().getName(),
+                    commit.getAuthorIdent().getEmailAddress(),
+                    Instant.ofEpochSecond(commit.getCommitTime()),
+                    commit.getFullMessage());
         }
     }
 
@@ -136,16 +136,16 @@ public class JGitRepositoryManager {
                 boolean isCurrent = branchName.equals(currentBranch);
 
                 branches.add(new GitBranchInfo(
-                    branchName,
-                    ref.getObjectId().getName(),
-                    isCurrent,
-                    false
-                ));
+                        branchName,
+                        ref.getObjectId().getName(),
+                        isCurrent,
+                        false));
             });
 
             return branches;
         } catch (IOException e) {
-            throw new GitAPIException("Failed to get current branch", e) {};
+            throw new GitAPIException("Failed to get current branch", e) {
+            };
         }
     }
 
@@ -157,18 +157,17 @@ public class JGitRepositoryManager {
             List<GitCommitInfo> commits = new ArrayList<>();
 
             git.log()
-                .setMaxCount(limit > 0 ? limit : Integer.MAX_VALUE)
-                .call()
-                .forEach(commit -> {
-                    commits.add(new GitCommitInfo(
-                        commit.getId().getName(),
-                        commit.getId().abbreviate(7).name(),
-                        commit.getAuthorIdent().getName(),
-                        commit.getAuthorIdent().getEmailAddress(),
-                        Instant.ofEpochSecond(commit.getCommitTime()),
-                        commit.getFullMessage()
-                    ));
-                });
+                    .setMaxCount(limit > 0 ? limit : Integer.MAX_VALUE)
+                    .call()
+                    .forEach(commit -> {
+                        commits.add(new GitCommitInfo(
+                                commit.getId().getName(),
+                                commit.getId().abbreviate(7).name(),
+                                commit.getAuthorIdent().getName(),
+                                commit.getAuthorIdent().getEmailAddress(),
+                                Instant.ofEpochSecond(commit.getCommitTime()),
+                                commit.getFullMessage()));
+                    });
 
             return commits;
         }
@@ -190,13 +189,12 @@ public class JGitRepositoryManager {
 
             logCommand.call().forEach(commit -> {
                 commits.add(new GitCommitInfo(
-                    commit.getId().getName(),
-                    commit.getId().abbreviate(7).name(),
-                    commit.getAuthorIdent().getName(),
-                    commit.getAuthorIdent().getEmailAddress(),
-                    Instant.ofEpochSecond(commit.getCommitTime()),
-                    commit.getFullMessage()
-                ));
+                        commit.getId().getName(),
+                        commit.getId().abbreviate(7).name(),
+                        commit.getAuthorIdent().getName(),
+                        commit.getAuthorIdent().getEmailAddress(),
+                        Instant.ofEpochSecond(commit.getCommitTime()),
+                        commit.getFullMessage()));
             });
 
             return commits;
@@ -204,9 +202,10 @@ public class JGitRepositoryManager {
     }
 
     /**
-     * Get diff between two commits or refs.
+     * Get diff between two commits or refs, optionally filtered by path.
      */
-    public String getDiff(Repository repo, String fromRef, String toRef) throws GitAPIException, IOException {
+    public String getDiff(Repository repo, String fromRef, String toRef, String filePath)
+            throws GitAPIException, IOException {
         try (Git git = new Git(repo)) {
             var diffCommand = git.diff();
 
@@ -221,6 +220,10 @@ public class JGitRepositoryManager {
                 if (toCommit != null) {
                     diffCommand.setNewTree(prepareTreeParser(repo, toCommit));
                 }
+            }
+
+            if (filePath != null && !filePath.isEmpty()) {
+                diffCommand.setPathFilter(org.eclipse.jgit.treewalk.filter.PathFilter.create(filePath));
             }
 
             var diffEntries = diffCommand.call();
@@ -249,10 +252,16 @@ public class JGitRepositoryManager {
         }
     }
 
+    // Overload for backward compatibility if needed, or update call sites
+    public String getDiff(Repository repo, String fromRef, String toRef) throws GitAPIException, IOException {
+        return getDiff(repo, fromRef, toRef, null);
+    }
+
     /**
      * Helper method to prepare tree parser for diff operations.
      */
-    private org.eclipse.jgit.treewalk.AbstractTreeIterator prepareTreeParser(Repository repo, ObjectId commitId) throws IOException {
+    private org.eclipse.jgit.treewalk.AbstractTreeIterator prepareTreeParser(Repository repo, ObjectId commitId)
+            throws IOException {
         try (org.eclipse.jgit.revwalk.RevWalk walk = new org.eclipse.jgit.revwalk.RevWalk(repo)) {
             org.eclipse.jgit.revwalk.RevCommit commit = walk.parseCommit(commitId);
             org.eclipse.jgit.revwalk.RevTree tree = walk.parseTree(commit.getTree().getId());
@@ -267,23 +276,43 @@ public class JGitRepositoryManager {
     }
 
     /**
-     * Get unstaged changes (working tree vs index).
+     * Get unstaged changes (working tree vs index), optionally filtered by path.
      */
-    public String getUnstagedDiff(Repository repo) throws GitAPIException {
+    public String getUnstagedDiff(Repository repo, String filePath) throws GitAPIException {
         try (Git git = new Git(repo)) {
-            var diffEntries = git.diff().call();
+            var diffCommand = git.diff();
+
+            if (filePath != null && !filePath.isEmpty()) {
+                diffCommand.setPathFilter(org.eclipse.jgit.treewalk.filter.PathFilter.create(filePath));
+            }
+
+            var diffEntries = diffCommand.call();
 
             StringBuilder diffOutput = new StringBuilder();
             for (var entry : diffEntries) {
                 diffOutput.append("diff --git a/")
-                    .append(entry.getOldPath())
-                    .append(" b/")
-                    .append(entry.getNewPath())
-                    .append("\n");
+                        .append(entry.getOldPath())
+                        .append(" b/")
+                        .append(entry.getNewPath())
+                        .append("\n");
+
+                diffOutput.append("index ")
+                        .append(entry.getOldId().name())
+                        .append("..")
+                        .append(entry.getNewId().name())
+                        .append("\n");
+
+                diffOutput.append("--- a/").append(entry.getOldPath()).append("\n");
+                diffOutput.append("+++ b/").append(entry.getNewPath()).append("\n");
+                diffOutput.append("@@ -0,0 +0,0 @@\n"); // Simplified diff header
             }
 
             return diffOutput.toString();
         }
+    }
+
+    public String getUnstagedDiff(Repository repo) throws GitAPIException {
+        return getUnstagedDiff(repo, null);
     }
 
     /**
@@ -292,8 +321,8 @@ public class JGitRepositoryManager {
     public void createBranch(Repository repo, String branchName) throws GitAPIException {
         try (Git git = new Git(repo)) {
             git.branchCreate()
-                .setName(branchName)
-                .call();
+                    .setName(branchName)
+                    .call();
         }
     }
 
@@ -303,8 +332,8 @@ public class JGitRepositoryManager {
     public void checkout(Repository repo, String ref) throws GitAPIException {
         try (Git git = new Git(repo)) {
             git.checkout()
-                .setName(ref)
-                .call();
+                    .setName(ref)
+                    .call();
         }
     }
 
