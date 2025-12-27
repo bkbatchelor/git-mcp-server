@@ -55,9 +55,9 @@ public class JGitRepositoryManager {
                 }
 
                 Repository repo = builder
-                        .readEnvironment()
-                        .findGitDir()
-                        .build();
+                    .readEnvironment()
+                    .findGitDir()
+                    .build();
 
                 // Validate that this is actually a Git repository
                 if (repo.getObjectDatabase() == null) {
@@ -100,8 +100,8 @@ public class JGitRepositoryManager {
     public ObjectId commit(Repository repo, String message) throws GitAPIException {
         try (Git git = new Git(repo)) {
             RevCommit commit = git.commit()
-                    .setMessage(message)
-                    .call();
+                .setMessage(message)
+                .call();
             return commit.getId();
         }
     }
@@ -181,7 +181,7 @@ public class JGitRepositoryManager {
             List<GitCommitInfo> commits = new ArrayList<>();
 
             var logCommand = git.log()
-                    .setMaxCount(limit > 0 ? limit : Integer.MAX_VALUE);
+                .setMaxCount(limit > 0 ? limit : Integer.MAX_VALUE);
 
             if (filePath != null && !filePath.isEmpty()) {
                 logCommand.addPath(filePath);
@@ -232,16 +232,16 @@ public class JGitRepositoryManager {
             StringBuilder diffOutput = new StringBuilder();
             for (var entry : diffEntries) {
                 diffOutput.append("diff --git a/")
-                        .append(entry.getOldPath())
-                        .append(" b/")
-                        .append(entry.getNewPath())
-                        .append("\n");
+                    .append(entry.getOldPath())
+                    .append(" b/")
+                    .append(entry.getNewPath())
+                    .append("\n");
 
                 diffOutput.append("index ")
-                        .append(entry.getOldId().name())
-                        .append("..")
-                        .append(entry.getNewId().name())
-                        .append("\n");
+                    .append(entry.getOldId().name())
+                    .append("..")
+                    .append(entry.getNewId().name())
+                    .append("\n");
 
                 diffOutput.append("--- a/").append(entry.getOldPath()).append("\n");
                 diffOutput.append("+++ b/").append(entry.getNewPath()).append("\n");
