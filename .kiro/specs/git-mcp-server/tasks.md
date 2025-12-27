@@ -110,12 +110,12 @@ This implementation plan breaks down the Git MCP Server design into discrete cod
     - Return commit hash and summary on success to make tests pass
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 6.5 Write property test for Git diff operations (RED)
+  - [x] 6.5 Write property test for Git diff operations (RED)
     - **Property 6: Git Diff Operations**
     - **Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5**
     - Write failing tests for Git diff functionality
 
-  - [ ] 6.6 Implement GitDiffTool (GREEN)
+  - [x] 6.6 Implement GitDiffTool (GREEN)
     - Create git_diff tool supporting multiple diff modes
     - Handle unstaged changes, single ref vs HEAD, two refs comparison
     - Return unified diff format output to make tests pass
