@@ -38,7 +38,6 @@ class GitStatusOperationsProperties {
     @Property
     @Tag("property-4")
     @Tag("git-status-operations")
-    @DisplayName("Property 4: Git Status Operations - Returns accurate working tree status (Req 3.1, 3.2)")
     void gitStatusReturnsAccurateWorkingTreeStatus(@ForAll("validGitRepositories") Path repositoryPath) {
         // Arrange
         GitStatusTool tool = new GitStatusTool();
@@ -67,7 +66,6 @@ class GitStatusOperationsProperties {
     @Property
     @Tag("property-4")
     @Tag("git-status-operations")
-    @DisplayName("Property 4: Git Status Operations - Returns error for invalid repository path (Req 3.4)")
     void gitStatusReturnsErrorForInvalidRepositoryPath(@ForAll("invalidRepositoryPaths") String invalidPath) {
         // Arrange
         GitStatusTool tool = new GitStatusTool();
@@ -85,7 +83,6 @@ class GitStatusOperationsProperties {
     @Property
     @Tag("property-4")
     @Tag("git-status-operations")
-    @DisplayName("Property 4: Git Status Operations - Categorizes files correctly (Req 3.1, 3.2)")
     void gitStatusCategorizesFilesCorrectly(@ForAll("repositoryWithKnownChanges") RepositoryState repoState) {
         // Arrange
         GitStatusTool tool = new GitStatusTool();

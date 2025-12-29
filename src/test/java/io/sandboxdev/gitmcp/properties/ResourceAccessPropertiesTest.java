@@ -23,7 +23,6 @@ class ResourceAccessPropertiesTest {
     private final GitResourceRegistry resourceRegistry = new GitResourceRegistry(repositoryManager);
 
     @RepeatedTest(10)
-    @DisplayName("Property 9: Resource Access - Resolves git:// URIs and reads file content (Req 8.2, 8.3, 8.4)")
     void resourceAccessWorkflow() throws Exception {
         Path tempDir = Files.createTempDirectory("git-resource-test");
         try {
