@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Property-based tests for input validation and security guardrails.
- * Tests Property 10: Input Validation and Security (Requirements 9.1, 9.2, 9.3, 9.4, 9.5)
+     Property-based tests for input validation and security guardrails.
+     Tests Property 10: Input Validation and Security (Requirements 9.1, 9.2, 9.3, 9.4, 9.5)
  */
 class InputValidationSecurityProperties {
 
@@ -37,8 +37,8 @@ class InputValidationSecurityProperties {
     private final GitInputValidator validator = new GitInputValidator(new SecurityGuardrails(createProperties()));
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1, 9.2)
-     * Path traversal sequences are always rejected
+     Property 10: Input Validation and Security (Req 9.1, 9.2)
+     Path traversal sequences are always rejected
      */
     @Property
     void pathTraversalSequencesAlwaysRejected(@ForAll("pathTraversalStrings") String traversalPath) {
@@ -52,8 +52,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1)
-     * Safe paths are always accepted
+     Property 10: Input Validation and Security (Req 9.1)
+     Safe paths are always accepted
      */
     @Property
     void safePathsAlwaysAccepted(@ForAll("safePaths") String safePath) {
@@ -63,8 +63,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.3, 9.4)
-     * Shell injection characters in branch names are rejected
+     Property 10: Input Validation and Security (Req 9.3, 9.4)
+     Shell injection characters in branch names are rejected
      */
     @Property
     void shellInjectionCharactersInBranchNamesRejected(@ForAll("shellInjectionStrings") String maliciousBranch) {
@@ -74,8 +74,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.3)
-     * Valid branch names are always accepted
+     Property 10: Input Validation and Security (Req 9.3)
+     Valid branch names are always accepted
      */
     @Property
     void validBranchNamesAlwaysAccepted(@ForAll("validBranchNames") String validBranch) {
@@ -84,8 +84,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1)
-     * Tool parameter validation enforces schemas
+     Property 10: Input Validation and Security (Req 9.1)
+     Tool parameter validation enforces schemas
      */
     @Property
     void toolParameterValidationEnforcesSchemas(@ForAll("toolInvocations") ToolInvocation invocation) {
@@ -100,8 +100,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.5)
-     * Repository allowlist is enforced
+     Property 10: Input Validation and Security (Req 9.5)
+     Repository allowlist is enforced
      */
     @Property
     void repositoryAllowlistEnforced(@ForAll("repositoryPaths") String repoPath) {

@@ -15,16 +15,16 @@ import java.nio.file.Path;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for Git commit operations.
- * 
- * Property 5: Git Commit Operations
- * For any valid Git repository with staged changes, the git_commit tool should
- * create a commit
- * with the provided message and return commit information, and return
- * appropriate errors for
- * repositories without staged changes or invalid commit messages.
- * 
- * Validates: Requirements 4.1, 4.3, 4.4
+     Property-based tests for Git commit operations.
+     
+     Property 5: Git Commit Operations
+     For any valid Git repository with staged changes, the git_commit tool should
+     create a commit
+     with the provided message and return commit information, and return
+     appropriate errors for
+     repositories without staged changes or invalid commit messages.
+     
+     Validates: Requirements 4.1, 4.3, 4.4
  */
 @Tag("git-mcp-server")
 @Tag("property-5")
@@ -34,8 +34,8 @@ class GitCommitOperationsProperties {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * Property 5: Git Commit Operations (Req 4.1, 4.3)
-     * Creates commit with staged changes
+     Property 5: Git Commit Operations (Req 4.1, 4.3)
+     Creates commit with staged changes
      */
     @Property
     @Tag("property-5")

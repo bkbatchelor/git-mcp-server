@@ -5,13 +5,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Basic integration test to verify the Spring Boot application context loads correctly.
- * 
- * This test validates that:
- * - All Spring Boot auto-configuration works properly
- * - Configuration properties are valid
- * - All required beans can be created
- * - Virtual Threads are enabled
+     Basic integration test to verify the Spring Boot application context loads correctly.
+     
+     This test validates that:
+     - All Spring Boot auto-configuration works properly
+     - Configuration properties are valid
+     - All required beans can be created
+     - Virtual Threads are enabled
  */
 @SpringBootTest
 @ActiveProfiles("test")

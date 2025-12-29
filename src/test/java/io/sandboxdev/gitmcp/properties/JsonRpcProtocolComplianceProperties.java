@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Tag;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for JSON-RPC protocol compliance.
- * 
- * These tests verify that the MCP server correctly validates JSON-RPC messages
- * and returns properly formatted responses with correct error codes.
+     Property-based tests for JSON-RPC protocol compliance.
+     
+     These tests verify that the MCP server correctly validates JSON-RPC messages
+     and returns properly formatted responses with correct error codes.
  */
 @Tag("git-mcp-server")
 @Tag("property-1")
@@ -26,8 +26,8 @@ class JsonRpcProtocolComplianceProperties {
     private final McpJsonRpcDispatcher dispatcher = new McpJsonRpcDispatcher();
 
     /**
-     * Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
-     * Valid requests are processed correctly
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Valid requests are processed correctly
      */
     @Property
     @Tag("property-1")
@@ -47,8 +47,8 @@ class JsonRpcProtocolComplianceProperties {
     }
 
     /**
-     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
-     * Invalid version returns error
+     Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     Invalid version returns error
      */
     @Property
     @Tag("property-1")
@@ -67,8 +67,8 @@ class JsonRpcProtocolComplianceProperties {
     }
 
     /**
-     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
-     * Empty method name returns error
+     Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     Empty method name returns error
      */
     @Property
     @Tag("property-1")
@@ -85,8 +85,8 @@ class JsonRpcProtocolComplianceProperties {
     }
 
     /**
-     * Property 1: JSON-RPC Protocol Compliance (Req 1.4)
-     * Unknown method returns METHOD_NOT_FOUND
+     Property 1: JSON-RPC Protocol Compliance (Req 1.4)
+     Unknown method returns METHOD_NOT_FOUND
      */
     @Property
     @Tag("property-1")
@@ -104,8 +104,8 @@ class JsonRpcProtocolComplianceProperties {
     }
 
     /**
-     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
-     * Malformed JSON returns PARSE_ERROR
+     Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     Malformed JSON returns PARSE_ERROR
      */
     @Property
     @Tag("property-1")
@@ -128,8 +128,8 @@ class JsonRpcProtocolComplianceProperties {
     }
 
     /**
-     * Property 1: JSON-RPC Protocol Compliance (Req 1.2)
-     * Responses maintain request ID correlation
+     Property 1: JSON-RPC Protocol Compliance (Req 1.2)
+     Responses maintain request ID correlation
      */
     @Property
     @Tag("property-1")

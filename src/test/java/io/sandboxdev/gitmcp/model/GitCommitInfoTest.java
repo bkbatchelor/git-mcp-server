@@ -5,11 +5,15 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.Instant;
 
 /**
- * Unit tests for GitCommitInfo record (TDD RED phase).
- * Tests the data model for Git commit information.
+     Unit tests for GitCommitInfo record (TDD RED phase).
+     Tests the data model for Git commit information.
  */
 class GitCommitInfoTest {
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1)
+     Validates GitCommitInfo model creation and properties
+     */
     @Test
     void shouldCreateGitCommitInfoWithAllFields() {
         // Given
@@ -32,6 +36,10 @@ class GitCommitInfoTest {
         assertThat(commit.message()).isEqualTo(message);
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1)
+     Validates GitCommitInfo model creation and properties
+     */
     @Test
     void shouldHandleMultilineCommitMessage() {
         // Given
@@ -47,6 +55,10 @@ class GitCommitInfoTest {
         assertThat(commit.message()).contains("\n");
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1)
+     Validates GitCommitInfo model creation and properties
+     */
     @Test
     void shouldBeImmutable() {
         // Given
@@ -63,6 +75,10 @@ class GitCommitInfoTest {
         assertThat(commit.message()).isNotNull();
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1)
+     Validates GitCommitInfo model creation and properties
+     */
     @Test
     void shouldImplementEqualsAndHashCode() {
         // Given

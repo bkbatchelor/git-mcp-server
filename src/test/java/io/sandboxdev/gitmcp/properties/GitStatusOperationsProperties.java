@@ -17,16 +17,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for Git status operations.
- * 
- * Property 4: Git Status Operations
- * For any valid Git repository, the git_status tool should return accurate
- * working tree status
- * with files correctly categorized as modified, staged, or untracked, and
- * return appropriate
- * errors for invalid repository paths.
- * 
- * Validates: Requirements 3.1, 3.2, 3.4
+     Property-based tests for Git status operations.
+     
+     Property 4: Git Status Operations
+     For any valid Git repository, the git_status tool should return accurate
+     working tree status
+     with files correctly categorized as modified, staged, or untracked, and
+     return appropriate
+     errors for invalid repository paths.
+     
+     Validates: Requirements 3.1, 3.2, 3.4
  */
 @Tag("git-mcp-server")
 @Tag("property-4")

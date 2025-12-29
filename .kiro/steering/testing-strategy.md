@@ -37,11 +37,21 @@ description: Mandates the TDD cycle, testing stack (JUnit 5, AssertJ, Mockito), 
 
 #### Map Test to Property and Requirement
 
-* **Specification Mapping:** Must enclose Property and Requirement(s) with JavaDoc block for all testing methods. Follow the JavaDoc format follows the pattern:
-```java
+* **Specification Mapping:** 
+  * **Property Test:** ALL property-based tests must include Property and Requirement(s) within a JavaDoc block for all property testing methods. Follow the JavaDoc format follows the pattern:
+  ```java
         /**
          Property X: [Description] (Req Y.Z, Y.W)
-         [Brief description of what the test validates]                                                    
+         [Brief description of what the test validates]                                                  
        */ 
-```
+  ``` 
+  * **Unit Test:** ALL unit tests must include Property and Requirement(s) within a JavaDoc block for all property testing methods. Follow the JavaDoc format follows the pattern:
+  ```java
+        /**
+         Property X: [Description] (Req Y.Z, Y.W)
+         [Brief description of what the test validates]                                                  
+       */ 
+  ```
+  * **@DisplayName Removal:** Must remove @DisplayName annotation if associate with test method, property-based or unit test 
+
   

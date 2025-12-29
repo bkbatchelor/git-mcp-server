@@ -38,6 +38,14 @@ class GitStatusToolTest {
         gitStatusTool = new GitStatusTool(repositoryManager, objectMapper, validator);
     }
 
+    /**
+     Property 4: Git Status Operations (Req 3.1, 3.2)
+     Returns accurate working tree status for valid repository
+     */
+    /**
+     Property 4: Git Status Operations (Req 3.1, 3.2, 3.4)
+     Validates Git status tool execution and error handling
+     */
     @Test
     void execute_ValidRepository_ReturnsGitStatus() throws Exception {
         // Arrange
@@ -66,6 +74,10 @@ class GitStatusToolTest {
         assertThat(actualStatus.isClean()).isFalse();
     }
 
+    /**
+     Property 4: Git Status Operations (Req 3.1, 3.2, 3.4)
+     Validates Git status tool execution and error handling
+     */
     @Test
     void execute_InvalidRepository_ReturnsError() {
         // Arrange
@@ -83,6 +95,10 @@ class GitStatusToolTest {
         assertThat(result.errorMessage().get()).contains("Repository not found");
     }
 
+    /**
+     Property 4: Git Status Operations (Req 3.1, 3.2, 3.4)
+     Validates Git status tool execution and error handling
+     */
     @Test
     void execute_CleanRepository_ReturnsCleanStatus() throws Exception {
         // Arrange

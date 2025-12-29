@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for SSE Transport implementation.
- * 
- * Tests the basic functionality of the SSE transport including
- * connection establishment, message processing, and CORS support.
+     Unit tests for SSE Transport implementation.
+     
+     Tests the basic functionality of the SSE transport including
+     connection establishment, message processing, and CORS support.
  */
 @ExtendWith(MockitoExtension.class)
 class SseTransportTest {

@@ -16,13 +16,13 @@ import java.util.Iterator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for Stdio transport logging isolation.
- * 
- * These tests verify that when Stdio transport is configured, all application logs
- * are redirected to System.err while JSON-RPC messages use System.out exclusively.
- * 
- * Feature: git-mcp-server, Property 2: Stdio Transport Logging Isolation
- * Validates: Requirements 2.3
+     Property-based tests for Stdio transport logging isolation.
+     
+     These tests verify that when Stdio transport is configured, all application logs
+     are redirected to System.err while JSON-RPC messages use System.out exclusively.
+     
+     Feature: git-mcp-server, Property 2: Stdio Transport Logging Isolation
+     Validates: Requirements 2.3
  */
 class StdioTransportLoggingProperties {
 

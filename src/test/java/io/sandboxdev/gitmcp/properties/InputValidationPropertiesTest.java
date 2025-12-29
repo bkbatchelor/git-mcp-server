@@ -28,12 +28,11 @@ class InputValidationPropertiesTest {
     private final GitInputValidator validator = new GitInputValidator(new SecurityGuardrails(createProperties()));
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1, 9.2)
-     * Rejects path traversal in repository paths
+     Property 10: Input Validation and Security (Req 9.1, 9.2)
+     Rejects path traversal in repository paths
      */
     @ParameterizedTest
     @ValueSource(strings = { "../etc/passwd", "foo/../bar", "test/../../secret", "..\\windows" })
-    @DisplayName("Property 10: Input Validation and Security (Req 9.1, 9.2)")
     void rejectsPathTraversalInRepositoryPath(String path) {
         assertThatThrownBy(() -> validator.validateRepositoryPath("/var/git/" + path))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -41,12 +40,11 @@ class InputValidationPropertiesTest {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1, 9.2)
-     * Rejects path traversal in file paths
+     Property 10: Input Validation and Security (Req 9.1, 9.2)
+     Rejects path traversal in file paths
      */
     @ParameterizedTest
     @ValueSource(strings = { "../etc/passwd", "foo/../bar", "test/../../secret" })
-    @DisplayName("Property 10: Input Validation and Security (Req 9.1, 9.2)")
     void rejectsPathTraversalInFilePath(String path) {
         assertThatThrownBy(() -> validator.validateFilePath(path))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -54,12 +52,11 @@ class InputValidationPropertiesTest {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.3)
-     * Accepts safe branch names
+     Property 10: Input Validation and Security (Req 9.3)
+     Accepts safe branch names
      */
     @ParameterizedTest
     @ValueSource(strings = { "feature/my-branch", "bugfix_123", "main", "develop", "release/v1.0.0" })
-    @DisplayName("Property 10: Input Validation and Security (Req 9.3)")
     void acceptsSafeBranchNames(String branchName) {
         validator.validateBranchName(branchName);
     }
@@ -90,6 +87,10 @@ class InputValidationPropertiesTest {
                 .hasMessageContaining("Invalid branch name");
     }
 
+    /**
+     Property 10: Input Validation and Security (Req 9.5)
+     Rejects empty repository path
+     */
     @Test
     void rejectsEmptyRepositoryPath() {
         assertThatThrownBy(() -> validator.validateRepositoryPath(""))
@@ -97,6 +98,10 @@ class InputValidationPropertiesTest {
                 .hasMessageContaining("Repository path cannot be empty");
     }
 
+    /**
+     Property 10: Input Validation and Security (Req 9.5)
+     Rejects null repository path
+     */
     @Test
     void rejectsNullRepositoryPath() {
         assertThatThrownBy(() -> validator.validateRepositoryPath(null))

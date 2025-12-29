@@ -19,13 +19,13 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for Virtual Thread I/O handling in Stdio transport.
- * 
- * These tests verify that when Stdio transport is configured, the server uses
- * Virtual Threads to handle blocking I/O operations without stalling the application.
- * 
- * Feature: git-mcp-server, Property 3: Virtual Thread I/O Handling
- * Validates: Requirements 2.4
+     Property-based tests for Virtual Thread I/O handling in Stdio transport.
+     
+     These tests verify that when Stdio transport is configured, the server uses
+     Virtual Threads to handle blocking I/O operations without stalling the application.
+     
+     Feature: git-mcp-server, Property 3: Virtual Thread I/O Handling
+     Validates: Requirements 2.4
  */
 @Tag("Feature-git-mcp-server-Property-3-Virtual-Thread-IO-Handling")
 class VirtualThreadIOHandlingProperties {
