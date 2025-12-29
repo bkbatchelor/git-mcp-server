@@ -5,6 +5,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class GitInputValidator {
 
+    private final SecurityGuardrails securityGuardrails;
+
+    public GitInputValidator(SecurityGuardrails securityGuardrails) {
+        this.securityGuardrails = securityGuardrails;
+    }
+
     public void validateRepositoryPath(String path) {
         if (path == null || path.isBlank()) {
             throw new IllegalArgumentException("Repository path cannot be empty");
@@ -12,7 +18,9 @@ public class GitInputValidator {
         if (containsPathTraversal(path)) {
             throw new IllegalArgumentException("Path traversal detected in repository path");
         }
-        // Additional checks can be added here (e.g. allowlist)
+        if (!securityGuardrails.isRepositoryAllowed(path)) {
+            throw new IllegalArgumentException("Repository path not in allowlist: " + path);
+        }
     }
 
     public void validateFilePath(String path) {
