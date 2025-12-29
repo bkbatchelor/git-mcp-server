@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for GitCommitTool.
+     Unit tests for GitCommitTool.
  */
 class GitCommitToolTest {
 
@@ -31,6 +31,10 @@ class GitCommitToolTest {
         gitCommitTool = new GitCommitTool(repositoryManager, objectMapper);
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1, 4.3, 4.4)
+     Validates Git commit tool execution and error handling
+     */
     @Test
     void executeCreatesCommitWithStagedChanges(@TempDir Path tempDir) throws Exception {
         // Arrange - Create git repository with staged changes
@@ -72,6 +76,10 @@ class GitCommitToolTest {
         assertThat(commitInfo.timestamp()).isNotNull();
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1, 4.3, 4.4)
+     Validates Git commit tool execution and error handling
+     */
     @Test
     void executeReturnsErrorForRepositoryWithoutStagedChanges(@TempDir Path tempDir) throws Exception {
         // Arrange - Create empty git repository
@@ -99,6 +107,10 @@ class GitCommitToolTest {
         assertThat(result.errorMessage().get()).contains("nothing to commit");
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1, 4.3, 4.4)
+     Validates Git commit tool execution and error handling
+     */
     @Test
     void executeReturnsErrorForInvalidCommitMessage(@TempDir Path tempDir) throws Exception {
         // Arrange - Create git repository with staged changes
@@ -133,6 +145,10 @@ class GitCommitToolTest {
         assertThat(result.errorMessage().get()).contains("Invalid commit message");
     }
 
+    /**
+     Property 5: Git Commit Operations (Req 4.1, 4.3, 4.4)
+     Validates Git commit tool execution and error handling
+     */
     @Test
     void executeReturnsErrorForInvalidRepositoryPath() {
         // Arrange

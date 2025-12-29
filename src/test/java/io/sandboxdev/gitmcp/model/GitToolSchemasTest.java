@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.Optional;
 
 /**
- * Unit tests for Git Tool Schema records (TDD RED phase).
- * Tests the data models for all Git operation tool schemas.
+     Unit tests for Git Tool Schema records (TDD RED phase).
+     Tests the data models for all Git operation tool schemas.
  */
 class GitToolSchemasTest {
 

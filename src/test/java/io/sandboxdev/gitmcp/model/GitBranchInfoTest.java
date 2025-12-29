@@ -4,11 +4,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Unit tests for GitBranchInfo record (TDD RED phase).
- * Tests the data model for Git branch information.
+     Unit tests for GitBranchInfo record (TDD RED phase).
+     Tests the data model for Git branch information.
  */
 class GitBranchInfoTest {
 
+    /**
+     Property 7: Git Branch Operations (Req 6.1)
+     Creates GitBranchInfo with all required fields
+     */
     @Test
     void shouldCreateGitBranchInfoWithAllFields() {
         // Given
@@ -27,6 +31,10 @@ class GitBranchInfoTest {
         assertThat(branch.isRemote()).isFalse();
     }
 
+    /**
+     Property 7: Git Branch Operations (Req 6.1)
+     Validates GitBranchInfo model creation and properties
+     */
     @Test
     void shouldCreateRemoteBranch() {
         // Given
@@ -42,6 +50,10 @@ class GitBranchInfoTest {
         assertThat(branch.isCurrent()).isFalse();
     }
 
+    /**
+     Property 7: Git Branch Operations (Req 6.1)
+     Validates GitBranchInfo model creation and properties
+     */
     @Test
     void shouldCreateCurrentLocalBranch() {
         // Given
@@ -57,6 +69,10 @@ class GitBranchInfoTest {
         assertThat(branch.isRemote()).isFalse();
     }
 
+    /**
+     Property 7: Git Branch Operations (Req 6.1)
+     Validates GitBranchInfo model creation and properties
+     */
     @Test
     void shouldBeImmutable() {
         // Given
@@ -67,6 +83,10 @@ class GitBranchInfoTest {
         assertThat(branch.commitHash()).isNotNull();
     }
 
+    /**
+     Property 7: Git Branch Operations (Req 6.1)
+     Validates GitBranchInfo model creation and properties
+     */
     @Test
     void shouldImplementEqualsAndHashCode() {
         // Given

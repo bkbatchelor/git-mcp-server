@@ -5,11 +5,15 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 
 /**
- * Unit tests for GitStatus record (TDD RED phase).
- * Tests the data model for Git repository status information.
+     Unit tests for GitStatus record (TDD RED phase).
+     Tests the data model for Git repository status information.
  */
 class GitStatusTest {
 
+    /**
+     Property 4: Git Status Operations (Req 3.1)
+     Validates GitStatus model creation and properties
+     */
     @Test
     void shouldCreateGitStatusWithAllFileTypes() {
         // Given
@@ -27,6 +31,10 @@ class GitStatusTest {
         assertThat(status.isClean()).isFalse();
     }
 
+    /**
+     Property 4: Git Status Operations (Req 3.1)
+     Validates GitStatus model creation and properties
+     */
     @Test
     void shouldCreateCleanGitStatus() {
         // Given
@@ -42,6 +50,10 @@ class GitStatusTest {
         assertThat(status.isClean()).isTrue();
     }
 
+    /**
+     Property 4: Git Status Operations (Req 3.1)
+     Validates GitStatus model creation and properties
+     */
     @Test
     void shouldBeImmutable() {
         // Given
@@ -54,6 +66,10 @@ class GitStatusTest {
         assertThat(status.untrackedFiles()).isUnmodifiable();
     }
 
+    /**
+     Property 4: Git Status Operations (Req 3.1)
+     Validates GitStatus model creation and properties
+     */
     @Test
     void shouldImplementEqualsAndHashCode() {
         // Given

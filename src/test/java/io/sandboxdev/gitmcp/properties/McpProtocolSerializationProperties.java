@@ -11,10 +11,10 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for MCP protocol serialization and deserialization.
+     Property-based tests for MCP protocol serialization and deserialization.
  *
- * These tests verify that all MCP protocol data models can be correctly
- * serialized to JSON and deserialized back to equivalent objects.
+     These tests verify that all MCP protocol data models can be correctly
+     serialized to JSON and deserialized back to equivalent objects.
  */
 @Tag("git-mcp-server")
 @Tag("property-12")

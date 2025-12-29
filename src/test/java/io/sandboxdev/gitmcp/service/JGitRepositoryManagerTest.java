@@ -20,7 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Tests for JGitRepositoryManager using Testcontainers for real Git repositories.
+     Tests for JGitRepositoryManager using Testcontainers for real Git repositories.
  */
 @Testcontainers
 class JGitRepositoryManagerTest {
@@ -35,6 +35,10 @@ class JGitRepositoryManagerTest {
         repositoryManager = new JGitRepositoryManager();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getRepository_withValidPath_returnsRepository() throws IOException, GitAPIException {
         // Arrange
@@ -48,6 +52,10 @@ class JGitRepositoryManagerTest {
         assertThat(repository.getObjectDatabase()).isNotNull();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getRepository_withNullPath_throwsIllegalArgumentException() {
         // Act & Assert
@@ -56,6 +64,10 @@ class JGitRepositoryManagerTest {
             .hasMessage("Repository path cannot be null");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getRepository_withInvalidPath_throwsRuntimeException() {
         // Arrange
@@ -67,6 +79,10 @@ class JGitRepositoryManagerTest {
             .hasMessageContaining("Failed to open repository");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getStatus_withCleanRepository_returnsCleanStatus() throws IOException, GitAPIException {
         // Arrange
@@ -83,6 +99,10 @@ class JGitRepositoryManagerTest {
         assertThat(status.untrackedFiles()).isEmpty();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getStatus_withUntrackedFile_returnsUntrackedFiles() throws IOException, GitAPIException {
         // Arrange
@@ -98,6 +118,10 @@ class JGitRepositoryManagerTest {
         assertThat(status.untrackedFiles()).contains("untracked.txt");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void commit_withStagedChanges_returnsCommitId() throws IOException, GitAPIException {
         // Arrange
@@ -118,6 +142,10 @@ class JGitRepositoryManagerTest {
         assertThat(commitId.getName()).hasSize(40); // SHA-1 hash length
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getCommitInfo_withValidCommit_returnsCommitInfo() throws IOException, GitAPIException {
         // Arrange
@@ -142,6 +170,10 @@ class JGitRepositoryManagerTest {
         assertThat(commitInfo.timestamp()).isNotNull();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void listBranches_withDefaultBranch_returnsMainBranch() throws IOException, GitAPIException {
         // Arrange
@@ -159,6 +191,10 @@ class JGitRepositoryManagerTest {
         assertThat(mainBranch.isRemote()).isFalse();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getLog_withLimit_returnsLimitedCommits() throws IOException, GitAPIException {
         // Arrange
@@ -183,6 +219,10 @@ class JGitRepositoryManagerTest {
         assertThat(commits.get(1).message()).isEqualTo("Commit 2");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void hasUncommittedChanges_withCleanRepo_returnsFalse() throws IOException, GitAPIException {
         // Arrange
@@ -196,6 +236,10 @@ class JGitRepositoryManagerTest {
         assertThat(hasChanges).isFalse();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void hasUncommittedChanges_withUntrackedFile_returnsTrue() throws IOException, GitAPIException {
         // Arrange
@@ -210,6 +254,10 @@ class JGitRepositoryManagerTest {
         assertThat(hasChanges).isTrue();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void isValidRepository_withValidRepo_returnsTrue() throws IOException, GitAPIException {
         // Arrange
@@ -222,6 +270,10 @@ class JGitRepositoryManagerTest {
         assertThat(isValid).isTrue();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void isValidRepository_withInvalidPath_returnsFalse() {
         // Arrange
@@ -234,6 +286,10 @@ class JGitRepositoryManagerTest {
         assertThat(isValid).isFalse();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void closeRepository_removesFromCache() throws IOException, GitAPIException {
         // Arrange
@@ -249,6 +305,10 @@ class JGitRepositoryManagerTest {
         assertThat(newRepository).isNotSameAs(repository);
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void closeAll_clearsAllRepositories() throws IOException, GitAPIException {
         // Arrange
@@ -266,6 +326,10 @@ class JGitRepositoryManagerTest {
         assertThat(repositoryManager.getRepository(repoPath2)).isNotNull();
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getLogWithFilePath_returnsCommitsForSpecificFile() throws IOException, GitAPIException {
         // Arrange
@@ -298,6 +362,10 @@ class JGitRepositoryManagerTest {
         assertThat(file1Commits).hasSize(2); // Add both + Modify file1 (file1 was involved)
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getDiff_withTwoRefs_returnsDiffOutput() throws IOException, GitAPIException {
         // Arrange
@@ -324,6 +392,10 @@ class JGitRepositoryManagerTest {
         assertThat(diff).contains("index 0000000000000000000000000000000000000000");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void getUnstagedDiff_withModifiedFiles_returnsDiff() throws IOException, GitAPIException {
         // Arrange
@@ -341,6 +413,10 @@ class JGitRepositoryManagerTest {
         assertThat(diff).contains("diff --git a/README.md b/README.md");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void createBranch_createsNewBranch() throws IOException, GitAPIException {
         // Arrange
@@ -357,6 +433,10 @@ class JGitRepositoryManagerTest {
             .contains("main", "feature-branch");
     }
 
+    /**
+     Property Multiple: Git Operations (Req 3.5, 4.5, 5.1, 7.1)
+     Validates JGit repository manager functionality
+     */
     @Test
     void checkout_switchesToBranch() throws IOException, GitAPIException {
         // Arrange
@@ -379,7 +459,7 @@ class JGitRepositoryManagerTest {
     }
 
     /**
-     * Helper method to initialize a Git repository with an initial commit.
+     Helper method to initialize a Git repository with an initial commit.
      */
     private Path initializeGitRepository(Path path) throws IOException, GitAPIException {
         Files.createDirectories(path);

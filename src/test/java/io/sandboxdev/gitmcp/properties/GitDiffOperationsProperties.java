@@ -15,16 +15,16 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Property-based tests for Git diff operations.
+     Property-based tests for Git diff operations.
  *
- * Property 6: Git Diff Operations
- * For any valid Git repository and commit references, the git_diff tool should
- * return
- * unified diff format output for the specified comparison (unstaged changes,
- * single ref vs HEAD,
- * or two refs), with appropriate errors for invalid references.
+     Property 6: Git Diff Operations
+     For any valid Git repository and commit references, the git_diff tool should
+     return
+     unified diff format output for the specified comparison (unstaged changes,
+     single ref vs HEAD,
+     or two refs), with appropriate errors for invalid references.
  *
- * Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5
+     Validates: Requirements 5.1, 5.2, 5.3, 5.4, 5.5
  */
 @Tag("git-mcp-server")
 @Tag("property-6")

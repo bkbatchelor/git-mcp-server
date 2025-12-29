@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Unit tests for Git parameter validation (TDD RED phase).
+     Unit tests for Git parameter validation (TDD RED phase).
  */
 class GitParameterValidationTest {
 

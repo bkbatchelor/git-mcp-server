@@ -18,13 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Property-based tests for input validation and security guardrails.
- * Tests Property 10: Input Validation and Security (Requirements 9.1, 9.2, 9.3, 9.4, 9.5)
+     Property-based tests for input validation and security guardrails.
+     Tests Property 10: Input Validation and Security (Requirements 9.1, 9.2, 9.3, 9.4, 9.5)
  */
 class InputValidationSecurityProperties {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    
+
     private GitMcpProperties createProperties() {
         return new GitMcpProperties(
                 new GitMcpProperties.TransportConfig(true, false, 8080, Duration.ofSeconds(30)),
@@ -37,23 +37,23 @@ class InputValidationSecurityProperties {
     private final GitInputValidator validator = new GitInputValidator(new SecurityGuardrails(createProperties()));
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1, 9.2)
-     * Path traversal sequences are always rejected
+     Property 10: Input Validation and Security (Req 9.1, 9.2)
+     Path traversal sequences are always rejected
      */
     @Property
     void pathTraversalSequencesAlwaysRejected(@ForAll("pathTraversalStrings") String traversalPath) {
         assertThatThrownBy(() -> validator.validateRepositoryPath("/var/git/" + traversalPath))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Path traversal detected");
-                
+
         assertThatThrownBy(() -> validator.validateFilePath(traversalPath))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Path traversal detected");
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1)
-     * Safe paths are always accepted
+     Property 10: Input Validation and Security (Req 9.1)
+     Safe paths are always accepted
      */
     @Property
     void safePathsAlwaysAccepted(@ForAll("safePaths") String safePath) {
@@ -63,8 +63,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.3, 9.4)
-     * Shell injection characters in branch names are rejected
+     Property 10: Input Validation and Security (Req 9.3, 9.4)
+     Shell injection characters in branch names are rejected
      */
     @Property
     void shellInjectionCharactersInBranchNamesRejected(@ForAll("shellInjectionStrings") String maliciousBranch) {
@@ -74,8 +74,8 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.3)
-     * Valid branch names are always accepted
+     Property 10: Input Validation and Security (Req 9.3)
+     Valid branch names are always accepted
      */
     @Property
     void validBranchNamesAlwaysAccepted(@ForAll("validBranchNames") String validBranch) {
@@ -84,14 +84,14 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.1)
-     * Tool parameter validation enforces schemas
+     Property 10: Input Validation and Security (Req 9.1)
+     Tool parameter validation enforces schemas
      */
     @Property
     void toolParameterValidationEnforcesSchemas(@ForAll("toolInvocations") ToolInvocation invocation) {
         // This test should fail initially - we need to implement schema validation
         boolean isValid = validator.validateToolParameters(invocation.toolName(), invocation.parameters());
-        
+
         if (invocation.isValidSchema()) {
             assertThat(isValid).isTrue();
         } else {
@@ -100,13 +100,13 @@ class InputValidationSecurityProperties {
     }
 
     /**
-     * Property 10: Input Validation and Security (Req 9.5)
-     * Repository allowlist is enforced
+     Property 10: Input Validation and Security (Req 9.5)
+     Repository allowlist is enforced
      */
     @Property
     void repositoryAllowlistEnforced(@ForAll("repositoryPaths") String repoPath) {
         boolean isAllowed = repoPath.startsWith("/var/git") || repoPath.startsWith("/home/user/repos");
-        
+
         if (isAllowed) {
             // Should not throw for allowed paths (assuming no path traversal)
             if (!repoPath.contains("..")) {
@@ -211,7 +211,7 @@ class InputValidationSecurityProperties {
                 // Valid tool invocations
                 Arbitraries.just(new ToolInvocation("git_status", createValidJsonNode("{}"), true)),
                 Arbitraries.strings().withCharRange('a', 'z').ofMinLength(1).ofMaxLength(50)
-                        .map(msg -> new ToolInvocation("git_commit", 
+                        .map(msg -> new ToolInvocation("git_commit",
                                 createValidJsonNode("{\"message\":\"" + msg + "\"}"), true)),
                 // Invalid tool invocations
                 Arbitraries.just(new ToolInvocation("git_commit", createValidJsonNode("{}"), false)),

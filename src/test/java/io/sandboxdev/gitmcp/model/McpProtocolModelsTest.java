@@ -13,13 +13,17 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for MCP protocol data models to verify JSON
- * serialization/deserialization.
+     Unit tests for MCP protocol data models to verify JSON
+     serialization/deserialization.
  */
 class McpProtocolModelsTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new Jdk8Module());
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void mcpRequestSerializationWorks() throws JsonProcessingException {
         JsonNode params = objectMapper.readTree("{\"test\": \"value\"}");
@@ -35,6 +39,10 @@ class McpProtocolModelsTest {
         assertThat(deserialized.isValid()).isTrue();
     }
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void mcpResponseSerializationWorks() throws JsonProcessingException {
         JsonNode result = objectMapper.readTree("{\"success\": true}");
@@ -50,6 +58,10 @@ class McpProtocolModelsTest {
         assertThat(deserialized.isSuccess()).isTrue();
     }
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void mcpNotificationSerializationWorks() throws JsonProcessingException {
         JsonNode params = objectMapper.readTree("{\"level\": \"info\"}");
@@ -64,6 +76,10 @@ class McpProtocolModelsTest {
         assertThat(deserialized.isValid()).isTrue();
     }
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void toolDefinitionSerializationWorks() throws JsonProcessingException {
         JsonSchema schema = JsonSchema.stringSchema("Test parameter");
@@ -78,6 +94,10 @@ class McpProtocolModelsTest {
         assertThat(deserialized.isValid()).isTrue();
     }
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void toolResultSerializationWorks() throws JsonProcessingException {
         ToolResult result = ToolResult.success("Operation completed");
@@ -90,6 +110,10 @@ class McpProtocolModelsTest {
         assertThat(deserialized.isError()).isFalse();
     }
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void resourceDefinitionSerializationWorks() throws JsonProcessingException {
         URI uri = URI.create("git-resource://test");
@@ -104,6 +128,10 @@ class McpProtocolModelsTest {
         assertThat(deserialized.isValid()).isTrue();
     }
 
+    /**
+     Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     Validates MCP protocol model serialization and deserialization
+     */
     @Test
     void resourceContentSerializationWorks() throws JsonProcessingException {
         Map<String, String> metadata = Map.of("size", "100", "encoding", "utf-8");

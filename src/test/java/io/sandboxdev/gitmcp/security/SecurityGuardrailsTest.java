@@ -24,7 +24,6 @@ class SecurityGuardrailsTest {
     }
 
     @Test
-    @DisplayName("Property 10: Security Guardrails - Repository allowlist enforcement (Req 9.5)")
     void enforcesRepositoryAllowlist() {
         var properties = createProperties(List.of("/var/git/allowed", "/home/user/projects"), 10);
         var guardrails = new SecurityGuardrails(properties);
@@ -37,7 +36,6 @@ class SecurityGuardrailsTest {
     }
 
     @Test
-    @DisplayName("Property 10: Security Guardrails - Rate limiting for resource-intensive operations (Req 10.1)")
     void enforcesRateLimiting() {
         var properties = createProperties(List.of("/var/git"), 2);
         var guardrails = new SecurityGuardrails(properties);
@@ -60,7 +58,6 @@ class SecurityGuardrailsTest {
         "Fix: resolve issue #123",
         "feat: add new feature\n\nDetailed description here"
     })
-    @DisplayName("Property 10: Security Guardrails - Output sanitization for safe content (Req 10.3)")
     void sanitizesOutputForSafeContent(String input) {
         var properties = createProperties(List.of("/var/git"), 10);
         var guardrails = new SecurityGuardrails(properties);
@@ -76,7 +73,6 @@ class SecurityGuardrailsTest {
         "<img src=x onerror=alert(1)>",
         "data:text/html,<script>alert(1)</script>"
     })
-    @DisplayName("Property 10: Security Guardrails - Output sanitization removes dangerous content (Req 10.3)")
     void sanitizesOutputRemovesDangerousContent(String input) {
         var properties = createProperties(List.of("/var/git"), 10);
         var guardrails = new SecurityGuardrails(properties);
@@ -89,7 +85,6 @@ class SecurityGuardrailsTest {
     }
 
     @Test
-    @DisplayName("Property 10: Security Guardrails - Rejects empty allowlist (Req 9.5)")
     void rejectsEmptyAllowlist() {
         var properties = createProperties(List.of(), 10);
         
@@ -99,7 +94,6 @@ class SecurityGuardrailsTest {
     }
 
     @Test
-    @DisplayName("Property 10: Security Guardrails - Handles null output sanitization (Req 10.3)")
     void handlesNullOutputSanitization() {
         var properties = createProperties(List.of("/var/git"), 10);
         var guardrails = new SecurityGuardrails(properties);

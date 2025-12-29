@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test class for GitMcpProperties configuration validation.
- * 
- * This test validates that:
- * - Configuration properties are correctly loaded from application-test.yml
- * - All required properties have valid values
- * - Type-safe configuration works as expected
+     Test class for GitMcpProperties configuration validation.
+     
+     This test validates that:
+     - Configuration properties are correctly loaded from application-test.yml
+     - All required properties have valid values
+     - Type-safe configuration works as expected
  */
 @SpringBootTest(classes = GitMcpPropertiesTest.TestConfiguration.class)
 @ActiveProfiles("test")
