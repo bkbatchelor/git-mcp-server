@@ -25,7 +25,6 @@ class GitLogOperationsPropertiesTest {
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
         @RepeatedTest(10)
-        @DisplayName("Property 8: Git Log Operations - Returns commit history with limit and file filtering (Req 7.1, 7.2, 7.3)")
         void gitLogOperationsWorkflow() throws Exception {
                 // Setup repo with history
                 Path repositoryPath = createInitializedRepositoryWithHistory();

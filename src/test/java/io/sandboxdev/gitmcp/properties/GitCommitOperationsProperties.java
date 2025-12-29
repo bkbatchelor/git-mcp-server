@@ -33,10 +33,13 @@ class GitCommitOperationsProperties {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Property 5: Git Commit Operations (Req 4.1, 4.3)
+     * Creates commit with staged changes
+     */
     @Property
     @Tag("property-5")
     @Tag("git-commit-operations")
-    @DisplayName("Property 5: Git Commit Operations - Creates commit with staged changes (Req 4.1, 4.3)")
     void gitCommitCreatesCommitWithStagedChanges(@ForAll("repositoryWithStagedChanges") RepositoryWithChanges repoState,
             @ForAll("validCommitMessages") String commitMessage) {
         // Arrange
@@ -63,7 +66,6 @@ class GitCommitOperationsProperties {
     @Property
     @Tag("property-5")
     @Tag("git-commit-operations")
-    @DisplayName("Property 5: Git Commit Operations - Returns error for repository without staged changes (Req 4.4)")
     void gitCommitReturnsErrorForRepositoryWithoutStagedChanges(
             @ForAll("repositoryWithoutStagedChanges") Path repositoryPath,
             @ForAll("validCommitMessages") String commitMessage) {
@@ -83,7 +85,6 @@ class GitCommitOperationsProperties {
     @Property
     @Tag("property-5")
     @Tag("git-commit-operations")
-    @DisplayName("Property 5: Git Commit Operations - Returns error for invalid commit message (Req 4.4)")
     void gitCommitReturnsErrorForInvalidCommitMessage(
             @ForAll("repositoryWithStagedChanges") RepositoryWithChanges repoState,
             @ForAll("invalidCommitMessages") String invalidMessage) {

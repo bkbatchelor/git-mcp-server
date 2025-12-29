@@ -25,10 +25,13 @@ class JsonRpcProtocolComplianceProperties {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final McpJsonRpcDispatcher dispatcher = new McpJsonRpcDispatcher();
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     * Valid requests are processed correctly
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
-    @DisplayName("Property 1: JSON-RPC Compliance - Valid requests are processed correctly (Req 1.1, 1.2)")
     void validJsonRpcRequestsAreProcessedCorrectly(@ForAll("validMcpRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         assertThat(request.isValid()).isTrue();
@@ -43,10 +46,13 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.isValid()).isTrue();
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     * Invalid version returns error
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
-    @DisplayName("Property 1: JSON-RPC Compliance - Invalid version returns error (Req 1.3)")
     void invalidJsonRpcVersionReturnsError(@ForAll("invalidVersionRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         assertThat(request.jsonrpc()).isNotEqualTo("2.0");
@@ -60,10 +66,13 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.error().code()).isEqualTo(McpError.INVALID_REQUEST);
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     * Empty method name returns error
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
-    @DisplayName("Property 1: JSON-RPC Compliance - Empty method name returns error (Req 1.3)")
     void emptyMethodNameReturnsError(@ForAll("emptyMethodRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         assertThat(request.method()).isBlank();
@@ -75,10 +84,13 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.error().code()).isEqualTo(McpError.INVALID_REQUEST);
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.4)
+     * Unknown method returns METHOD_NOT_FOUND
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
-    @DisplayName("Property 1: JSON-RPC Compliance - Unknown method returns METHOD_NOT_FOUND (Req 1.4)")
     void unknownMethodReturnsMethodNotFoundError(@ForAll("unknownMethodRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         // Assume the method name is not a known MCP method
@@ -91,10 +103,13 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.error().message()).contains(request.method());
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     * Malformed JSON returns PARSE_ERROR
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
-    @DisplayName("Property 1: JSON-RPC Compliance - Malformed JSON returns PARSE_ERROR (Req 1.3)")
     void malformedJsonReturnsParseError(@ForAll("malformedJsonStrings") String malformedJson) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         try {
@@ -112,10 +127,13 @@ class JsonRpcProtocolComplianceProperties {
         }
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.2)
+     * Responses maintain request ID correlation
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
-    @DisplayName("Property 1: JSON-RPC Compliance - Responses maintain request ID correlation (Req 1.2)")
     void responsesMaintainRequestIdCorrelation(@ForAll("validMcpRequests") McpRequest request) {
         // This test should fail initially as McpJsonRpcDispatcher doesn't exist yet
         McpResponse response = dispatcher.dispatch(request, null);

@@ -37,5 +37,11 @@ description: Mandates the TDD cycle, testing stack (JUnit 5, AssertJ, Mockito), 
 
 #### Map Test to Property and Requirement
 
-* **Specification Mapping:** Must enclose Property and Requirement(s) with JUnit 5 `@DisplayName` for all testing methods. Format @DisplayName argument according to this example: ```DisplayName("Property 7: Git Branch Operations (Req 6.1, 6.2, 6.3, 6.4)")```
+* **Specification Mapping:** Must enclose Property and Requirement(s) with JavaDoc block for all testing methods. Follow the JavaDoc format follows the pattern:
+```java
+        /**
+         Property X: [Description] (Req Y.Z, Y.W)
+         [Brief description of what the test validates]                                                    
+       */ 
+```
   
