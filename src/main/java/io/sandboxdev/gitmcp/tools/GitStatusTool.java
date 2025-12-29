@@ -1,9 +1,12 @@
 package io.sandboxdev.gitmcp.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sandboxdev.gitmcp.config.GitMcpProperties;
 import io.sandboxdev.gitmcp.model.GitStatus;
 import io.sandboxdev.gitmcp.model.GitStatusToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
+import io.sandboxdev.gitmcp.security.GitInputValidator;
+import io.sandboxdev.gitmcp.security.SecurityGuardrails;
 import io.sandboxdev.gitmcp.service.JGitRepositoryManager;
 import io.sandboxdev.gitmcp.security.GitInputValidator;
 import org.springframework.stereotype.Component;
@@ -11,10 +14,12 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.List;
 
 /**
  * Git status tool implementation.
- * 
+ *
  * Provides Git working tree status information including modified, staged, and
  * untracked files.
  */
@@ -35,7 +40,14 @@ public class GitStatusTool {
     public GitStatusTool() {
         this.repositoryManager = new JGitRepositoryManager();
         this.objectMapper = new ObjectMapper();
-        this.validator = new GitInputValidator();
+        // Create minimal SecurityGuardrails for testing
+        var properties = new GitMcpProperties(
+                new GitMcpProperties.TransportConfig(true, false, 8080, Duration.ofSeconds(30)),
+                new GitMcpProperties.SecurityConfig(List.of("/"), true, 10),
+                new GitMcpProperties.RepositoryConfig("main", "10MB"),
+                new GitMcpProperties.ObservabilityConfig(true, true, "INFO")
+        );
+        this.validator = new GitInputValidator(new SecurityGuardrails(properties));
     }
 
     public ToolResult execute(GitStatusToolSchema schema) {

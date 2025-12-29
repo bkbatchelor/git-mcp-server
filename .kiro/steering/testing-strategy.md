@@ -34,3 +34,8 @@ description: Mandates the TDD cycle, testing stack (JUnit 5, AssertJ, Mockito), 
 * **Containers:**
   * Use **Testcontainers** for database/broker dependencies.
   * **Vector Stores:** Mandatory use of Testcontainers for Vector Databases (e.g., `pgvector`, `chroma`) to verify embedding search logic.
+
+#### Map Test to Property and Requirement
+
+* **Specification Mapping:** Must enclose Property and Requirement(s) with JUnit 5 `@DisplayName` for all testing methods. Format @DisplayName argument according to this example: ```DisplayName("Property 7: Git Branch Operations (Req 6.1, 6.2, 6.3, 6.4)")```
+  
