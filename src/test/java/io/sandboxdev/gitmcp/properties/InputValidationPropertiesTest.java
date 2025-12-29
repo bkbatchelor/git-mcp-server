@@ -27,24 +27,39 @@ class InputValidationPropertiesTest {
 
     private final GitInputValidator validator = new GitInputValidator(new SecurityGuardrails(createProperties()));
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.1, 9.2)
+     * Rejects path traversal in repository paths
+     */
     @ParameterizedTest
     @ValueSource(strings = { "../etc/passwd", "foo/../bar", "test/../../secret", "..\\windows" })
+    @DisplayName("Property 10: Input Validation and Security (Req 9.1, 9.2)")
     void rejectsPathTraversalInRepositoryPath(String path) {
         assertThatThrownBy(() -> validator.validateRepositoryPath("/var/git/" + path))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Path traversal detected");
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.1, 9.2)
+     * Rejects path traversal in file paths
+     */
     @ParameterizedTest
     @ValueSource(strings = { "../etc/passwd", "foo/../bar", "test/../../secret" })
+    @DisplayName("Property 10: Input Validation and Security (Req 9.1, 9.2)")
     void rejectsPathTraversalInFilePath(String path) {
         assertThatThrownBy(() -> validator.validateFilePath(path))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Path traversal detected");
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.3)
+     * Accepts safe branch names
+     */
     @ParameterizedTest
     @ValueSource(strings = { "feature/my-branch", "bugfix_123", "main", "develop", "release/v1.0.0" })
+    @DisplayName("Property 10: Input Validation and Security (Req 9.3)")
     void acceptsSafeBranchNames(String branchName) {
         validator.validateBranchName(branchName);
     }

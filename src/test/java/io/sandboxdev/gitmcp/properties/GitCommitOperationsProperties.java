@@ -33,6 +33,10 @@ class GitCommitOperationsProperties {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Property 5: Git Commit Operations (Req 4.1, 4.3)
+     * Creates commit with staged changes
+     */
     @Property
     @Tag("property-5")
     @Tag("git-commit-operations")

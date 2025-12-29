@@ -25,6 +25,10 @@ class JsonRpcProtocolComplianceProperties {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final McpJsonRpcDispatcher dispatcher = new McpJsonRpcDispatcher();
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.1, 1.2)
+     * Valid requests are processed correctly
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
@@ -42,6 +46,10 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.isValid()).isTrue();
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     * Invalid version returns error
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
@@ -58,6 +66,10 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.error().code()).isEqualTo(McpError.INVALID_REQUEST);
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     * Empty method name returns error
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
@@ -72,6 +84,10 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.error().code()).isEqualTo(McpError.INVALID_REQUEST);
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.4)
+     * Unknown method returns METHOD_NOT_FOUND
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
@@ -87,6 +103,10 @@ class JsonRpcProtocolComplianceProperties {
         assertThat(response.error().message()).contains(request.method());
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.3)
+     * Malformed JSON returns PARSE_ERROR
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")
@@ -107,6 +127,10 @@ class JsonRpcProtocolComplianceProperties {
         }
     }
 
+    /**
+     * Property 1: JSON-RPC Protocol Compliance (Req 1.2)
+     * Responses maintain request ID correlation
+     */
     @Property
     @Tag("property-1")
     @Tag("json-rpc-compliance")

@@ -36,6 +36,10 @@ class InputValidationSecurityProperties {
 
     private final GitInputValidator validator = new GitInputValidator(new SecurityGuardrails(createProperties()));
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.1, 9.2)
+     * Path traversal sequences are always rejected
+     */
     @Property
     void pathTraversalSequencesAlwaysRejected(@ForAll("pathTraversalStrings") String traversalPath) {
         assertThatThrownBy(() -> validator.validateRepositoryPath("/var/git/" + traversalPath))
@@ -47,6 +51,10 @@ class InputValidationSecurityProperties {
                 .hasMessageContaining("Path traversal detected");
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.1)
+     * Safe paths are always accepted
+     */
     @Property
     void safePathsAlwaysAccepted(@ForAll("safePaths") String safePath) {
         // Should not throw for safe paths within allowed repositories
@@ -54,6 +62,10 @@ class InputValidationSecurityProperties {
         validator.validateFilePath(safePath);
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.3, 9.4)
+     * Shell injection characters in branch names are rejected
+     */
     @Property
     void shellInjectionCharactersInBranchNamesRejected(@ForAll("shellInjectionStrings") String maliciousBranch) {
         assertThatThrownBy(() -> validator.validateBranchName(maliciousBranch))
@@ -61,12 +73,20 @@ class InputValidationSecurityProperties {
                 .hasMessageContaining("Invalid branch name");
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.3)
+     * Valid branch names are always accepted
+     */
     @Property
     void validBranchNamesAlwaysAccepted(@ForAll("validBranchNames") String validBranch) {
         // Should not throw for valid branch names
         validator.validateBranchName(validBranch);
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.1)
+     * Tool parameter validation enforces schemas
+     */
     @Property
     void toolParameterValidationEnforcesSchemas(@ForAll("toolInvocations") ToolInvocation invocation) {
         // This test should fail initially - we need to implement schema validation
@@ -79,6 +99,10 @@ class InputValidationSecurityProperties {
         }
     }
 
+    /**
+     * Property 10: Input Validation and Security (Req 9.5)
+     * Repository allowlist is enforced
+     */
     @Property
     void repositoryAllowlistEnforced(@ForAll("repositoryPaths") String repoPath) {
         boolean isAllowed = repoPath.startsWith("/var/git") || repoPath.startsWith("/home/user/repos");
