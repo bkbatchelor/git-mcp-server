@@ -16,14 +16,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
      Property-based tests for Git commit operations.
-     
+
      Property 5: Git Commit Operations
      For any valid Git repository with staged changes, the git_commit tool should
      create a commit
      with the provided message and return commit information, and return
      appropriate errors for
      repositories without staged changes or invalid commit messages.
-     
+
      Validates: Requirements 4.1, 4.3, 4.4
  */
 @Tag("git-mcp-server")

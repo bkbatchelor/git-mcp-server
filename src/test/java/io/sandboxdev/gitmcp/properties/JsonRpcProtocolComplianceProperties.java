@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
      Property-based tests for JSON-RPC protocol compliance.
-     
+
      These tests verify that the MCP server correctly validates JSON-RPC messages
      and returns properly formatted responses with correct error codes.
  */

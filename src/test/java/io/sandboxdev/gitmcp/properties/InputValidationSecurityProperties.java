@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class InputValidationSecurityProperties {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    
+
     private GitMcpProperties createProperties() {
         return new GitMcpProperties(
                 new GitMcpProperties.TransportConfig(true, false, 8080, Duration.ofSeconds(30)),
@@ -45,7 +45,7 @@ class InputValidationSecurityProperties {
         assertThatThrownBy(() -> validator.validateRepositoryPath("/var/git/" + traversalPath))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Path traversal detected");
-                
+
         assertThatThrownBy(() -> validator.validateFilePath(traversalPath))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Path traversal detected");
@@ -91,7 +91,7 @@ class InputValidationSecurityProperties {
     void toolParameterValidationEnforcesSchemas(@ForAll("toolInvocations") ToolInvocation invocation) {
         // This test should fail initially - we need to implement schema validation
         boolean isValid = validator.validateToolParameters(invocation.toolName(), invocation.parameters());
-        
+
         if (invocation.isValidSchema()) {
             assertThat(isValid).isTrue();
         } else {
@@ -106,7 +106,7 @@ class InputValidationSecurityProperties {
     @Property
     void repositoryAllowlistEnforced(@ForAll("repositoryPaths") String repoPath) {
         boolean isAllowed = repoPath.startsWith("/var/git") || repoPath.startsWith("/home/user/repos");
-        
+
         if (isAllowed) {
             // Should not throw for allowed paths (assuming no path traversal)
             if (!repoPath.contains("..")) {
@@ -211,7 +211,7 @@ class InputValidationSecurityProperties {
                 // Valid tool invocations
                 Arbitraries.just(new ToolInvocation("git_status", createValidJsonNode("{}"), true)),
                 Arbitraries.strings().withCharRange('a', 'z').ofMinLength(1).ofMaxLength(50)
-                        .map(msg -> new ToolInvocation("git_commit", 
+                        .map(msg -> new ToolInvocation("git_commit",
                                 createValidJsonNode("{\"message\":\"" + msg + "\"}"), true)),
                 // Invalid tool invocations
                 Arbitraries.just(new ToolInvocation("git_commit", createValidJsonNode("{}"), false)),
