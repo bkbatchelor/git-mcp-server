@@ -8,6 +8,7 @@ import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.security.GitInputValidator;
 import io.sandboxdev.gitmcp.security.SecurityGuardrails;
 import io.sandboxdev.gitmcp.service.JGitRepositoryManager;
+import io.sandboxdev.gitmcp.security.GitInputValidator;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
@@ -18,7 +19,7 @@ import java.util.List;
 
 /**
  * Git status tool implementation.
- * 
+ *
  * Provides Git working tree status information including modified, staged, and
  * untracked files.
  */
