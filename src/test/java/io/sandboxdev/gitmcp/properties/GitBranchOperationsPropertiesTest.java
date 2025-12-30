@@ -10,7 +10,6 @@ import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitBranchCreateTool;
 import io.sandboxdev.gitmcp.tools.GitBranchListTool;
 import io.sandboxdev.gitmcp.tools.GitCheckoutTool;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 

@@ -9,7 +9,6 @@ import net.jqwik.api.*;
 import net.jqwik.api.constraints.AlphaChars;
 import net.jqwik.api.constraints.NumericChars;
 import net.jqwik.api.constraints.StringLength;
-import org.junit.jupiter.api.DisplayName;
 
 import java.time.Duration;
 import java.util.List;

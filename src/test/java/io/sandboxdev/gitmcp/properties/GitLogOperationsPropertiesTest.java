@@ -7,7 +7,6 @@ import io.sandboxdev.gitmcp.model.GitCommitInfo;
 import io.sandboxdev.gitmcp.model.GitLogToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitLogTool;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 

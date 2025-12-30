@@ -2,7 +2,6 @@ package io.sandboxdev.gitmcp.properties;
 
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.IntRange;
-import org.junit.jupiter.api.DisplayName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
