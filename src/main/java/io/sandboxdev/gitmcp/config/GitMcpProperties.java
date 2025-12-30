@@ -1,57 +1,78 @@
 package io.sandboxdev.gitmcp.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
-import java.time.Duration;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Configuration properties for the Git MCP Server.
- * 
- * This record defines type-safe configuration properties that can be externalized
- * via application.yml or environment variables.
+ * Type-safe configuration properties for Git MCP Server.
+ * Requirement 15.1: Use @ConfigurationProperties for type-safe configuration
  */
 @ConfigurationProperties(prefix = "git.mcp")
+@Validated
 public record GitMcpProperties(
-    TransportConfig transport,
-    SecurityConfig security,
-    RepositoryConfig repository,
-    ObservabilityConfig observability
+    @Valid @NotNull TransportConfig transport,
+    @Valid @NotNull SecurityConfig security,
+    @Valid @NotNull RepositoryConfig repository,
+    @Valid @NotNull HeadlessConfig headless,
+    @Valid @NotNull ObservabilityConfig observability
 ) {
-    
+
     /**
-     * Transport layer configuration for MCP communication.
+     * Transport layer configuration.
      */
     public record TransportConfig(
         boolean stdioEnabled,
         boolean sseEnabled,
         int ssePort,
-        Duration requestTimeout
-    ) {}
-    
+        java.time.Duration requestTimeout
+    ) {
+        public TransportConfig {
+            if (!stdioEnabled && !sseEnabled) {
+                throw new IllegalArgumentException("At least one transport must be enabled");
+            }
+        }
+    }
+
     /**
-     * Security configuration for input validation and access control.
+     * Security configuration.
      */
     public record SecurityConfig(
-        List<String> allowedRepositories,
+        @NotNull List<String> allowedRepositories,
         boolean enableInputSanitization,
+        int maxRequestsPerMinute,
         int maxConcurrentOperations
     ) {}
-    
+
     /**
-     * Git repository configuration.
+     * Repository configuration.
      */
     public record RepositoryConfig(
-        String defaultBranch,
-        String maxFileSize
+        @NotNull String defaultBranch,
+        boolean autoFetch,
+        int operationTimeoutSeconds,
+        @NotNull String maxFileSize
     ) {}
-    
+
     /**
-     * Observability configuration for logging, tracing, and metrics.
+     * Headless deployment configuration.
+     */
+    public record HeadlessConfig(
+        boolean daemonMode,
+        boolean structuredLogging,
+        int shutdownTimeoutSeconds,
+        boolean batchProcessing
+    ) {}
+
+    /**
+     * Observability configuration.
      */
     public record ObservabilityConfig(
         boolean tracingEnabled,
         boolean metricsEnabled,
-        String logLevel
+        @NotNull String logLevel
     ) {}
 }

@@ -28,8 +28,9 @@ class InputValidationSecurityProperties {
     private GitMcpProperties createProperties() {
         return new GitMcpProperties(
                 new GitMcpProperties.TransportConfig(true, false, 8080, Duration.ofSeconds(30)),
-                new GitMcpProperties.SecurityConfig(List.of("/var/git", "/home/user/repos"), true, 10),
-                new GitMcpProperties.RepositoryConfig("main", "10MB"),
+                new GitMcpProperties.SecurityConfig(List.of("/var/git", "/home/user/repos"), true, 10, 5),
+                new GitMcpProperties.RepositoryConfig("main", true, 30, "10MB"),
+                new GitMcpProperties.HeadlessConfig(false, false, 30, false),
                 new GitMcpProperties.ObservabilityConfig(true, true, "INFO")
         );
     }

@@ -4,14 +4,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Main configuration class for the Git MCP Server.
- * 
- * This configuration class enables the GitMcpProperties and sets up
- * the basic Spring Boot configuration for the MCP server.
+ * Configuration class to enable GitMcpProperties.
+ * Requirement 15.1: Use @ConfigurationProperties for type-safe configuration
+ * Requirement 15.4: Validate configuration at startup and fail fast if required properties missing
  */
 @Configuration
 @EnableConfigurationProperties(GitMcpProperties.class)
 public class GitMcpConfiguration {
-    
-    // Additional configuration beans will be added in subsequent tasks
 }

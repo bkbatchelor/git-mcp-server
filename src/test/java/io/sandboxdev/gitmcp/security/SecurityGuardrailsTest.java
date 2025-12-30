@@ -17,8 +17,9 @@ class SecurityGuardrailsTest {
     private GitMcpProperties createProperties(List<String> allowedRepos, int maxConcurrent) {
         return new GitMcpProperties(
                 new GitMcpProperties.TransportConfig(true, false, 8080, Duration.ofSeconds(30)),
-                new GitMcpProperties.SecurityConfig(allowedRepos, true, maxConcurrent),
-                new GitMcpProperties.RepositoryConfig("main", "10MB"),
+                new GitMcpProperties.SecurityConfig(allowedRepos, true, 10, maxConcurrent),
+                new GitMcpProperties.RepositoryConfig("main", true, 30, "10MB"),
+                new GitMcpProperties.HeadlessConfig(false, false, 30, false),
                 new GitMcpProperties.ObservabilityConfig(true, true, "INFO")
         );
     }
