@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sandboxdev.gitmcp.model.*;
 import io.sandboxdev.gitmcp.protocol.McpJsonRpcDispatcher;
 import net.jqwik.api.*;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -4,7 +4,6 @@ import io.sandboxdev.gitmcp.model.GitDiffToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitDiffTool;
 import net.jqwik.api.*;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 import java.io.IOException;

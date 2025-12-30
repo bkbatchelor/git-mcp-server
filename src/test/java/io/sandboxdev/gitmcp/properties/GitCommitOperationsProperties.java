@@ -6,7 +6,6 @@ import io.sandboxdev.gitmcp.model.GitCommitToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitCommitTool;
 import net.jqwik.api.*;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 import java.nio.file.Files;

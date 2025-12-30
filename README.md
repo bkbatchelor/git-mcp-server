@@ -9,7 +9,9 @@ A production-grade Model Context Protocol (MCP) Server that enables Large Langua
 - **Java 21 & Virtual Threads**: High-throughput I/O operations with minimal resource overhead
 - **JGit Integration**: Pure Java Git operations without external dependencies
 - **Comprehensive Security**: Input validation, path traversal prevention, and access control
+- **Stateless Architecture**: Horizontal scalability and fault tolerance
 - **Observability**: Distributed tracing, metrics, and structured logging
+- **Headless Deployment**: Docker-ready with daemon mode support
 - **Property-Based Testing**: Comprehensive test coverage with mutation testing
 
 ## Prerequisites
@@ -24,26 +26,87 @@ A production-grade Model Context Protocol (MCP) Server that enables Large Langua
    ./gradlew build
    ```
 
-2. **Run the application**:
+2. **Run with Stdio transport** (for IDE integration):
    ```bash
-   ./gradlew bootRun
+   ./gradlew bootRun --args="--spring.profiles.active=dev"
    ```
 
-3. **Run tests**:
+3. **Run with SSE transport** (for remote access):
    ```bash
-   ./gradlew test
+   ./gradlew bootRun --args="--git.mcp.transport.sse-enabled=true --git.mcp.transport.stdio-enabled=false"
    ```
 
-4. **Run mutation tests**:
-   ```bash
-   ./gradlew pitest
-   ```
+## Deployment
+
+### Stdio Transport (IDE Integration)
+
+For local IDE integration using standard input/output:
+
+```bash
+# Development mode with debug logging
+./gradlew bootRun --args="--spring.profiles.active=dev"
+
+# Production mode with optimized settings
+java -jar build/libs/git-mcp-server-1.0.0-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+**Key Features:**
+- JSON-RPC messages via System.out
+- All logs redirected to System.err
+- Virtual threads for high concurrency
+- Stateless operation
+
+### SSE Transport (Remote Access)
+
+For HTTP-based Server-Sent Events transport:
+
+```bash
+# Enable SSE on port 8080
+java -jar build/libs/git-mcp-server-1.0.0-SNAPSHOT.jar \
+  --git.mcp.transport.sse-enabled=true \
+  --git.mcp.transport.stdio-enabled=false \
+  --git.mcp.transport.sse-port=8080
+```
+
+**Endpoints:**
+- `GET /sse/{sessionId}` - Establish SSE connection
+- `POST /mcp/request` - Send MCP requests
+- `GET /actuator/health` - Health check
+
+### Docker Deployment
+
+```dockerfile
+FROM openjdk:21-jdk-slim
+COPY build/libs/git-mcp-server-1.0.0-SNAPSHOT.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+```
+
+```bash
+# Build and run container
+docker build -t git-mcp-server .
+docker run -p 8080:8080 \
+  -e GIT_MCP_ALLOWED_REPOSITORIES="/workspace" \
+  -v /path/to/repos:/workspace \
+  git-mcp-server --spring.profiles.active=prod
+```
 
 ## Configuration
 
-The application can be configured via `application.yml` or environment variables:
+### Required Environment Variables
 
-### Key Configuration Properties
+```bash
+# Repository access (required)
+export GIT_MCP_ALLOWED_REPOSITORIES="/path/to/repo1,/path/to/repo2"
+
+# Optional: API keys for AI integrations
+export OPENAI_API_KEY="your-openai-key"
+export ANTHROPIC_API_KEY="your-anthropic-key"
+```
+
+### Application Configuration
+
+Create `application-local.yml` for custom settings:
 
 ```yaml
 git:
@@ -51,29 +114,234 @@ git:
     transport:
       stdio-enabled: true
       sse-enabled: false
+      sse-port: 8080
     security:
       allowed-repositories:
-        - /path/to/allowed/repos
+        - /path/to/your/repos
+      rate-limiting-enabled: true
+      max-requests-per-minute: 60
+    repository:
+      default-branch: main
+      operation-timeout-seconds: 30
+    headless:
+      daemon-mode: false
+      structured-logging: true
     observability:
       tracing-enabled: true
       metrics-enabled: true
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
 ```
 
-## Architecture
+### Profile-Specific Configuration
 
-The server follows a layered architecture:
+**Development Profile** (`--spring.profiles.active=dev`):
+- Debug logging enabled
+- Rate limiting disabled
+- All actuator endpoints exposed
+- Detailed health information
 
-- **Transport Layer**: Handles Stdio and SSE communication
-- **Protocol Layer**: Implements MCP JSON-RPC 2.0 specification
-- **Tool Layer**: Git operations exposed as MCP Tools
-- **Resource Layer**: Repository context exposed as MCP Resources
-- **Security Layer**: Input validation and access control
-- **Observability Layer**: Logging, tracing, and metrics
+**Production Profile** (`--spring.profiles.active=prod`):
+- Daemon mode enabled
+- Structured JSON logging
+- Limited actuator endpoints
+- Security-focused settings
+
+## Accessing Actuator Endpoints
+
+### Health Check
+```bash
+curl http://localhost:8080/actuator/health
+```
+
+Response:
+```json
+{
+  "status": "UP",
+  "components": {
+    "diskSpace": {"status": "UP"},
+    "ping": {"status": "UP"}
+  }
+}
+```
+
+### Application Info
+```bash
+curl http://localhost:8080/actuator/info
+```
+
+### Metrics
+```bash
+curl http://localhost:8080/actuator/metrics
+curl http://localhost:8080/actuator/metrics/jvm.memory.used
+```
+
+## Logging Configuration
+
+### Development Logging
+```yaml
+logging:
+  level:
+    io.sandboxdev.gitmcp: DEBUG
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{traceId},%X{spanId}] %logger{36} - %msg%n"
+```
+
+### Production Logging (Structured JSON)
+```yaml
+logging:
+  level:
+    io.sandboxdev.gitmcp: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss}","level":"%-5level","traceId":"%X{traceId}","spanId":"%X{spanId}","logger":"%logger{36}","message":"%msg"}%n'
+```
+
+### Log Aggregation
+For production deployments with log aggregation systems:
+
+```bash
+# Forward logs to external system
+java -jar app.jar --spring.profiles.active=prod 2>&1 | your-log-forwarder
+```
+
+## Git Operations
+
+The server exposes the following MCP tools:
+
+- `git_status` - Get repository status
+- `git_commit` - Create commits
+- `git_diff` - Show differences
+- `git_branch_list` - List branches
+- `git_branch_create` - Create branches
+- `git_checkout` - Switch branches
+- `git_log` - Show commit history
+
+### Example MCP Request
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "tools/call",
+  "params": {
+    "name": "git_status",
+    "arguments": {
+      "repositoryPath": "/path/to/repo"
+    }
+  }
+}
+```
+
+## Security
+
+### Repository Access Control
+```yaml
+git:
+  mcp:
+    security:
+      allowed-repositories:
+        - /safe/repo/path
+        - /another/safe/path
+      enable-input-sanitization: true
+      max-requests-per-minute: 60
+```
+
+### Input Validation
+- Path traversal prevention (`../` blocked)
+- Branch name validation (no shell injection)
+- Commit message sanitization
+- Repository allowlist enforcement
+
+### Rate Limiting
+- Configurable requests per minute
+- Per-client rate limiting
+- Resource-intensive operation throttling
+
+## Monitoring & Observability
+
+### Distributed Tracing
+```yaml
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+```
+
+### Metrics Collection
+- Git operation latency and success rates
+- JVM metrics (memory, GC, threads)
+- HTTP request metrics
+- Custom business metrics
+
+### Health Checks
+- Repository accessibility
+- Git command availability
+- Memory and disk space
+- External service connectivity
+
+## Troubleshooting
+
+### Common Issues
+
+**1. Repository Access Denied**
+```bash
+# Check repository permissions
+ls -la /path/to/repo
+# Verify allowlist configuration
+curl http://localhost:8080/actuator/configprops | grep allowed-repositories
+```
+
+**2. High Memory Usage**
+```bash
+# Check JVM metrics
+curl http://localhost:8080/actuator/metrics/jvm.memory.used
+# Adjust heap size
+java -Xmx2g -jar app.jar
+```
+
+**3. Stdio Transport Issues**
+```bash
+# Verify System.out is reserved for JSON-RPC
+# Check System.err for application logs
+java -jar app.jar 2>app.log
+```
+
+### Debug Mode
+```bash
+# Enable debug logging
+java -jar app.jar --logging.level.io.sandboxdev.gitmcp=DEBUG
+```
 
 ## Development
 
-### Project Structure
+### Running Tests
+```bash
+# All tests
+./gradlew test
 
+# Integration tests only
+./gradlew test --tests "*Integration*"
+
+# Property-based tests
+./gradlew test --tests "*Properties*"
+
+# Mutation testing
+./gradlew pitest
+```
+
+### Project Structure
 ```
 src/
 ├── main/java/io/sandboxdev/gitmcp/
@@ -81,23 +349,16 @@ src/
 │   ├── tools/           # MCP Tool implementations
 │   ├── resources/       # MCP Resource providers
 │   ├── model/           # Java Records (DTOs, Schemas)
-│   └── security/        # Security and validation
+│   ├── security/        # Security and validation
+│   ├── transport/       # Stdio and SSE transports
+│   ├── protocol/        # JSON-RPC dispatcher
+│   ├── registry/        # Tool and resource registries
+│   ├── service/         # JGit repository manager
+│   ├── stateless/       # Stateless operation components
+│   ├── headless/        # Headless deployment support
+│   └── integration/     # Integration services
 └── test/java/           # Test classes
 ```
-
-### Testing Strategy
-
-- **Unit Tests**: JUnit 5 + AssertJ + Mockito
-- **Property-Based Tests**: jqwik for universal correctness properties
-- **Integration Tests**: Testcontainers for Git repository testing
-- **Mutation Testing**: PiTest with 80% coverage threshold
-
-### Build Tools
-
-- **Gradle Kotlin DSL**: Modern build configuration
-- **Version Catalog**: Centralized dependency management
-- **OWASP Dependency Check**: Security vulnerability scanning
-- **PiTest**: Mutation testing for test quality validation
 
 ## License
 

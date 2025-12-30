@@ -7,7 +7,6 @@ import io.sandboxdev.gitmcp.model.GitStatusToolSchema;
 import io.sandboxdev.gitmcp.model.ToolResult;
 import io.sandboxdev.gitmcp.tools.GitStatusTool;
 import net.jqwik.api.*;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
 import java.nio.file.Files;
