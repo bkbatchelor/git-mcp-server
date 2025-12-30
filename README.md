@@ -36,6 +36,16 @@ A production-grade Model Context Protocol (MCP) Server that enables Large Langua
    ./gradlew bootRun --args="--git.mcp.transport.sse-enabled=true --git.mcp.transport.stdio-enabled=false"
    ```
 
+4. **Change server port** (default is 8080):
+   ```bash
+   # Via command line
+   ./gradlew bootRun --args="--server.port=9090"
+   
+   # Via environment variable
+   export SERVER_PORT=9090
+   ./gradlew bootRun
+   ```
+
 ## Deployment
 
 ### Stdio Transport (IDE Integration)
