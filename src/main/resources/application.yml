@@ -26,6 +26,44 @@ git:
       metrics-enabled: true
       log-level: INFO
 
+# Spring Boot Configuration
+spring:
+  application:
+    name: git-mcp-server
+  threads:
+    virtual:
+      enabled: true
+
+# Actuator Configuration (Requirement 13.4, 15.5)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+    info:
+      enabled: true
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+  security:
+    enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    io.sandboxdev.gitmcp: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{traceId},%X{spanId}] %logger{36} - %msg%n"
+
 # Requirement 15.5: Support profile-specific configuration
 ---
 spring:
@@ -39,6 +77,23 @@ git:
     headless:
       structured-logging: true
 
+# Development-specific actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,configprops
+  endpoint:
+    health:
+      show-details: always
+  security:
+    enabled: false
+
+logging:
+  level:
+    io.sandboxdev.gitmcp: DEBUG
+    org.springframework.security: DEBUG
+
 ---
 spring:
   config:
@@ -51,3 +106,20 @@ git:
       structured-logging: true
     security:
       max-requests-per-minute: 30
+
+# Production-specific actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never
+  security:
+    enabled: true
+
+logging:
+  level:
+    io.sandboxdev.gitmcp: INFO
+    org.springframework.security: WARN
