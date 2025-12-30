@@ -6,31 +6,61 @@
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties"
     },
     {
+      "name": "git.mcp.headless",
+      "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$HeadlessConfig",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
+      "sourceMethod": "public GitMcpProperties.@Valid @NotNull HeadlessConfig headless() "
+    },
+    {
       "name": "git.mcp.observability",
       "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$ObservabilityConfig",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
-      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.ObservabilityConfig observability() "
+      "sourceMethod": "public GitMcpProperties.@Valid @NotNull ObservabilityConfig observability() "
     },
     {
       "name": "git.mcp.repository",
       "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
-      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.RepositoryConfig repository() "
+      "sourceMethod": "public GitMcpProperties.@Valid @NotNull RepositoryConfig repository() "
     },
     {
       "name": "git.mcp.security",
       "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
-      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.SecurityConfig security() "
+      "sourceMethod": "public GitMcpProperties.@Valid @NotNull SecurityConfig security() "
     },
     {
       "name": "git.mcp.transport",
       "type": "io.sandboxdev.gitmcp.config.GitMcpProperties$TransportConfig",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties",
-      "sourceMethod": "public io.sandboxdev.gitmcp.config.GitMcpProperties.TransportConfig transport() "
+      "sourceMethod": "public GitMcpProperties.@Valid @NotNull TransportConfig transport() "
     }
   ],
   "properties": [
+    {
+      "name": "git.mcp.headless.batch-processing",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$HeadlessConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "git.mcp.headless.daemon-mode",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$HeadlessConfig",
+      "defaultValue": false
+    },
+    {
+      "name": "git.mcp.headless.shutdown-timeout-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$HeadlessConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "git.mcp.headless.structured-logging",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$HeadlessConfig",
+      "defaultValue": false
+    },
     {
       "name": "git.mcp.observability.log-level",
       "type": "java.lang.String",
@@ -49,6 +79,12 @@
       "defaultValue": false
     },
     {
+      "name": "git.mcp.repository.auto-fetch",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig",
+      "defaultValue": false
+    },
+    {
       "name": "git.mcp.repository.default-branch",
       "type": "java.lang.String",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig"
@@ -57,6 +93,12 @@
       "name": "git.mcp.repository.max-file-size",
       "type": "java.lang.String",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig"
+    },
+    {
+      "name": "git.mcp.repository.operation-timeout-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$RepositoryConfig",
+      "defaultValue": 0
     },
     {
       "name": "git.mcp.security.allowed-repositories",
@@ -74,6 +116,18 @@
       "type": "java.lang.Integer",
       "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
       "defaultValue": 0
+    },
+    {
+      "name": "git.mcp.security.max-requests-per-minute",
+      "type": "java.lang.Integer",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "git.mcp.security.rate-limiting-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.sandboxdev.gitmcp.config.GitMcpProperties$SecurityConfig",
+      "defaultValue": false
     },
     {
       "name": "git.mcp.transport.request-timeout",

@@ -1,21 +1,3 @@
-spring:
-  application:
-    name: git-mcp-server
-  
-  # Enable Virtual Threads
-  threads:
-    virtual:
-      enabled: true
-  
-  # Security Configuration
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          # JWT configuration will be added when implementing security
-          issuer-uri: ${JWT_ISSUER_URI:}
-
-# Git MCP Server Configuration
 git:
   mcp:
     transport:
@@ -25,75 +7,47 @@ git:
       request-timeout: PT30S
     security:
       allowed-repositories:
-        - ${user.home}/Projects
-        - ${user.home}/workspace
-        - /tmp/git-repos
-      enable-input-sanitization: true
+        - ${user.home}/.git
+      rate-limiting-enabled: true
+      max-requests-per-minute: 60
       max-concurrent-operations: 10
     repository:
       default-branch: main
+      auto-fetch: false
+      operation-timeout-seconds: 30
       max-file-size: 10MB
+    headless:
+      daemon-mode: false
+      structured-logging: false
+      shutdown-timeout-seconds: 10
+      batch-processing: false
     observability:
       tracing-enabled: true
       metrics-enabled: true
       log-level: INFO
 
-# Actuator Configuration
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,prometheus
-  endpoint:
-    health:
-      show-details: when-authorized
-  tracing:
-    sampling:
-      probability: 1.0
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-
-# Logging Configuration
-logging:
-  level:
-    io.sandboxdev.gitmcp: INFO
-    org.eclipse.jgit: WARN
-  pattern:
-    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
-
+# Requirement 15.5: Support profile-specific configuration
 ---
-# Development Profile
 spring:
   config:
     activate:
       on-profile: dev
-
 git:
   mcp:
-    observability:
-      log-level: DEBUG
-
-logging:
-  level:
-    io.sandboxdev.gitmcp: DEBUG
+    security:
+      rate-limiting-enabled: false
+    headless:
+      structured-logging: true
 
 ---
-# Production Profile
 spring:
   config:
     activate:
       on-profile: prod
-
 git:
   mcp:
+    headless:
+      daemon-mode: true
+      structured-logging: true
     security:
-      enable-input-sanitization: true
-    observability:
-      log-level: WARN
-
-logging:
-  level:
-    root: WARN
-    io.sandboxdev.gitmcp: INFO
+      max-requests-per-minute: 30

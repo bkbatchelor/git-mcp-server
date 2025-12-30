@@ -9,10 +9,18 @@ git:
       allowed-repositories:
         - /tmp/test-repos
       enable-input-sanitization: true
+      max-requests-per-minute: 60
       max-concurrent-operations: 5
     repository:
       default-branch: main
+      auto-fetch: false
+      operation-timeout-seconds: 30
       max-file-size: 1MB
+    headless:
+      daemon-mode: false
+      structured-logging: false
+      shutdown-timeout-seconds: 30
+      batch-processing: false
     observability:
       tracing-enabled: false
       metrics-enabled: false

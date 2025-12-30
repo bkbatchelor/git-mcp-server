@@ -43,8 +43,9 @@ public class GitStatusTool {
         // Create minimal SecurityGuardrails for testing
         var properties = new GitMcpProperties(
                 new GitMcpProperties.TransportConfig(true, false, 8080, Duration.ofSeconds(30)),
-                new GitMcpProperties.SecurityConfig(List.of("/"), true, 10),
-                new GitMcpProperties.RepositoryConfig("main", "10MB"),
+                new GitMcpProperties.SecurityConfig(List.of("/"), true, 10, 5),
+                new GitMcpProperties.RepositoryConfig("main", false, 30, "10MB"),
+                new GitMcpProperties.HeadlessConfig(false, false, 10, false),
                 new GitMcpProperties.ObservabilityConfig(true, true, "INFO")
         );
         this.validator = new GitInputValidator(new SecurityGuardrails(properties));
