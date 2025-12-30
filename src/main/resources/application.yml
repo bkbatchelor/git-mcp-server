@@ -7,7 +7,9 @@ git:
       request-timeout: PT30S
     security:
       allowed-repositories:
-        - ${user.home}/.git
+        - /home/user/projects/*
+        - /workspace/*
+        - /var/git/*
       rate-limiting-enabled: true
       max-requests-per-minute: 60
       max-concurrent-operations: 10
