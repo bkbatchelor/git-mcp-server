@@ -35,6 +35,8 @@ spring:
   threads:
     virtual:
       enabled: true
+server:
+  port: 8080
 
 # Actuator Configuration (Requirement 13.4, 15.5)
 management:
