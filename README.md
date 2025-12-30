@@ -99,6 +99,12 @@ docker run -p 8080:8080 \
 # Repository access (required)
 export GIT_MCP_ALLOWED_REPOSITORIES="/path/to/repo1,/path/to/repo2"
 
+# Domain-based access with wildcards
+export GIT_MCP_ALLOWED_REPOSITORIES="/home/*/projects/*,/workspace/*,/var/git/*"
+
+# Allow everything (NOT recommended for production)
+export GIT_MCP_ALLOWED_REPOSITORIES="/*"
+
 # Optional: API keys for AI integrations
 export OPENAI_API_KEY="your-openai-key"
 export ANTHROPIC_API_KEY="your-anthropic-key"
@@ -118,6 +124,8 @@ git:
     security:
       allowed-repositories:
         - /path/to/your/repos
+        - /home/*/projects/*     # Domain wildcards
+        - /workspace/*           # Any workspace repo
       rate-limiting-enabled: true
       max-requests-per-minute: 60
     repository:
@@ -249,11 +257,24 @@ git:
   mcp:
     security:
       allowed-repositories:
+        # Specific repositories
         - /safe/repo/path
         - /another/safe/path
+        
+        # Domain-based wildcards
+        - /home/*/projects/*     # Any user's projects
+        - /workspace/*           # Any workspace repo
+        - /opt/repos/*          # Company repos
+        - /tmp/git-*            # Temporary Git repos
+        
       enable-input-sanitization: true
       max-requests-per-minute: 60
 ```
+
+**Security Levels:**
+- **SECURE**: Specific paths (`/home/user/project`)
+- **MODERATE**: Domain wildcards (`/workspace/*`)  
+- **INSECURE**: Global access (`/*`) - avoid in production
 
 ### Input Validation
 - Path traversal prevention (`../` blocked)
