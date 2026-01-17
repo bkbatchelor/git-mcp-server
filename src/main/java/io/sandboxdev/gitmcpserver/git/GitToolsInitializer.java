@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Component
 public class GitToolsInitializer {
     private final ToolRegistry toolRegistry;
     private final GitService gitService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public GitToolsInitializer(ToolRegistry toolRegistry, GitService gitService) {
         this.toolRegistry = toolRegistry;
@@ -26,6 +29,25 @@ public class GitToolsInitializer {
             arguments -> {
                 List<String> branches = gitService.listBranches();
                 return Map.of("content", List.of(Map.of("type", "text", "text", String.join("\n", branches))));
+            }
+        ));
+
+        toolRegistry.registerTool(new Tool(
+            "get_log",
+            "Get commit log",
+            Map.of("type", "object", "properties", Map.of("count", Map.of("type", "integer"))),
+            arguments -> {
+                int count = 10;
+                if (arguments.containsKey("count")) {
+                    count = ((Number) arguments.get("count")).intValue();
+                }
+                List<Map<String, String>> log = gitService.getLog(count);
+                try {
+                    String logJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(log);
+                    return Map.of("content", List.of(Map.of("type", "text", "text", logJson)));
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to serialize log", e);
+                }
             }
         ));
     }
