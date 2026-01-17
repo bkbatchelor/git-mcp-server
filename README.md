@@ -52,6 +52,26 @@ The server will start and listen for MCP JSON-RPC messages on Standard Input (st
 
 This server is designed to be used by an MCP Client (like an IDE extension or an AI agent runner). However, you can test it manually via the command line.
 
+### MCP Client Configuration
+
+To use this server with an MCP client like **Claude Desktop**, add the following to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "git-mcp-server": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "/path/to/your/git-mcp-server/build/libs/git-mcp-server-0.0.1-SNAPSHOT.jar"
+      ]
+    }
+  }
+}
+```
+
+*Replace `/path/to/your/git-mcp-server` with the actual absolute path to the project directory.*
+
 ### Example: List Branches
 
 **Input (stdin):**
