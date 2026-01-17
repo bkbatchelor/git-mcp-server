@@ -17,4 +17,8 @@ public class ToolRegistry {
     public List<Tool> getTools() {
         return new ArrayList<>(tools.values());
     }
+
+    public java.util.Optional<Tool> getTool(String name) {
+        return java.util.Optional.ofNullable(tools.get(name));
+    }
 }
