@@ -1,6 +1,6 @@
 # Implementation Plan: Initialize MCP Server Infrastructure and Basic Git Read Operations
 
-## Phase 1: MCP Infrastructure Setup
+## Phase 1: MCP Infrastructure Setup [checkpoint: bb7055d]
 Establish the communication layer using Standard I/O and implement basic tool discovery.
 
 - [x] Task: Configure MCP Stdio Transport and JSON-RPC Handler 71580bd
