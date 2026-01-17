@@ -1,6 +1,6 @@
 # Implementation Plan: Create Project README
 
-## Phase 1: Drafting and Creation
+## Phase 1: Drafting and Creation [checkpoint: b6f2735]
 Generate the content and write the file.
 
 - [x] Task: Draft and Write README.md 3eda090
