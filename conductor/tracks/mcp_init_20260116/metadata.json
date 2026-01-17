@@ -1,8 +1,0 @@
-{
-  "track_id": "mcp_init_20260116",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-01-16T12:00:00Z",
-  "updated_at": "2026-01-16T12:00:00Z",
-  "description": "Initialize MCP Server Infrastructure and Basic Git Read Operations"
-}

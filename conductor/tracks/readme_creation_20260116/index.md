@@ -1,4 +1,4 @@
-# Track mcp_init_20260116 Context
+# Track readme_creation_20260116 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)
