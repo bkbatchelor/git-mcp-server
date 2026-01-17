@@ -14,7 +14,7 @@ Establish the communication layer using Standard I/O and implement basic tool di
 - [x] Task: Integrate StdioTransport into Application Lifecycle 55cf8e1
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: MCP Infrastructure Setup' (Protocol in workflow.md)
 
-## Phase 2: Basic Git Read Tools
+## Phase 2: Basic Git Read Tools [checkpoint: 778f22b]
 Implement the first set of tools to allow AI agents to read Git repository information.
 
 - [x] Task: Implement `list_branches` Tool 5bb8894
