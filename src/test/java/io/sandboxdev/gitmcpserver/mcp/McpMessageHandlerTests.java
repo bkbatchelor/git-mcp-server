@@ -7,7 +7,7 @@ class McpMessageHandlerTests {
 
     @Test
     void shouldHandleUnknownMethodWithError() {
-        McpMessageHandler handler = new McpMessageHandler();
+        McpMessageHandler handler = new McpMessageHandler(new ToolRegistry());
         McpJsonRpcMessage request = new McpJsonRpcMessage("2.0", "unknown_method", null, 1, null, null);
         
         McpJsonRpcMessage response = handler.handle(request);
