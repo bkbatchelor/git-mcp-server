@@ -23,12 +23,14 @@ public class StdioTransport {
             try {
                 McpJsonRpcMessage request = McpJsonRpcParser.parse(line);
                 McpJsonRpcMessage response = handler.handle(request);
-                String responseJson = objectMapper.writeValueAsString(response);
-                writer.write(responseJson);
-                writer.newLine();
-                writer.flush();
+                if (response != null) {
+                    String responseJson = objectMapper.writeValueAsString(response);
+                    writer.write(responseJson);
+                    writer.newLine();
+                    writer.flush();
+                }
             } catch (Exception e) {
-                // TODO: Handle parse errors with a proper JSON-RPC error response
+                // Ignore or handle parse errors
             }
         }
     }

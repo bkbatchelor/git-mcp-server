@@ -1,0 +1,8 @@
+{
+  "id": "fix_server_timeout_20260117",
+  "name": "Fix Server Timeout",
+  "status": "in_progress",
+  "created": "2026-01-17",
+  "owner": "Gemini",
+  "description": "Optimize server startup time to prevent timeouts in MCP clients."
+}

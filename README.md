@@ -54,23 +54,26 @@ This server is designed to be used by an MCP Client (like an IDE extension or an
 
 ### MCP Client Configuration
 
-To use this server with an MCP client like **Claude Desktop**, add the following to your `claude_desktop_config.json`:
+For best performance and to avoid timeouts (especially in **Gemini CLI** or **Claude Desktop**), it is recommended to use the provided optimized wrapper script:
 
 ```json
 {
   "mcpServers": {
     "git-mcp-server": {
-      "command": "java",
-      "args": [
-        "-jar",
-        "/path/to/your/git-mcp-server/build/libs/git-mcp-server-0.0.1-SNAPSHOT.jar"
-      ]
+      "command": "/path/to/your/git-mcp-server/git-mcp-server.sh",
+      "args": []
     }
   }
 }
 ```
 
 *Replace `/path/to/your/git-mcp-server` with the actual absolute path to the project directory.*
+
+Alternatively, if you prefer to call `java` directly, ensure you use the following optimized JVM flags:
+
+```bash
+java -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -jar build/libs/git-mcp-server-0.0.1-SNAPSHOT.jar
+```
 
 ### Example: List Branches
 

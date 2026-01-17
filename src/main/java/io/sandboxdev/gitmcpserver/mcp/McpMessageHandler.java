@@ -15,6 +15,32 @@ public class McpMessageHandler {
     }
 
     public McpJsonRpcMessage handle(McpJsonRpcMessage request) {
+        if ("initialize".equals(request.method())) {
+            return new McpJsonRpcMessage(
+                "2.0",
+                null,
+                null,
+                request.id(),
+                Map.of(
+                    "protocolVersion", "2024-11-05",
+                    "capabilities", Map.of(
+                        "tools", Map.of(),
+                        "resources", Map.of(),
+                        "prompts", Map.of()
+                    ),
+                    "serverInfo", Map.of(
+                        "name", "git-mcp-server",
+                        "version", "0.0.1"
+                    )
+                ),
+                null
+            );
+        }
+
+        if ("notifications/initialized".equals(request.method())) {
+            return null;
+        }
+
         if ("tools/list".equals(request.method())) {
             List<Tool> tools = toolRegistry.getTools();
             return new McpJsonRpcMessage(
@@ -23,6 +49,28 @@ public class McpMessageHandler {
                 null,
                 request.id(),
                 Map.of("tools", tools),
+                null
+            );
+        }
+
+        if ("resources/list".equals(request.method())) {
+            return new McpJsonRpcMessage(
+                "2.0",
+                null,
+                null,
+                request.id(),
+                Map.of("resources", List.of()),
+                null
+            );
+        }
+
+        if ("prompts/list".equals(request.method())) {
+            return new McpJsonRpcMessage(
+                "2.0",
+                null,
+                null,
+                request.id(),
+                Map.of("prompts", List.of()),
                 null
             );
         }
@@ -54,6 +102,10 @@ public class McpMessageHandler {
             } else {
                 return errorResponse(request.id(), -32601, "Tool not found: " + toolName);
             }
+        }
+
+        if (request.id() == null) {
+            return null; // Don't respond to unknown notifications
         }
 
         return errorResponse(request.id(), -32601, "Method not found: " + request.method());
