@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: git-mcp-server
+  main:
+    banner-mode: "off"
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+  # Note: Standard Spring Boot console logging goes to stdout. 
+  # For MCP, we should ideally redirect logs to a file or stderr.
