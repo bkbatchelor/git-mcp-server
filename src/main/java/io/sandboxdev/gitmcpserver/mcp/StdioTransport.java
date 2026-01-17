@@ -32,4 +32,14 @@ public class StdioTransport {
             }
         }
     }
+
+    public void run() {
+        try {
+            while (true) {
+                processOne();
+            }
+        } catch (IOException e) {
+            // End of stream or error
+        }
+    }
 }

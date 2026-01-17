@@ -11,6 +11,7 @@ Establish the communication layer using Standard I/O and implement basic tool di
     - [ ] Write failing tests for the `tools/list` MCP capability
     - [ ] Implement tool registration and listing logic
     - [ ] Verify 80% code coverage for the tool registry
+- [ ] Task: Integrate StdioTransport into Application Lifecycle
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: MCP Infrastructure Setup' (Protocol in workflow.md)
 
 ## Phase 2: Basic Git Read Tools
