@@ -3,7 +3,7 @@
 ## Phase 1: MCP Infrastructure Setup
 Establish the communication layer using Standard I/O and implement basic tool discovery.
 
-- [ ] Task: Configure MCP Stdio Transport and JSON-RPC Handler
+- [~] Task: Configure MCP Stdio Transport and JSON-RPC Handler
     - [ ] Write failing tests for JSON-RPC message parsing and transport handling
     - [ ] Implement `StdioTransport` and `McpMessageHandler` to pass tests
     - [ ] Verify 80% code coverage for the new transport layer
