@@ -21,7 +21,7 @@ Implement the first set of tools to allow AI agents to read Git repository infor
     - [ ] Write failing integration tests for branch listing logic (using a temporary Git repo)
     - [ ] Implement `GitService` and `list_branches` tool handler
     - [ ] Verify 80% code coverage for the branch listing feature
-- [~] Task: Implement `get_log` Tool
+- [x] Task: Implement `get_log` Tool 4ab00b3
     - [ ] Write failing integration tests for commit log retrieval
     - [ ] Implement commit history parsing logic
     - [ ] Verify 80% code coverage for the log retrieval feature
