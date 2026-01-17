@@ -10,8 +10,8 @@
 - **Dependencies:** `org.springframework.boot:spring-boot-starter-test`
 
 ## Libraries & Integration
-- **Git Interaction:** (To be determined: JGit or Native Git CLI Wrapper)
-- **MCP Protocol:** (To be determined: Spring AI or custom MCP implementation)
+- **Git Interaction:** Native Git CLI Wrapper (ProcessBuilder)
+- **MCP Protocol:** Custom implementation (Spring Boot + Jackson)
 
 ## Project Structure
 - **Group ID:** `io.sandboxdev`

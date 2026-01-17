@@ -17,7 +17,7 @@ Establish the communication layer using Standard I/O and implement basic tool di
 ## Phase 2: Basic Git Read Tools
 Implement the first set of tools to allow AI agents to read Git repository information.
 
-- [~] Task: Implement `list_branches` Tool
+- [x] Task: Implement `list_branches` Tool 5bb8894
     - [ ] Write failing integration tests for branch listing logic (using a temporary Git repo)
     - [ ] Implement `GitService` and `list_branches` tool handler
     - [ ] Verify 80% code coverage for the branch listing feature
