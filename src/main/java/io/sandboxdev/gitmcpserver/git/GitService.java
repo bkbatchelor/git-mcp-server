@@ -6,6 +6,7 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,10 +19,17 @@ import java.util.List;
 @Service
 public class GitService {
     private static final Logger log = LoggerFactory.getLogger(GitService.class);
-    private final Path workingDir;
+    private Path workingDir;
 
-    public GitService() {
-        this.workingDir = Path.of(".").toAbsolutePath().normalize();
+    @org.springframework.beans.factory.annotation.Autowired
+    public GitService(ApplicationArguments args) {
+        if (args != null && !args.getNonOptionArgs().isEmpty()) {
+            this.workingDir = Path.of(args.getNonOptionArgs().get(0)).toAbsolutePath().normalize();
+            log.info("Using repository path from arguments: {}", workingDir);
+        } else {
+            this.workingDir = Path.of(".").toAbsolutePath().normalize();
+            log.info("No repository path provided, using current directory: {}", workingDir);
+        }
     }
 
     public GitService(Path workingDir) {
