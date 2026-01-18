@@ -23,6 +23,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-json")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:7.1.0.202411261347-r")
     annotationProcessor("org.springframework:spring-context-indexer")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
