@@ -6,14 +6,14 @@
     - [x] Update `logback-spring.xml` to include a `RollingFileAppender`.
     - [x] Configure log directory (defaulting to current working dir or `logs/`).
     - [x] Verify logs are written to file and NOT `stdout`.
-- [ ] Task: Update `GitService` to manage JGit `Git` and `Repository` instances
+- [x] Task: Update `GitService` to manage JGit `Git` and `Repository` instances 88be69d
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure and Setup' (Protocol in workflow.md)
 
 ## Phase 2: Migrate Read Operations
-- [ ] Task: Migrate `list_branches` to JGit
-    - [ ] Write failing test in `GitServiceTests` for JGit-based branch listing
-    - [ ] Implement JGit logic in `GitService.listBranches()`
-    - [ ] Verify test passes
+- [x] Task: Migrate `list_branches` to JGit 88be69d
+    - [x] Write failing test in `GitServiceTests` for JGit-based branch listing
+    - [x] Implement JGit logic in `GitService.listBranches()`
+    - [x] Verify test passes
 - [ ] Task: Migrate repository status/validation checks to JGit
     - [ ] Write failing tests for repository validation
     - [ ] Implement JGit-based validation
