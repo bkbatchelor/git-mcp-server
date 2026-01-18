@@ -14,10 +14,10 @@
     - [x] Write failing test in `GitServiceTests` for JGit-based branch listing
     - [x] Implement JGit logic in `GitService.listBranches()`
     - [x] Verify test passes
-- [ ] Task: Migrate repository status/validation checks to JGit
-    - [ ] Write failing tests for repository validation
-    - [ ] Implement JGit-based validation
-    - [ ] Verify tests pass
+- [x] Task: Migrate repository status/validation checks to JGit d3a231d
+    - [x] Write failing tests for repository validation
+    - [x] Implement JGit-based validation
+    - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Migrate Read Operations' (Protocol in workflow.md)
 
 ## Phase 3: Migrate Write Operations
