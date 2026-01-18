@@ -1,0 +1,37 @@
+# Implementation Plan: Replace ProcessBuilder with JGit
+
+## Phase 1: Infrastructure and Setup
+- [x] Task: Add JGit dependency to `build.gradle.kts` 9d2419b
+- [ ] Task: Configure File-Based Logging
+    - [ ] Update `logback-spring.xml` to include a `RollingFileAppender`.
+    - [ ] Configure log directory (defaulting to current working dir or `logs/`).
+    - [ ] Verify logs are written to file and NOT `stdout`.
+- [ ] Task: Update `GitService` to manage JGit `Git` and `Repository` instances
+- [ ] Task: Conductor - User Manual Verification 'Infrastructure and Setup' (Protocol in workflow.md)
+
+## Phase 2: Migrate Read Operations
+- [ ] Task: Migrate `list_branches` to JGit
+    - [ ] Write failing test in `GitServiceTests` for JGit-based branch listing
+    - [ ] Implement JGit logic in `GitService.listBranches()`
+    - [ ] Verify test passes
+- [ ] Task: Migrate repository status/validation checks to JGit
+    - [ ] Write failing tests for repository validation
+    - [ ] Implement JGit-based validation
+    - [ ] Verify tests pass
+- [ ] Task: Conductor - User Manual Verification 'Migrate Read Operations' (Protocol in workflow.md)
+
+## Phase 3: Migrate Write Operations
+- [ ] Task: Migrate `checkout_branch` to JGit
+    - [ ] Write failing test for branch checkout
+    - [ ] Implement JGit `checkout()` command
+    - [ ] Verify test passes
+- [ ] Task: Migrate staging and commit operations to JGit
+    - [ ] Write failing tests for add and commit
+    - [ ] Implement JGit `add()` and `commit()` commands
+    - [ ] Verify tests pass
+- [ ] Task: Conductor - User Manual Verification 'Migrate Write Operations' (Protocol in workflow.md)
+
+## Phase 4: Cleanup and Finalization
+- [ ] Task: Remove `ProcessBuilder` and shell-specific utility methods from `GitService`
+- [ ] Task: Perform final integration verification with `ToolDiscoveryTests` and manual client tests
+- [ ] Task: Conductor - User Manual Verification 'Cleanup and Finalization' (Protocol in workflow.md)
