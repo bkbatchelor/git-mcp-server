@@ -1,7 +1,15 @@
 package io.sandboxdev.gitmcpserver.git;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -9,30 +17,35 @@ import java.util.List;
 
 @Service
 public class GitService {
+    private static final Logger log = LoggerFactory.getLogger(GitService.class);
     private final Path workingDir;
 
     public GitService() {
-        this.workingDir = Path.of(".");
+        this.workingDir = Path.of(".").toAbsolutePath().normalize();
     }
 
     public GitService(Path workingDir) {
-        this.workingDir = workingDir;
+        this.workingDir = workingDir.toAbsolutePath().normalize();
+    }
+
+    private Git getGit() throws IOException {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        Repository repository = builder.setGitDir(workingDir.resolve(".git").toFile())
+                .readEnvironment()
+                .findGitDir()
+                .build();
+        return new Git(repository);
     }
 
     public List<String> listBranches() {
         List<String> branches = new ArrayList<>();
-        try {
-            ProcessBuilder pb = new ProcessBuilder("git", "branch", "--format=%(refname:short)");
-            pb.directory(workingDir.toFile());
-            Process process = pb.start();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    branches.add(line.trim());
-                }
+        try (Git git = getGit()) {
+            List<Ref> refs = git.branchList().call();
+            for (Ref ref : refs) {
+                branches.add(Repository.shortenRefName(ref.getName()));
             }
-            process.waitFor();
         } catch (Exception e) {
+            log.error("Failed to list branches using JGit", e);
             throw new RuntimeException("Failed to list branches", e);
         }
         return branches;
