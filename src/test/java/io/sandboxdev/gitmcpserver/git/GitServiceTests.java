@@ -57,4 +57,15 @@ class GitServiceTests {
         assertThat(log.get(0)).containsKey("author");
         assertThat(log.get(0)).containsKey("date");
     }
+
+    @Test
+    void shouldThrowExceptionForInvalidRepo() {
+        // tempDir is empty, not a git repo
+        GitService gitService = new GitService(tempDir);
+        
+        // listBranches uses getGit() which should fail
+        org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
+            gitService.listBranches();
+        });
+    }
 }

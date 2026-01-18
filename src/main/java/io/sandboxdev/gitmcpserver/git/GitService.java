@@ -34,6 +34,9 @@ public class GitService {
                 .readEnvironment()
                 .findGitDir()
                 .build();
+        if (!repository.getObjectDatabase().exists()) {
+             throw new IOException("Invalid git repository: " + workingDir);
+        }
         return new Git(repository);
     }
 
