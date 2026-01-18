@@ -2,10 +2,10 @@
 
 ## Phase 1: Infrastructure and Setup
 - [x] Task: Add JGit dependency to `build.gradle.kts` 9d2419b
-- [ ] Task: Configure File-Based Logging
-    - [ ] Update `logback-spring.xml` to include a `RollingFileAppender`.
-    - [ ] Configure log directory (defaulting to current working dir or `logs/`).
-    - [ ] Verify logs are written to file and NOT `stdout`.
+- [x] Task: Configure File-Based Logging 0f204c8
+    - [x] Update `logback-spring.xml` to include a `RollingFileAppender`.
+    - [x] Configure log directory (defaulting to current working dir or `logs/`).
+    - [x] Verify logs are written to file and NOT `stdout`.
 - [ ] Task: Update `GitService` to manage JGit `Git` and `Repository` instances
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure and Setup' (Protocol in workflow.md)
 
