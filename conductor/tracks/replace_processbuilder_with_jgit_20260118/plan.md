@@ -1,13 +1,13 @@
 # Implementation Plan: Replace ProcessBuilder with JGit
 
-## Phase 1: Infrastructure and Setup
+## Phase 1: Infrastructure and Setup [checkpoint: ecc9dc9]
 - [x] Task: Add JGit dependency to `build.gradle.kts` 9d2419b
 - [x] Task: Configure File-Based Logging 0f204c8
     - [x] Update `logback-spring.xml` to include a `RollingFileAppender`.
     - [x] Configure log directory (defaulting to current working dir or `logs/`).
     - [x] Verify logs are written to file and NOT `stdout`.
 - [x] Task: Update `GitService` to manage JGit `Git` and `Repository` instances 88be69d
-- [ ] Task: Conductor - User Manual Verification 'Infrastructure and Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Infrastructure and Setup' (Protocol in workflow.md) ecc9dc9
 
 ## Phase 2: Migrate Read Operations
 - [x] Task: Migrate `list_branches` to JGit 88be69d
