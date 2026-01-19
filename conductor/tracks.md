@@ -13,8 +13,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix Tool Schema**
   *Link: [./tracks/fix_tool_schema_20260117/](./tracks/fix_tool_schema_20260117/)*
-
----
-
-- [x] **Track: Remove ProcessBuilder and replace with JGit**
-  *Link: [./tracks/replace_processbuilder_with_jgit_20260118/](./tracks/replace_processbuilder_with_jgit_20260118/)*

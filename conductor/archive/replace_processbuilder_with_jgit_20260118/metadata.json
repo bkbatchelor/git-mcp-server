@@ -1,0 +1,8 @@
+{
+  "track_id": "replace_processbuilder_with_jgit_20260118",
+  "type": "refactor",
+  "status": "new",
+  "created_at": "2026-01-18T14:30:00Z",
+  "updated_at": "2026-01-18T14:30:00Z",
+  "description": "Remove ProcessBuilder and replace with JGit"
+}
