@@ -25,10 +25,10 @@
     - [x] Write failing test for branch checkout
     - [x] Implement JGit `checkout()` command
     - [x] Verify test passes
-- [ ] Task: Migrate staging and commit operations to JGit
-    - [ ] Write failing tests for add and commit
-    - [ ] Implement JGit `add()` and `commit()` commands
-    - [ ] Verify tests pass
+- [x] Task: Migrate staging and commit operations to JGit 922bbaa
+    - [x] Write failing tests for add and commit
+    - [x] Implement JGit `add()` and `commit()` commands
+    - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Migrate Write Operations' (Protocol in workflow.md)
 
 ## Phase 4: Cleanup and Finalization
