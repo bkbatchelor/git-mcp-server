@@ -10,7 +10,7 @@
 - **Dependencies:** `org.springframework.boot:spring-boot-starter-test`
 
 ## Libraries & Integration
-- **Git Interaction:** Native Git CLI Wrapper (ProcessBuilder)
+- **Git Interaction:** JGit (org.eclipse.jgit)
 - **MCP Protocol:** Custom implementation (Spring Boot + Jackson)
 
 ## Project Structure
