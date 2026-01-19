@@ -1,20 +1,23 @@
 package io.sandboxdev.gitmcpserver.git;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 @Service
 public class GitService {
@@ -93,31 +96,27 @@ public class GitService {
         }
     }
 
-    public List<java.util.Map<String, String>> getLog(int count) {
-        List<java.util.Map<String, String>> log = new ArrayList<>();
-        try {
-            // format: hash|author|date|message
-            ProcessBuilder pb = new ProcessBuilder("git", "log", "-n", String.valueOf(count), "--pretty=format:%H|%an|%ad|%s");
-            pb.directory(workingDir.toFile());
-            Process process = pb.start();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split("\\|", 4);
-                    if (parts.length == 4) {
-                        log.add(java.util.Map.of(
-                            "hash", parts[0],
-                            "author", parts[1],
-                            "date", parts[2],
-                            "message", parts[3]
-                        ));
-                    }
-                }
+    public List<Map<String, String>> getLog(int count) {
+        List<Map<String, String>> logList = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy Z");
+        
+        try (Git git = getGit()) {
+            Iterable<RevCommit> commits = git.log().setMaxCount(count).call();
+            for (RevCommit commit : commits) {
+                PersonIdent author = commit.getAuthorIdent();
+                dateFormat.setTimeZone(author.getTimeZone());
+                
+                logList.add(Map.of(
+                    "hash", commit.getName(),
+                    "author", author.getName(),
+                    "date", dateFormat.format(author.getWhen()),
+                    "message", commit.getFullMessage().trim()
+                ));
             }
-            process.waitFor();
         } catch (Exception e) {
+            log.error("Failed to get log using JGit", e);
             throw new RuntimeException("Failed to get log", e);
         }
-        return log;
+        return logList;
     }
 }
