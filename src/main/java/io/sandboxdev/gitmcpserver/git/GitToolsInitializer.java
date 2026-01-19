@@ -46,6 +46,28 @@ public class GitToolsInitializer {
         ));
 
         toolRegistry.registerTool(new Tool(
+            "add",
+            "Stage files for commit",
+            Map.of("type", "object", "properties", Map.of("files", Map.of("type", "array", "items", Map.of("type", "string"))), "required", List.of("files")),
+            arguments -> {
+                List<String> files = (List<String>) arguments.get("files");
+                gitService.add(files);
+                return Map.of("content", List.of(Map.of("type", "text", "text", "Staged files: " + String.join(", ", files))));
+            }
+        ));
+
+        toolRegistry.registerTool(new Tool(
+            "commit",
+            "Commit staged changes",
+            Map.of("type", "object", "properties", Map.of("message", Map.of("type", "string")), "required", List.of("message")),
+            arguments -> {
+                String message = (String) arguments.get("message");
+                gitService.commit(message);
+                return Map.of("content", List.of(Map.of("type", "text", "text", "Committed with message: " + message)));
+            }
+        ));
+
+        toolRegistry.registerTool(new Tool(
             "get_log",
             "Get commit log",
             Map.of("type", "object", "properties", Map.of("count", Map.of("type", "integer"))),

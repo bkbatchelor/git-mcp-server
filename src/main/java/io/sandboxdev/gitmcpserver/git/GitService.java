@@ -71,6 +71,28 @@ public class GitService {
         }
     }
 
+    public void add(List<String> filePatterns) {
+        try (Git git = getGit()) {
+            var addCommand = git.add();
+            for (String pattern : filePatterns) {
+                addCommand.addFilepattern(pattern);
+            }
+            addCommand.call();
+        } catch (Exception e) {
+            log.error("Failed to add files using JGit", e);
+            throw new RuntimeException("Failed to add files", e);
+        }
+    }
+
+    public void commit(String message) {
+        try (Git git = getGit()) {
+            git.commit().setMessage(message).call();
+        } catch (Exception e) {
+            log.error("Failed to commit using JGit", e);
+            throw new RuntimeException("Failed to commit", e);
+        }
+    }
+
     public List<java.util.Map<String, String>> getLog(int count) {
         List<java.util.Map<String, String>> log = new ArrayList<>();
         try {

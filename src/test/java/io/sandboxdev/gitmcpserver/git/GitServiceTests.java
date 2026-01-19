@@ -95,4 +95,24 @@ class GitServiceTests {
         String head = java.nio.file.Files.readString(tempDir.resolve(".git/HEAD")).trim();
         assertThat(head).isEqualTo("ref: refs/heads/feature");
     }
+
+    @Test
+    void shouldAddAndCommit() throws IOException, InterruptedException {
+        // Initialize a git repo in tempDir
+        new ProcessBuilder("git", "init").directory(tempDir.toFile()).start().waitFor();
+        new ProcessBuilder("git", "config", "user.email", "test@example.com").directory(tempDir.toFile()).start().waitFor();
+        new ProcessBuilder("git", "config", "user.name", "test").directory(tempDir.toFile()).start().waitFor();
+        
+        Path testFile = tempDir.resolve("newfile.txt");
+        java.nio.file.Files.writeString(testFile, "content");
+
+        GitService gitService = new GitService(tempDir);
+        gitService.add(List.of("newfile.txt"));
+        gitService.commit("Add newfile.txt");
+
+        // Verify commit exists
+        List<Map<String, String>> log = gitService.getLog(1);
+        assertThat(log).hasSize(1);
+        assertThat(log.get(0).get("message")).isEqualTo("Add newfile.txt");
+    }
 }
