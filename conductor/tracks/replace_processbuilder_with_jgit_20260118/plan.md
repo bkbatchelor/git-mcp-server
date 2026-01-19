@@ -21,10 +21,10 @@
 - [x] Task: Conductor - User Manual Verification 'Migrate Read Operations' (Protocol in workflow.md) 4b0698a
 
 ## Phase 3: Migrate Write Operations
-- [ ] Task: Migrate `checkout_branch` to JGit
-    - [ ] Write failing test for branch checkout
-    - [ ] Implement JGit `checkout()` command
-    - [ ] Verify test passes
+- [x] Task: Migrate `checkout_branch` to JGit 3f75910
+    - [x] Write failing test for branch checkout
+    - [x] Implement JGit `checkout()` command
+    - [x] Verify test passes
 - [ ] Task: Migrate staging and commit operations to JGit
     - [ ] Write failing tests for add and commit
     - [ ] Implement JGit `add()` and `commit()` commands
