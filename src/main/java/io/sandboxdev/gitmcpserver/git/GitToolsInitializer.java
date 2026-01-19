@@ -35,6 +35,17 @@ public class GitToolsInitializer {
         ));
 
         toolRegistry.registerTool(new Tool(
+            "checkout_branch",
+            "Checkout a branch",
+            Map.of("type", "object", "properties", Map.of("branch_name", Map.of("type", "string")), "required", List.of("branch_name")),
+            arguments -> {
+                String branchName = (String) arguments.get("branch_name");
+                gitService.checkoutBranch(branchName);
+                return Map.of("content", List.of(Map.of("type", "text", "text", "Checked out branch: " + branchName)));
+            }
+        ));
+
+        toolRegistry.registerTool(new Tool(
             "get_log",
             "Get commit log",
             Map.of("type", "object", "properties", Map.of("count", Map.of("type", "integer"))),

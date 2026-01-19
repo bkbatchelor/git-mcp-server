@@ -62,6 +62,15 @@ public class GitService {
         return branches;
     }
 
+    public void checkoutBranch(String branchName) {
+        try (Git git = getGit()) {
+            git.checkout().setName(branchName).call();
+        } catch (Exception e) {
+            log.error("Failed to checkout branch using JGit", e);
+            throw new RuntimeException("Failed to checkout branch: " + branchName, e);
+        }
+    }
+
     public List<java.util.Map<String, String>> getLog(int count) {
         List<java.util.Map<String, String>> log = new ArrayList<>();
         try {

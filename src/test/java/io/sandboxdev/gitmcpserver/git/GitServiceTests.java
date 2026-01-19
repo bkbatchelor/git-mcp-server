@@ -68,4 +68,31 @@ class GitServiceTests {
             gitService.listBranches();
         });
     }
+
+    @Test
+    void shouldCheckoutBranch() throws IOException, InterruptedException {
+        // Initialize a git repo in tempDir
+        new ProcessBuilder("git", "init").directory(tempDir.toFile()).start().waitFor();
+        new ProcessBuilder("git", "config", "user.email", "test@example.com").directory(tempDir.toFile()).start().waitFor();
+        new ProcessBuilder("git", "config", "user.name", "test").directory(tempDir.toFile()).start().waitFor();
+        
+        // Create and checkout main
+        new ProcessBuilder("git", "checkout", "-b", "main").directory(tempDir.toFile()).start().waitFor();
+        
+        // Commit something so branch exists
+        Path testFile = tempDir.resolve("test.txt");
+        java.nio.file.Files.writeString(testFile, "test");
+        new ProcessBuilder("git", "add", ".").directory(tempDir.toFile()).start().waitFor();
+        new ProcessBuilder("git", "commit", "-m", "initial").directory(tempDir.toFile()).start().waitFor();
+
+        // Create a new branch
+        new ProcessBuilder("git", "branch", "feature").directory(tempDir.toFile()).start().waitFor();
+
+        GitService gitService = new GitService(tempDir);
+        gitService.checkoutBranch("feature");
+
+        // Verify current branch is feature by reading HEAD
+        String head = java.nio.file.Files.readString(tempDir.resolve(".git/HEAD")).trim();
+        assertThat(head).isEqualTo("ref: refs/heads/feature");
+    }
 }
